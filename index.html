@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png">
 
-<!-- ⚡ SPEED: Preconnect -->
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
@@ -26,13 +25,13 @@
 <!-- ⚡ INSTANT CACHE SYSTEM -->
 <script>
 window.ADMIN_CACHE = {
-    products: 'bq_admin_products_v3', orders: 'bq_admin_orders_v3',
-    reviews: 'bq_admin_reviews_v3', newsletter: 'bq_admin_newsletter_v3',
-    coupons: 'bq_admin_coupons_v3', banners: 'bq_admin_banners_v3',
-    pages: 'bq_admin_pages_v3', faq: 'bq_admin_faq_v3',
-    sizeCharts: 'bq_admin_sizeCharts_v3', homeCollections: 'bq_admin_homeCollections_v3',
-    settings: 'bq_admin_settings_v3', contentSettings: 'bq_admin_content_v3',
-    stats: 'bq_admin_stats_v3'
+    products: 'bq_admin_products_v4', orders: 'bq_admin_orders_v4',
+    reviews: 'bq_admin_reviews_v4', newsletter: 'bq_admin_newsletter_v4',
+    coupons: 'bq_admin_coupons_v4', banners: 'bq_admin_banners_v4',
+    pages: 'bq_admin_pages_v4', faq: 'bq_admin_faq_v4',
+    sizeCharts: 'bq_admin_sizeCharts_v4', homeCollections: 'bq_admin_homeCollections_v4',
+    settings: 'bq_admin_settings_v4', contentSettings: 'bq_admin_content_v4',
+    stats: 'bq_admin_stats_v4'
 };
 window.aCacheGet = function(key) {
     try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw).data : null; } catch(e) { return null; }
@@ -44,6 +43,88 @@ window.aCacheClear = function() {
     try { Object.keys(ADMIN_CACHE).forEach(k => localStorage.removeItem(ADMIN_CACHE[k])); } catch(e) {}
 };
 console.log('⚡ Instant cache ready');
+</script>
+
+<!-- 🔔 NOTIFICATION SYSTEM -->
+<script>
+(function() {
+    if (document.getElementById('admin-notification-container')) return;
+    const style = document.createElement('style');
+    style.textContent = `
+        #admin-notification-container{position:fixed;top:20px;right:20px;z-index:999999;display:flex;flex-direction:column;gap:10px;max-width:380px;pointer-events:none}
+        .admin-notification{background:linear-gradient(135deg,#1a1a1e,#0b0b0d);border:1.5px solid #dfb15b;border-radius:14px;padding:14px 18px;color:#f3f3f6;box-shadow:0 8px 30px rgba(0,0,0,.6),0 0 20px rgba(223,177,91,.3);display:flex;align-items:center;gap:12px;pointer-events:auto;animation:slideInNotif .4s cubic-bezier(.22,1,.36,1);cursor:pointer;font-family:'Poppins',sans-serif}
+        .admin-notification.removing{animation:slideOutNotif .3s ease forwards}
+        .admin-notification-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff}
+        .admin-notification-icon.newsletter{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
+        .admin-notification-icon.review{background:linear-gradient(135deg,#f59e0b,#d97706)}
+        .admin-notification-icon.order{background:linear-gradient(135deg,#22c55e,#16a34a)}
+        .admin-notification-icon.coupon{background:linear-gradient(135deg,#ff007f,#7928ca)}
+        .admin-notification-icon.product{background:linear-gradient(135deg,#dfb15b,#9c7526)}
+        .admin-notification-content{flex:1;min-width:0}
+        .admin-notification-title{font-weight:800;font-size:13px;color:#dfb15b;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+        .admin-notification-message{font-size:13px;color:#f3f3f6;line-height:1.4;word-break:break-word}
+        .admin-notification-time{font-size:10px;color:#9e9ea6;margin-top:3px}
+        .admin-notification-close{background:transparent;border:none;color:#9e9ea6;font-size:16px;cursor:pointer;padding:4px;align-self:flex-start;transition:color .2s}
+        .admin-notification-close:hover{color:#ef4444}
+        @keyframes slideInNotif{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes slideOutNotif{from{transform:translateX(0);opacity:1}to{transform:translateX(400px);opacity:0}}
+        @keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(223,177,91,.7)}50%{box-shadow:0 0 0 10px rgba(223,177,91,0)}}
+        .admin-notification.new{animation:slideInNotif .4s cubic-bezier(.22,1,.36,1),pulseGlow 1s ease .4s}
+    `;
+    document.head.appendChild(style);
+    const container = document.createElement('div');
+    container.id = 'admin-notification-container';
+    document.body.appendChild(container);
+})();
+
+window.playNotificationSound = function() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 880; osc.type = 'sine';
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+        setTimeout(() => {
+            const osc2 = ctx.createOscillator(); const gain2 = ctx.createGain();
+            osc2.connect(gain2); gain2.connect(ctx.destination);
+            osc2.frequency.value = 1100; osc2.type = 'sine';
+            gain2.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+            osc2.start(ctx.currentTime); osc2.stop(ctx.currentTime + 0.25);
+        }, 120);
+    } catch(e) {}
+};
+
+window.showAdminNotification = function(type, title, message, duration = 8000) {
+    const container = document.getElementById('admin-notification-container');
+    if (!container) return;
+    const icons = { newsletter: '<i class="fas fa-envelope"></i>', review: '<i class="fas fa-star"></i>', order: '<i class="fas fa-shopping-bag"></i>', coupon: '<i class="fas fa-ticket-alt"></i>', product: '<i class="fas fa-box"></i>' };
+    const notif = document.createElement('div');
+    notif.className = 'admin-notification new';
+    notif.innerHTML = `<div class="admin-notification-icon ${type}">${icons[type] || icons.product}</div><div class="admin-notification-content"><div class="admin-notification-title">${title}</div><div class="admin-notification-message">${message}</div><div class="admin-notification-time">${new Date().toLocaleTimeString('en-GB')}</div></div><button class="admin-notification-close" onclick="this.parentElement.remove()">×</button>`;
+    container.appendChild(notif);
+    setTimeout(() => { if (notif.parentElement) { notif.classList.add('removing'); setTimeout(() => notif.remove(), 300); } }, duration);
+    playNotificationSound();
+    if ('Notification' in window && Notification.permission === 'granted') {
+        try { new Notification(title, { body: message, icon: 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png' }); } catch(e) {}
+    }
+    flashTabTitle();
+};
+
+let titleFlashInterval = null, originalTitle = document.title, flashCount = 0;
+function flashTabTitle() {
+    flashCount++;
+    document.title = `(${flashCount}) 🔔 New Update!`;
+    if (titleFlashInterval) clearInterval(titleFlashInterval);
+    let toggle = false;
+    titleFlashInterval = setInterval(() => { document.title = toggle ? originalTitle : `(${flashCount}) 🔔 New Update!`; toggle = !toggle; }, 800);
+    const stopFlash = () => { if (titleFlashInterval) clearInterval(titleFlashInterval); document.title = originalTitle; flashCount = 0; window.removeEventListener('focus', stopFlash); };
+    window.addEventListener('focus', stopFlash);
+}
+if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
 </script>
 
 <!-- 🆕 IMGBB API -->
@@ -88,7 +169,6 @@ window.uploadToImgBB = async function(file) {
     return data.data.url;
 };
 
-// 🆕 UNIVERSAL UPLOAD HANDLERS
 window.uploadMainImage = async function(e) {
     const file = e.target.files[0]; if (!file) return;
     const status = document.getElementById('p-main-status');
@@ -143,11 +223,8 @@ window.uploadPaymentIcon = async function(e, inputEl) {
     const file = e.target.files[0]; if (!file) return;
     const box = inputEl.closest('.content-item-box');
     const urlInput = box.querySelector('.pm-icon');
-    try {
-        const url = await window.uploadToImgBB(file);
-        urlInput.value = url;
-        alert('✅ Icon uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); urlInput.value = url; alert('✅ Icon uploaded!'); }
+    catch(err) { alert('❌ ' + err.message); }
     e.target.value = '';
 };
 
@@ -155,11 +232,8 @@ window.uploadCourierLogo = async function(e, inputEl) {
     const file = e.target.files[0]; if (!file) return;
     const box = inputEl.closest('.content-item-box');
     const urlInput = box.querySelector('.co-logo');
-    try {
-        const url = await window.uploadToImgBB(file);
-        urlInput.value = url;
-        alert('✅ Logo uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); urlInput.value = url; alert('✅ Logo uploaded!'); }
+    catch(err) { alert('❌ ' + err.message); }
     e.target.value = '';
 };
 
@@ -167,11 +241,8 @@ window.uploadCollectionImage = async function(e, inputEl) {
     const file = e.target.files[0]; if (!file) return;
     const box = inputEl.closest('.content-item-box');
     const urlInput = box.querySelector('.hc-image');
-    try {
-        const url = await window.uploadToImgBB(file);
-        urlInput.value = url;
-        alert('✅ Image uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); urlInput.value = url; alert('✅ Image uploaded!'); }
+    catch(err) { alert('❌ ' + err.message); }
     e.target.value = '';
 };
 
@@ -179,11 +250,8 @@ window.uploadColorRow = async function(e, rowId) {
     const file = e.target.files[0]; if (!file) return;
     const row = document.getElementById(rowId); if (!row) return;
     const input = row.querySelector('.cimg');
-    try {
-        const url = await window.uploadToImgBB(file);
-        input.value = url;
-        alert('✅ Color uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); input.value = url; alert('✅ Color uploaded!'); }
+    catch(err) { alert('❌ ' + err.message); }
     e.target.value = '';
 };
 
@@ -191,11 +259,8 @@ window.uploadAdditionalRow = async function(e, rowId) {
     const file = e.target.files[0]; if (!file) return;
     const row = document.getElementById(rowId); if (!row) return;
     const input = row.querySelector('.aimg');
-    try {
-        const url = await window.uploadToImgBB(file);
-        input.value = url;
-        alert('✅ Image uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); input.value = url; alert('✅ Image uploaded!'); }
+    catch(err) { alert('❌ ' + err.message); }
     e.target.value = '';
 };
 
@@ -281,7 +346,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .stock-badge.lowstock{background:rgba(245,158,11,.15);color:var(--warn);border:1px solid var(--warn)}
 .stock-badge.outofstock{background:rgba(239,68,68,.15);color:var(--bad);border:1px solid var(--bad)}
 
-/* 🆕 UPLOAD BUTTON STYLES */
 .img-upload-wrap{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
 .upload-btn{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:none;padding:10px 16px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
 .upload-btn:hover{opacity:0.9}
@@ -475,17 +539,9 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
         <p class="sub">Burqa Bazaar & Boutiques</p>
         <div class="err" id="err"></div>
         <form id="login-form" onsubmit="doLogin(event)">
-            <div class="fgroup">
-                <label>📧 Email</label>
-                <input type="email" id="email" placeholder="admin@burqa.com" required autocomplete="email">
-            </div>
-            <div class="fgroup">
-                <label>🔒 Password</label>
-                <input type="password" id="password" placeholder="আপনার পাসওয়ার্ড" required autocomplete="current-password">
-            </div>
-            <button type="submit" class="login-btn" id="login-btn">
-                <i class="fas fa-sign-in-alt"></i> Login
-            </button>
+            <div class="fgroup"><label>📧 Email</label><input type="email" id="email" placeholder="admin@burqa.com" required autocomplete="email"></div>
+            <div class="fgroup"><label>🔒 Password</label><input type="password" id="password" placeholder="আপনার পাসওয়ার্ড" required autocomplete="current-password"></div>
+            <button type="submit" class="login-btn" id="login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
         </form>
     </div>
 </div>
@@ -525,346 +581,139 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div class="stat"><i class="fas fa-clock"></i><div class="val" id="st-pending">0</div><div class="lbl">Pending</div></div>
                 <div class="stat"><i class="fas fa-check-circle"></i><div class="val" id="st-completed">0</div><div class="lbl">Completed</div></div>
             </div>
-
             <div class="shead"><h2><i class="fas fa-chart-line"></i> Sales Summary</h2></div>
             <div class="stats" style="margin-bottom: 25px;">
-                <div class="stat" style="background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(34,197,94,.03)); border-color: rgba(34,197,94,.4);">
-                    <i class="fas fa-sun" style="color: #22c55e;"></i>
-                    <div class="val" id="st-today-revenue" style="color: #22c55e;">৳0</div>
-                    <div class="lbl">Today's Revenue</div>
-                </div>
-                <div class="stat" style="background: linear-gradient(135deg, rgba(59,130,246,.15), rgba(59,130,246,.03)); border-color: rgba(59,130,246,.4);">
-                    <i class="fas fa-calendar-alt" style="color: #3b82f6;"></i>
-                    <div class="val" id="st-month-revenue" style="color: #3b82f6;">৳0</div>
-                    <div class="lbl">This Month</div>
-                </div>
-                <div class="stat" style="background: linear-gradient(135deg, rgba(223,177,91,.15), rgba(223,177,91,.03)); border-color: rgba(223,177,91,.4);">
-                    <i class="fas fa-coins"></i>
-                    <div class="val" id="st-total-revenue">৳0</div>
-                    <div class="lbl">Total Revenue</div>
-                </div>
-                <div class="stat" style="background: linear-gradient(135deg, rgba(255,0,127,.15), rgba(121,40,202,.05)); border-color: rgba(255,0,127,.4);">
-                    <i class="fas fa-shopping-cart" style="color: #ff007f;"></i>
-                    <div class="val" id="st-today-orders" style="color: #ff007f;">0</div>
-                    <div class="lbl">Today's Orders</div>
-                </div>
+                <div class="stat" style="background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(34,197,94,.03)); border-color: rgba(34,197,94,.4);"><i class="fas fa-sun" style="color: #22c55e;"></i><div class="val" id="st-today-revenue" style="color: #22c55e;">৳0</div><div class="lbl">Today's Revenue</div></div>
+                <div class="stat" style="background: linear-gradient(135deg, rgba(59,130,246,.15), rgba(59,130,246,.03)); border-color: rgba(59,130,246,.4);"><i class="fas fa-calendar-alt" style="color: #3b82f6;"></i><div class="val" id="st-month-revenue" style="color: #3b82f6;">৳0</div><div class="lbl">This Month</div></div>
+                <div class="stat" style="background: linear-gradient(135deg, rgba(223,177,91,.15), rgba(223,177,91,.03)); border-color: rgba(223,177,91,.4);"><i class="fas fa-coins"></i><div class="val" id="st-total-revenue">৳0</div><div class="lbl">Total Revenue</div></div>
+                <div class="stat" style="background: linear-gradient(135deg, rgba(255,0,127,.15), rgba(121,40,202,.05)); border-color: rgba(255,0,127,.4);"><i class="fas fa-shopping-cart" style="color: #ff007f;"></i><div class="val" id="st-today-orders" style="color: #ff007f;">0</div><div class="lbl">Today's Orders</div></div>
             </div>
-
             <div class="shead"><h2><i class="fas fa-trophy"></i> Top 5 Best-Selling Products</h2></div>
-            <div id="top-products-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 25px;">
-                <div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading...</p></div>
-            </div>
-
+            <div id="top-products-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 25px;"><div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             <div class="shead"><h2><i class="fas fa-chart-bar"></i> Last 7 Days Sales</h2></div>
-            <div id="weekly-chart-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 25px;">
-                <div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading chart...</p></div>
-            </div>
+            <div id="weekly-chart-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 25px;"><div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading chart...</p></div></div>
         </div>
 
         <!-- PRODUCTS -->
         <div class="section" id="sec-products">
-            <div class="shead">
-                <h2><i class="fas fa-box"></i> All Products</h2>
-                <button class="btn-p" onclick="switchTab('add')"><i class="fas fa-plus"></i> Add New</button>
-            </div>
+            <div class="shead"><h2><i class="fas fa-box"></i> All Products</h2><button class="btn-p" onclick="switchTab('add')"><i class="fas fa-plus"></i> Add New</button></div>
             <div id="products-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
         <!-- ADD/EDIT PRODUCT -->
         <div class="section" id="sec-add">
-            <div class="shead">
-                <h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Product</h2>
-                <button class="btn-s" onclick="switchTab('products')"><i class="fas fa-arrow-left"></i> Back</button>
-            </div>
+            <div class="shead"><h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Product</h2><button class="btn-s" onclick="switchTab('products')"><i class="fas fa-arrow-left"></i> Back</button></div>
             <div id="form-msg" class="msg"></div>
             <form id="p-form" onsubmit="submitProduct(event)" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                 <input type="hidden" id="edit-id">
                 <div class="fgroup"><label>📝 Product Name *</label><input type="text" id="p-name" required></div>
-                <div class="fgroup"><label>📁 Category *</label>
-                    <select id="p-cat" required onchange="onCategoryChange()">
-                        <option value="">-- Select --</option>
-                        <option value="Hijab Collection">Hijab Collection</option>
-                        <option value="Burqa Collection">Burqa Collection</option>
-                        <option value="Abaya Collection">Abaya Collection</option>
-                    </select>
-                </div>
+                <div class="fgroup"><label>📁 Category *</label><select id="p-cat" required onchange="onCategoryChange()"><option value="">-- Select --</option><option value="Hijab Collection">Hijab Collection</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option></select></div>
                 <div class="fgroup"><label>💰 Price (Taka) *</label><input type="text" id="p-price" placeholder="1000 অথবা Coming Soon" required></div>
-                <div class="fgroup"><label>📦 Stock Quantity *</label>
-                    <input type="number" id="p-stock" placeholder="যেমন: 10" required min="0" value="1">
-                </div>
-                <div class="fgroup">
-                    <label>🖼️ Main Image URL *</label>
-                    <input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required>
-                    <div class="img-upload-wrap">
-                        <input type="file" id="p-main-file" accept="image/*" style="display:none" onchange="uploadMainImage(event)">
-                        <button type="button" class="upload-btn" onclick="document.getElementById('p-main-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload From Gallery</button>
-                        <span id="p-main-status" class="upload-status"></span>
-                    </div>
-                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
-                </div>
-                <div class="fgroup">
-                    <label>🖼️ Additional Images (ঐচ্ছিক)</label>
-                    <div id="additional-images"></div>
-                    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-                        <button type="button" class="btn-s" onclick="addAdditionalImage()" style="flex:1;min-width:140px;justify-content:center"><i class="fas fa-plus"></i> Add Row</button>
-                        <input type="file" id="additional-files" accept="image/*" multiple style="display:none" onchange="uploadAdditionalMultiple(event)">
-                        <button type="button" class="upload-btn" onclick="document.getElementById('additional-files').click()" style="flex:1;min-width:140px;justify-content:center"><i class="fas fa-cloud-upload-alt"></i> Upload Multiple</button>
-                    </div>
-                </div>
+                <div class="fgroup"><label>📦 Stock Quantity *</label><input type="number" id="p-stock" placeholder="যেমন: 10" required min="0" value="1"></div>
+                <div class="fgroup"><label>🖼️ Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required><div class="img-upload-wrap"><input type="file" id="p-main-file" accept="image/*" style="display:none" onchange="uploadMainImage(event)"><button type="button" class="upload-btn" onclick="document.getElementById('p-main-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload From Gallery</button><span id="p-main-status" class="upload-status"></span></div><small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small></div>
+                <div class="fgroup"><label>🖼️ Additional Images (ঐচ্ছিক)</label><div id="additional-images"></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn-s" onclick="addAdditionalImage()" style="flex:1;min-width:140px;justify-content:center"><i class="fas fa-plus"></i> Add Row</button><input type="file" id="additional-files" accept="image/*" multiple style="display:none" onchange="uploadAdditionalMultiple(event)"><button type="button" class="upload-btn" onclick="document.getElementById('additional-files').click()" style="flex:1;min-width:140px;justify-content:center"><i class="fas fa-cloud-upload-alt"></i> Upload Multiple</button></div></div>
                 <div class="fgroup"><label>🎥 Video URL (ঐচ্ছিক)</label><input type="text" id="p-video" placeholder="YouTube / Facebook / Vimeo Video Link"></div>
-                <div class="fgroup"><label>🏷️ Badge (ঐচ্ছিক)</label>
-                    <select id="p-badge">
-                        <option value="">None</option>
-                        <option value="new">NEW</option>
-                        <option value="hot">HOT</option>
-                        <option value="sale">SALE</option>
-                        <option value="soldout">SOLD OUT</option>
-                    </select>
-                </div>
+                <div class="fgroup"><label>🏷️ Badge (ঐচ্ছিক)</label><select id="p-badge"><option value="">None</option><option value="new">NEW</option><option value="hot">HOT</option><option value="sale">SALE</option><option value="soldout">SOLD OUT</option></select></div>
                 <div class="fgroup" id="size-section" style="display: none;"><label>📏 Sizes</label><div class="size-box" id="size-box"></div></div>
-                <div class="fgroup">
-                    <label>🎨 Colors *</label>
-                    <div id="colors"></div>
-                    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-                        <button type="button" class="btn-s" onclick="addColor()" style="flex:1;min-width:140px;justify-content:center"><i class="fas fa-plus"></i> Add Color Row</button>
-                    </div>
-                </div>
+                <div class="fgroup"><label>🎨 Colors *</label><div id="colors"></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn-s" onclick="addColor()" style="flex:1;min-width:140px;justify-content:center"><i class="fas fa-plus"></i> Add Color Row</button></div></div>
                 <div class="fgroup"><label>📄 Description *</label><textarea id="p-desc" rows="8" required></textarea></div>
-                <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;">
-                    <button type="submit" class="btn-p" id="submit-btn" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save</button>
-                    <button type="button" class="btn-s" onclick="resetForm()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button>
-                </div>
+                <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;"><button type="submit" class="btn-p" id="submit-btn" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save</button><button type="button" class="btn-s" onclick="resetForm()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button></div>
             </form>
         </div>
 
         <!-- ORDERS -->
         <div class="section" id="sec-orders">
-            <div class="shead">
-                <h2><i class="fas fa-shopping-bag"></i> All Orders</h2>
-                <button class="btn-s" onclick="loadOrders(true)"><i class="fas fa-sync-alt"></i> Refresh</button>
-            </div>
-            <div style="position: relative; margin-bottom: 15px;">
-                <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold);"></i>
-                <input type="text" id="order-search" placeholder="Phone, Order ID, Name বা Address দিয়ে খুঁজুন..." oninput="applyOrderFilters()" style="width: 100%; padding: 13px 40px 13px 45px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;">
-                <button id="order-search-clear" onclick="clearOrderSearch()" style="display: none; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 5px;"><i class="fas fa-times-circle"></i></button>
-            </div>
-            <div class="ofilter" id="date-filter" style="margin-bottom: 10px;">
-                <button class="active" data-date="all" onclick="setDateFilter('all')">📆 All Time</button>
-                <button data-date="today" onclick="setDateFilter('today')">☀️ Today</button>
-                <button data-date="week" onclick="setDateFilter('week')">📅 Last 7 Days</button>
-                <button data-date="month" onclick="setDateFilter('month')">🗓️ This Month</button>
-                <button data-date="custom" onclick="setDateFilter('custom')">🎯 Custom</button>
-            </div>
-            <div id="custom-date-range" style="display: none; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 15px; gap: 10px; flex-wrap: wrap; align-items: center;">
-                <label style="font-size: 12px; color: var(--muted); font-weight: 600;">From:</label>
-                <input type="date" id="date-from" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit;">
-                <label style="font-size: 12px; color: var(--muted); font-weight: 600;">To:</label>
-                <input type="date" id="date-to" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit;">
-                <button onclick="clearCustomDate()" class="btn-s" style="padding: 8px 14px; font-size: 12px;"><i class="fas fa-times"></i> Clear</button>
-            </div>
-            <div class="ofilter" id="order-filter">
-                <button class="active" data-filter="all" onclick="filterOrders('all')">📦 All Status</button>
-                <button data-filter="pending" onclick="filterOrders('pending')">⏳ Pending</button>
-                <button data-filter="completed" onclick="filterOrders('completed')">✅ Completed</button>
-            </div>
-            <div id="order-result-count" style="font-size: 13px; color: var(--muted); margin-bottom: 15px; padding: 10px 15px; background: var(--card); border: 1px solid var(--border); border-radius: 10px;">
-                <i class="fas fa-info-circle" style="color: var(--gold);"></i> <span id="order-count-text">Loading...</span>
-            </div>
+            <div class="shead"><h2><i class="fas fa-shopping-bag"></i> All Orders</h2><button class="btn-s" onclick="loadOrders(true)"><i class="fas fa-sync-alt"></i> Refresh</button></div>
+            <div style="position: relative; margin-bottom: 15px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold);"></i><input type="text" id="order-search" placeholder="Phone, Order ID, Name বা Address দিয়ে খুঁজুন..." oninput="applyOrderFilters()" style="width: 100%; padding: 13px 40px 13px 45px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;"><button id="order-search-clear" onclick="clearOrderSearch()" style="display: none; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 5px;"><i class="fas fa-times-circle"></i></button></div>
+            <div class="ofilter" id="date-filter" style="margin-bottom: 10px;"><button class="active" data-date="all" onclick="setDateFilter('all')">📆 All Time</button><button data-date="today" onclick="setDateFilter('today')">☀️ Today</button><button data-date="week" onclick="setDateFilter('week')">📅 Last 7 Days</button><button data-date="month" onclick="setDateFilter('month')">🗓️ This Month</button><button data-date="custom" onclick="setDateFilter('custom')">🎯 Custom</button></div>
+            <div id="custom-date-range" style="display: none; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 15px; gap: 10px; flex-wrap: wrap; align-items: center;"><label style="font-size: 12px; color: var(--muted); font-weight: 600;">From:</label><input type="date" id="date-from" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit;"><label style="font-size: 12px; color: var(--muted); font-weight: 600;">To:</label><input type="date" id="date-to" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit;"><button onclick="clearCustomDate()" class="btn-s" style="padding: 8px 14px; font-size: 12px;"><i class="fas fa-times"></i> Clear</button></div>
+            <div class="ofilter" id="order-filter"><button class="active" data-filter="all" onclick="filterOrders('all')">📦 All Status</button><button data-filter="pending" onclick="filterOrders('pending')">⏳ Pending</button><button data-filter="completed" onclick="filterOrders('completed')">✅ Completed</button></div>
+            <div id="order-result-count" style="font-size: 13px; color: var(--muted); margin-bottom: 15px; padding: 10px 15px; background: var(--card); border: 1px solid var(--border); border-radius: 10px;"><i class="fas fa-info-circle" style="color: var(--gold);"></i> <span id="order-count-text">Loading...</span></div>
             <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
         <!-- REVIEWS -->
         <div class="section" id="sec-reviews">
-            <div class="shead">
-                <h2><i class="fas fa-star"></i> Customer Reviews</h2>
-                <button class="btn-s" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Refresh</button>
-            </div>
+            <div class="shead"><h2><i class="fas fa-star"></i> Customer Reviews</h2><button class="btn-s" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
             <div id="reviews-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
         <!-- NEWSLETTER -->
         <div class="section" id="sec-newsletter">
-            <div class="shead">
-                <h2><i class="fas fa-envelope"></i> Newsletter Subscribers</h2>
-                <button class="btn-s" onclick="loadNewsletter()"><i class="fas fa-sync-alt"></i> Refresh</button>
-            </div>
-            <div class="news-hero">
-                <div class="news-hero-left">
-                    <div class="news-hero-icon"><i class="fas fa-users"></i></div>
-                    <div class="news-hero-text">
-                        <h3>Total Subscribers</h3>
-                        <p>নতুন কালেকশন ও অফার এদের কাছে পাঠাতে পারবেন</p>
-                    </div>
-                </div>
-                <div class="news-count-big" id="news-total-count">0</div>
-            </div>
-            <div class="news-export-bar">
-                <button class="news-export-btn" onclick="exportNewsletterCSV()"><i class="fas fa-file-csv"></i> Export as CSV</button>
-                <button class="btn-s" onclick="copyAllEmails()" style="padding: 10px 18px;"><i class="fas fa-copy"></i> Copy All Emails</button>
-            </div>
-            <div class="search-news-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="news-search" placeholder="Search email..." onkeyup="filterNewsletter()">
-            </div>
+            <div class="shead"><h2><i class="fas fa-envelope"></i> Newsletter Subscribers</h2><button class="btn-s" onclick="loadNewsletter()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
+            <div class="news-hero"><div class="news-hero-left"><div class="news-hero-icon"><i class="fas fa-users"></i></div><div class="news-hero-text"><h3>Total Subscribers</h3><p>নতুন কালেকশন ও অফার এদের কাছে পাঠাতে পারবেন</p></div></div><div class="news-count-big" id="news-total-count">0</div></div>
+            <div class="news-export-bar"><button class="news-export-btn" onclick="exportNewsletterCSV()"><i class="fas fa-file-csv"></i> Export as CSV</button><button class="btn-s" onclick="copyAllEmails()" style="padding: 10px 18px;"><i class="fas fa-copy"></i> Copy All Emails</button></div>
+            <div class="search-news-box"><i class="fas fa-search"></i><input type="text" id="news-search" placeholder="Search email..." onkeyup="filterNewsletter()"></div>
             <div id="newsletter-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
         <!-- COUPONS -->
         <div class="section" id="sec-coupons">
-            <div class="shead">
-                <h2><i class="fas fa-ticket-alt"></i> Discount Coupons</h2>
-                <button class="btn-p" onclick="openCouponModal()"><i class="fas fa-plus"></i> Add Coupon</button>
-            </div>
-            <div class="coupon-hero">
-                <div class="coupon-hero-left">
-                    <div class="coupon-hero-icon"><i class="fas fa-tags"></i></div>
-                    <div class="coupon-hero-text">
-                        <h3>Active Coupons</h3>
-                        <p>এই কুপনগুলো দিয়ে কাস্টমাররা ছাড় পাবে</p>
-                    </div>
-                </div>
-                <div class="coupon-count-big" id="coupon-total-count">0</div>
-            </div>
-            <div class="ofilter" id="coupon-filter">
-                <button class="active" data-cfilter="all" onclick="filterCoupons('all')">📦 All</button>
-                <button data-cfilter="active" onclick="filterCoupons('active')">✅ Active</button>
-                <button data-cfilter="inactive" onclick="filterCoupons('inactive')">⏸️ Inactive</button>
-                <button data-cfilter="expired" onclick="filterCoupons('expired')">❌ Expired</button>
-            </div>
+            <div class="shead"><h2><i class="fas fa-ticket-alt"></i> Discount Coupons</h2><button class="btn-p" onclick="openCouponModal()"><i class="fas fa-plus"></i> Add Coupon</button></div>
+            <div class="coupon-hero"><div class="coupon-hero-left"><div class="coupon-hero-icon"><i class="fas fa-tags"></i></div><div class="coupon-hero-text"><h3>Active Coupons</h3><p>এই কুপনগুলো দিয়ে কাস্টমাররা ছাড় পাবে</p></div></div><div class="coupon-count-big" id="coupon-total-count">0</div></div>
+            <div class="ofilter" id="coupon-filter"><button class="active" data-cfilter="all" onclick="filterCoupons('all')">📦 All</button><button data-cfilter="active" onclick="filterCoupons('active')">✅ Active</button><button data-cfilter="inactive" onclick="filterCoupons('inactive')">⏸️ Inactive</button><button data-cfilter="expired" onclick="filterCoupons('expired')">❌ Expired</button></div>
             <div id="coupons-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
         <!-- BANNERS -->
         <div class="section" id="sec-banners">
-            <div class="shead">
-                <h2><i class="fas fa-images"></i> Promo Banners</h2>
-                <button class="btn-p" onclick="openBannerModal()"><i class="fas fa-plus"></i> Add Banner</button>
-            </div>
-            <div class="coupon-hero" style="background: linear-gradient(135deg, rgba(59,130,246,.12) 0%, rgba(59,130,246,.03) 100%); border-color: rgba(59,130,246,.4);">
-                <div class="coupon-hero-left">
-                    <div class="coupon-hero-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 0 20px rgba(59,130,246,.4);"><i class="fas fa-images"></i></div>
-                    <div class="coupon-hero-text">
-                        <h3 style="color: #60a5fa;">Active Banners</h3>
-                        <p>ওয়েবসাইটের হোম পেজে এই ব্যানারগুলো স্লাইড হবে</p>
-                    </div>
-                </div>
-                <div class="coupon-count-big" id="banner-total-count" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">0</div>
-            </div>
+            <div class="shead"><h2><i class="fas fa-images"></i> Promo Banners</h2><button class="btn-p" onclick="openBannerModal()"><i class="fas fa-plus"></i> Add Banner</button></div>
+            <div class="coupon-hero" style="background: linear-gradient(135deg, rgba(59,130,246,.12) 0%, rgba(59,130,246,.03) 100%); border-color: rgba(59,130,246,.4);"><div class="coupon-hero-left"><div class="coupon-hero-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 0 20px rgba(59,130,246,.4);"><i class="fas fa-images"></i></div><div class="coupon-hero-text"><h3 style="color: #60a5fa;">Active Banners</h3><p>ওয়েবসাইটের হোম পেজে এই ব্যানারগুলো স্লাইড হবে</p></div></div><div class="coupon-count-big" id="banner-total-count" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">0</div></div>
             <div id="banners-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading Banners...</p></div></div>
         </div>
 
         <!-- PAGES EDITOR -->
         <div class="section" id="sec-pages">
-            <div class="shead">
-                <h2><i class="fas fa-file-alt"></i> Website Pages Editor</h2>
-                <button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button>
-            </div>
-            <div class="ofilter" id="page-filter">
-                <button class="active" data-page="about" onclick="switchPage('about')">🌸 About Us</button>
-                <button data-page="privacy" onclick="switchPage('privacy')">🔒 Privacy</button>
-                <button data-page="terms" onclick="switchPage('terms')">📜 Terms</button>
-                <button data-page="return-policy" onclick="switchPage('return-policy')">🔄 Return Policy</button>
-                <button data-page="contact" onclick="switchPage('contact')">📞 Contact</button>
-                <button data-page="track-order" onclick="switchPage('track-order')">📦 Track Order</button>
-            </div>
+            <div class="shead"><h2><i class="fas fa-file-alt"></i> Website Pages Editor</h2><button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
+            <div class="ofilter" id="page-filter"><button class="active" data-page="about" onclick="switchPage('about')">🌸 About Us</button><button data-page="privacy" onclick="switchPage('privacy')">🔒 Privacy</button><button data-page="terms" onclick="switchPage('terms')">📜 Terms</button><button data-page="return-policy" onclick="switchPage('return-policy')">🔄 Return Policy</button><button data-page="contact" onclick="switchPage('contact')">📞 Contact</button><button data-page="track-order" onclick="switchPage('track-order')">📦 Track Order</button></div>
             <div id="page-editor-wrapper" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
-                <div class="shead" style="margin-bottom: 12px;">
-                    <h2 id="page-editor-title" style="font-size: 16px;"><i class="fas fa-edit"></i> Editing: About Us</h2>
-                    <span id="page-editor-status" style="font-size: 11px; color: var(--muted);"></span>
-                </div>
-                <div class="fgroup">
-                    <label>📝 HTML Content</label>
-                    <textarea id="page-html-editor" rows="20" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 400px;"></textarea>
-                </div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-                    <button class="btn-p" id="page-save-btn" onclick="savePage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Page</button>
-                    <button class="btn-s" onclick="resetPageToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button>
-                    <button class="btn-s" onclick="previewPage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-eye"></i> Preview</button>
-                </div>
+                <div class="shead" style="margin-bottom: 12px;"><h2 id="page-editor-title" style="font-size: 16px;"><i class="fas fa-edit"></i> Editing: About Us</h2><span id="page-editor-status" style="font-size: 11px; color: var(--muted);"></span></div>
+                <div class="fgroup"><label>📝 HTML Content</label><textarea id="page-html-editor" rows="20" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 400px;"></textarea></div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;"><button class="btn-p" id="page-save-btn" onclick="savePage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Page</button><button class="btn-s" onclick="resetPageToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button><button class="btn-s" onclick="previewPage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-eye"></i> Preview</button></div>
                 <div id="page-form-msg" class="msg" style="margin-top: 12px;"></div>
             </div>
         </div>
 
         <!-- CONTENT MANAGER -->
         <div class="section" id="sec-content">
-            <div class="shead">
-                <h2><i class="fas fa-edit"></i> Content Manager</h2>
-                <button class="btn-s" onclick="loadContentSettings()"><i class="fas fa-sync-alt"></i> Reload</button>
-            </div>
+            <div class="shead"><h2><i class="fas fa-edit"></i> Content Manager</h2><button class="btn-s" onclick="loadContentSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
             <div id="content-msg" class="msg"></div>
-
-            <!-- Logo & Branding -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-image"></i> Logo & Branding</h3>
-                <div class="fgroup">
-                    <label>🖼️ Main Logo URL</label>
-                    <input type="text" id="c-logo-url" placeholder="https://i.ibb.co/xxxxx/logo.png">
-                    <div class="img-upload-wrap">
-                        <input type="file" id="c-logo-file" accept="image/*" style="display:none" onchange="uploadLogoImage(event)">
-                        <button type="button" class="upload-btn" onclick="document.getElementById('c-logo-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Logo</button>
-                    </div>
-                </div>
+                <div class="fgroup"><label>🖼️ Main Logo URL</label><input type="text" id="c-logo-url" placeholder="https://i.ibb.co/xxxxx/logo.png"><div class="img-upload-wrap"><input type="file" id="c-logo-file" accept="image/*" style="display:none" onchange="uploadLogoImage(event)"><button type="button" class="upload-btn" onclick="document.getElementById('c-logo-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Logo</button></div></div>
                 <div class="fgroup"><label>📝 Footer Copyright Text</label><input type="text" id="c-copyright-text" placeholder="© 2026 Your Store. All rights reserved."></div>
             </div>
-
-            <!-- Contact Icons -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-icons"></i> Contact Icons</h3>
                 <div id="contact-icons-container"></div>
                 <button type="button" class="btn-s" onclick="addContactIcon()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add New Contact Icon</button>
             </div>
-
-            <!-- Payment Methods -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-credit-card"></i> Payment Methods</h3>
                 <div id="payment-methods-container"></div>
                 <button type="button" class="btn-s" onclick="addPaymentMethod()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Payment Method</button>
             </div>
-
-            <!-- Couriers -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Track Order Couriers</h3>
                 <div id="couriers-container"></div>
                 <button type="button" class="btn-s" onclick="addCourier()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Courier</button>
             </div>
-
-            <!-- FAQ -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-question-circle"></i> FAQ Manager</h3>
                 <div id="faq-container"></div>
                 <button type="button" class="btn-s" onclick="addFAQ()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add FAQ</button>
             </div>
-
-            <!-- Size Chart -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-ruler"></i> Size Chart Manager</h3>
-                <div class="fgroup">
-                    <label>📁 Select Category</label>
-                    <select id="size-chart-category" onchange="loadSizeChartForCategory()">
-                        <option value="default">Default / সাধারণ</option>
-                        <option value="Burqa Collection">Burqa Collection</option>
-                        <option value="Abaya Collection">Abaya Collection</option>
-                        <option value="Hijab Collection">Hijab Collection</option>
-                    </select>
-                </div>
+                <div class="fgroup"><label>📁 Select Category</label><select id="size-chart-category" onchange="loadSizeChartForCategory()"><option value="default">Default / সাধারণ</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option><option value="Hijab Collection">Hijab Collection</option></select></div>
                 <div class="fgroup"><label>📝 Chart Title</label><input type="text" id="size-chart-title-input" placeholder="বোরকা সাইজ চার্ট"></div>
-                <div class="fgroup">
-                    <label>📏 Size Rows</label>
-                    <div class="size-chart-header-row">
-                        <span>Size</span><span>Chest</span><span>Waist</span><span>Length</span><span>Shoulder</span><span>Sleeve</span><span></span>
-                    </div>
-                    <div id="size-chart-rows-container"></div>
-                    <button type="button" class="btn-s" onclick="addSizeChartRow()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Size Row</button>
-                </div>
+                <div class="fgroup"><label>📏 Size Rows</label><div class="size-chart-header-row"><span>Size</span><span>Chest</span><span>Waist</span><span>Length</span><span>Shoulder</span><span>Sleeve</span><span></span></div><div id="size-chart-rows-container"></div><button type="button" class="btn-s" onclick="addSizeChartRow()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Size Row</button></div>
             </div>
-
-            <!-- Home Collections -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-th-large"></i> Home Collections</h3>
                 <div id="home-collections-container"></div>
                 <button type="button" class="btn-s" onclick="addHomeCollection()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Collection Card</button>
             </div>
-
             <div style="position: sticky; bottom: 20px; background: var(--bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap;">
                 <button class="btn-p" id="content-save-btn" onclick="saveContentSettings()" style="flex: 1; min-width: 200px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save All Content</button>
                 <button class="btn-s" onclick="resetContentToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button>
@@ -873,19 +722,14 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 
         <!-- SETTINGS -->
         <div class="section" id="sec-settings">
-            <div class="shead">
-                <h2><i class="fas fa-cog"></i> Store Settings</h2>
-                <button class="btn-s" onclick="loadSettings()"><i class="fas fa-sync-alt"></i> Reload</button>
-            </div>
+            <div class="shead"><h2><i class="fas fa-cog"></i> Store Settings</h2><button class="btn-s" onclick="loadSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
             <div id="settings-msg" class="msg"></div>
-
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-store"></i> Store Information</h3>
                 <div class="fgroup"><label>🏪 Store Name *</label><input type="text" id="s-store-name" placeholder="Burqa Bazar and Boutiques"></div>
                 <div class="fgroup"><label>📝 Welcome Text (Homepage)</label><input type="text" id="s-welcome-text" placeholder="WELCOME TO BURQA BAZAR AND BOUTIQUES ✨"></div>
                 <div class="fgroup"><label>📄 Website Title (Browser Tab)</label><input type="text" id="s-page-title" placeholder="Burqa Bazar & Boutiques | Premium Hijab, Burqa & Abaya Collection"></div>
             </div>
-
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-phone"></i> Contact Information</h3>
                 <div class="fgroup"><label>📞 Phone Number</label><input type="text" id="s-phone" placeholder="+880 1832-140613"></div>
@@ -893,7 +737,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div class="fgroup"><label>📧 Email</label><input type="email" id="s-email" placeholder="burqabazaarandboutiques@gmail.com"></div>
                 <div class="fgroup"><label>📍 Store Address</label><textarea id="s-address" rows="2" placeholder="ফেনী সওদাগর পট্টি..."></textarea></div>
             </div>
-
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-money-bill-wave"></i> Payment Numbers</h3>
                 <div class="fgroup"><label>💳 bKash Number (Personal)</label><input type="text" id="s-bkash" placeholder="01832140613"></div>
@@ -902,7 +745,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div class="fgroup"><label>🚀 Rocket Number (Personal)</label><input type="text" id="s-rocket" placeholder="01832140613"></div>
                 <div class="fgroup"><label>💵 SureCash Number (Personal)</label><input type="text" id="s-surecash" placeholder="01832140613"></div>
             </div>
-
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-university"></i> Bank Information (Optional)</h3>
                 <div class="fgroup"><label>🏦 Bank Name</label><input type="text" id="s-bank-name" placeholder="যেমন: Dutch Bangla Bank"></div>
@@ -910,7 +752,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div class="fgroup"><label>🔢 Account Number</label><input type="text" id="s-bank-account-number" placeholder="1234567890123"></div>
                 <div class="fgroup"><label>🏢 Branch Name</label><input type="text" id="s-bank-branch" placeholder="যেমন: Feni Branch"></div>
             </div>
-
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Delivery Charges</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -918,7 +759,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                     <div class="fgroup"><label>🚚 Outside Feni (৳) *</label><input type="number" id="s-delivery-outside" placeholder="130" min="0"></div>
                 </div>
             </div>
-
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-share-alt"></i> Social Media Links (ঐচ্ছিক)</h3>
                 <div class="fgroup"><label><i class="fab fa-facebook-f" style="color: #1877f2;"></i> Facebook Page URL</label><input type="text" id="s-facebook" placeholder="https://facebook.com/yourpage"></div>
@@ -926,7 +766,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div class="fgroup"><label><i class="fab fa-youtube" style="color: #ff0000;"></i> YouTube Channel URL</label><input type="text" id="s-youtube" placeholder="https://youtube.com/@yourchannel"></div>
                 <div class="fgroup"><label><i class="fab fa-tiktok"></i> TikTok Profile URL</label><input type="text" id="s-tiktok" placeholder="https://tiktok.com/@yourprofile"></div>
             </div>
-
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-tools"></i> Backup & Sync Tools</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
@@ -939,7 +778,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                     <button type="button" class="btn-s" onclick="clearAdminCacheNow()" style="justify-content: center; padding: 12px;"><i class="fas fa-broom"></i> Clear Cache</button>
                 </div>
             </div>
-
             <div style="position: sticky; bottom: 20px; background: var(--bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap;">
                 <button class="btn-p" id="settings-save-btn" onclick="saveSettings()" style="flex: 1; min-width: 200px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save All Settings</button>
                 <button class="btn-s" onclick="resetSettingsToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button>
@@ -955,24 +793,13 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
         <div id="coupon-form-msg" class="msg"></div>
         <input type="hidden" id="c-edit-id">
         <div class="fgroup"><label>🎟️ Coupon Code *</label><input type="text" id="c-code" placeholder="যেমন: EID20" required style="text-transform: uppercase;"></div>
-        <div class="fgroup"><label>📉 Discount Type *</label>
-            <select id="c-type" required onchange="onCouponTypeChange()">
-                <option value="percentage">Percentage (%)</option>
-                <option value="flat">Flat (৳)</option>
-            </select>
-        </div>
+        <div class="fgroup"><label>📉 Discount Type *</label><select id="c-type" required onchange="onCouponTypeChange()"><option value="percentage">Percentage (%)</option><option value="flat">Flat (৳)</option></select></div>
         <div class="fgroup"><label id="c-value-label">💯 Discount Value *</label><input type="number" id="c-value" placeholder="20" required min="1"></div>
         <div class="fgroup"><label>🛒 Minimum Order (৳) *</label><input type="number" id="c-minorder" placeholder="500" required min="0" value="0"></div>
         <div class="fgroup"><label>📅 Expiry Date *</label><input type="date" id="c-expiry" required></div>
         <div class="fgroup"><label>📝 Description (ঐচ্ছিক)</label><input type="text" id="c-desc" placeholder="যেমন: ঈদ স্পেশাল ২০% ছাড়"></div>
-        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
-            <div><div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div></div>
-            <label class="toggle-switch"><input type="checkbox" id="c-active" checked><span class="toggle-slider"></span></label>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-            <button type="button" class="btn-p" id="c-submit-btn" onclick="submitCoupon()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Coupon</button>
-            <button type="button" class="btn-s" onclick="closeCouponModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button>
-        </div>
+        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;"><div><div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div></div><label class="toggle-switch"><input type="checkbox" id="c-active" checked><span class="toggle-slider"></span></label></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;"><button type="button" class="btn-p" id="c-submit-btn" onclick="submitCoupon()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Coupon</button><button type="button" class="btn-s" onclick="closeCouponModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button></div>
     </div>
 </div>
 
@@ -982,66 +809,22 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
         <h3 id="banner-modal-title"><i class="fas fa-image"></i> Add New Banner</h3>
         <div id="banner-form-msg" class="msg"></div>
         <input type="hidden" id="b-edit-id">
-        <div class="fgroup">
-            <label>🖼️ Banner Image URL *</label>
-            <input type="text" id="b-image" placeholder="https://i.ibb.co/xxxxx/banner.png" required>
-            <div class="img-upload-wrap">
-                <input type="file" id="b-image-file" accept="image/*" style="display:none" onchange="uploadBannerImage(event)">
-                <button type="button" class="upload-btn" onclick="document.getElementById('b-image-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload From Gallery</button>
-            </div>
-            <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">💡 Recommended: 1600×900 px</small>
-        </div>
+        <div class="fgroup"><label>🖼️ Banner Image URL *</label><input type="text" id="b-image" placeholder="https://i.ibb.co/xxxxx/banner.png" required><div class="img-upload-wrap"><input type="file" id="b-image-file" accept="image/*" style="display:none" onchange="uploadBannerImage(event)"><button type="button" class="upload-btn" onclick="document.getElementById('b-image-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload From Gallery</button></div><small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">💡 Recommended: 1600×900 px</small></div>
         <div class="fgroup"><label>🔗 Banner Title (ঐচ্ছিক)</label><input type="text" id="b-title" placeholder="যেমন: ঈদ স্পেশাল কালেকশন"></div>
-        <div class="fgroup"><label>🎯 Click করলে কী হবে?</label>
-            <select id="b-link-type" onchange="onBannerLinkTypeChange()">
-                <option value="none">🔇 কিছুই হবে না</option>
-                <option value="category">📁 Category Page এ যাবে</option>
-                <option value="tab">📄 Website Section এ যাবে</option>
-                <option value="external">🌐 External Website এ যাবে</option>
-            </select>
-        </div>
-        <div class="fgroup" id="b-category-group" style="display: none;">
-            <label>📁 Category</label>
-            <select id="b-category-value">
-                <option value="Hijab Collection">Hijab Collection</option>
-                <option value="Burqa Collection">Burqa Collection</option>
-                <option value="Abaya Collection">Abaya Collection</option>
-            </select>
-        </div>
-        <div class="fgroup" id="b-tab-group" style="display: none;">
-            <label>📄 Section</label>
-            <select id="b-tab-value">
-                <option value="shop">Shop</option>
-                <option value="faq">FAQ</option>
-                <option value="about">About Us</option>
-                <option value="contact">Contact Us</option>
-                <option value="track-order">Track Order</option>
-            </select>
-        </div>
-        <div class="fgroup" id="b-external-group" style="display: none;">
-            <label>🌐 External URL</label>
-            <input type="text" id="b-external-value" placeholder="https://facebook.com/yourpage">
-        </div>
+        <div class="fgroup"><label>🎯 Click করলে কী হবে?</label><select id="b-link-type" onchange="onBannerLinkTypeChange()"><option value="none">🔇 কিছুই হবে না</option><option value="category">📁 Category Page এ যাবে</option><option value="tab">📄 Website Section এ যাবে</option><option value="external">🌐 External Website এ যাবে</option></select></div>
+        <div class="fgroup" id="b-category-group" style="display: none;"><label>📁 Category</label><select id="b-category-value"><option value="Hijab Collection">Hijab Collection</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option></select></div>
+        <div class="fgroup" id="b-tab-group" style="display: none;"><label>📄 Section</label><select id="b-tab-value"><option value="shop">Shop</option><option value="faq">FAQ</option><option value="about">About Us</option><option value="contact">Contact Us</option><option value="track-order">Track Order</option></select></div>
+        <div class="fgroup" id="b-external-group" style="display: none;"><label>🌐 External URL</label><input type="text" id="b-external-value" placeholder="https://facebook.com/yourpage"></div>
         <div class="fgroup"><label>🔢 Order *</label><input type="number" id="b-order" placeholder="1" min="1" value="1" required></div>
-        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
-            <div><div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div></div>
-            <label class="toggle-switch"><input type="checkbox" id="b-active" checked><span class="toggle-slider"></span></label>
-        </div>
-        <div style="margin-top: 15px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;">
-            <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">🖼️ Preview:</div>
-            <div id="b-preview" style="width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                <span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>
-            </div>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-            <button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Banner</button>
-            <button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button>
-        </div>
+        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;"><div><div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div></div><label class="toggle-switch"><input type="checkbox" id="b-active" checked><span class="toggle-slider"></span></label></div>
+        <div style="margin-top: 15px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;"><div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">🖼️ Preview:</div><div id="b-preview" style="width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;"><span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span></div></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;"><button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Banner</button><button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button></div>
     </div>
 </div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -1071,6 +854,10 @@ let pagesCache = {};
 let currentEditingPage = 'about';
 const ALL_SIZES = ["50", "52", "54", "56"];
 
+// Track seen items for notifications
+const _seenIds = { newsletter: new Set(), reviews: new Set(), orders: new Set() };
+const _firstLoad = { newsletter: true, reviews: true, orders: true };
+
 const DEFAULT_SETTINGS = {
     storeName: 'Burqa Bazar and Boutiques',
     welcomeText: 'WELCOME TO BURQA BAZAR AND BOUTIQUES ✨',
@@ -1095,7 +882,6 @@ const DEFAULT_PAGES = {
     'track-order': `<h2 style="text-align:center;margin-bottom:25px;">📦 Tracking Order</h2>`
 };
 const PAGE_NAMES = { 'about': 'About Us', 'privacy': 'Privacy Policy', 'terms': 'Terms & Conditions', 'return-policy': 'Return Policy', 'contact': 'Contact Us', 'track-order': 'Track Order' };
-
 const DEFAULT_CONTENT = { logoUrl: 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png', copyrightText: '© 2026 Burqa Bazar and Boutiques. All rights reserved.' };
 
 // ===== UTILITIES =====
@@ -1163,7 +949,15 @@ onAuthStateChanged(auth, (user) => {
         admin.classList.add('active');
         document.getElementById('user-badge').textContent = user.email;
         instantLoadFromCache();
-        preloadEverything();
+        // Restore last tab
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlTab = urlParams.get('tab');
+        const savedTab = localStorage.getItem('admin_current_tab') || 'dashboard';
+        const initialTab = urlTab || savedTab;
+        setTimeout(() => window.switchTab(initialTab), 150);
+        // Start background sync + realtime listeners
+        setTimeout(() => preloadEverything(), 100);
+        setTimeout(() => attachRealtimeListeners(), 1500);
     } else {
         loginScreen.style.display = 'flex';
         admin.classList.remove('active');
@@ -1182,12 +976,12 @@ function instantLoadFromCache() {
     const cN = aCacheGet(ADMIN_CACHE.newsletter);
     const cC = aCacheGet(ADMIN_CACHE.coupons);
     const cB = aCacheGet(ADMIN_CACHE.banners);
-    if (cP) { products = cP; }
-    if (cO) { orders = cO; }
-    if (cR) { reviews = cR; }
-    if (cN) { newsletterList = cN; }
-    if (cC) { coupons = cC; }
-    if (cB) { banners = cB; }
+    if (cP) products = cP;
+    if (cO) orders = cO;
+    if (cR) reviews = cR;
+    if (cN) newsletterList = cN;
+    if (cC) coupons = cC;
+    if (cB) banners = cB;
     const cachedStats = aCacheGet(ADMIN_CACHE.stats);
     if (cachedStats) applyStatsToUI(cachedStats, cP || [], cO || []);
     else if (cP || cO) recalcStatsFromCache();
@@ -1224,10 +1018,7 @@ async function preloadEverything() {
         if (szS) { const obj = {}; szS.forEach(d => { obj[d.id] = d.data(); }); allSizeCharts = obj; aCacheSet(ADMIN_CACHE.sizeCharts, obj); }
         if (hcS) { const arr = []; hcS.forEach(d => arr.push({ docId: d.id, ...d.data() })); aCacheSet(ADMIN_CACHE.homeCollections, arr); }
         if (setS && setS.exists()) { const data = setS.data(); settingsCache = { ...DEFAULT_SETTINGS, ...data }; aCacheSet(ADMIN_CACHE.settings, settingsCache); }
-        
         recalcStatsFromCache();
-        
-        // Re-render active tab
         const activeTab = document.querySelector('.tab.active');
         if (activeTab) {
             const tabName = activeTab.getAttribute('data-tab');
@@ -1242,8 +1033,100 @@ async function preloadEverything() {
     } catch(e) { console.warn('Preload error:', e); }
 }
 
+// ===== REALTIME LISTENERS (Customer → Admin instant) =====
+function attachRealtimeListeners() {
+    if (!onSnapshot) { console.warn('onSnapshot not available'); return; }
+    console.log('🔴 Attaching realtime listeners...');
+    
+    // Newsletter
+    try {
+        onSnapshot(collection(db, 'newsletter'), (snap) => {
+            const arr = [];
+            snap.forEach(d => arr.push({ docId: d.id, ...d.data() }));
+            arr.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+            newsletterList = arr;
+            aCacheSet(ADMIN_CACHE.newsletter, arr);
+            
+            if (!_firstLoad.newsletter) {
+                arr.forEach(item => {
+                    if (!_seenIds.newsletter.has(item.docId)) {
+                        _seenIds.newsletter.add(item.docId);
+                        showAdminNotification('newsletter', '📬 নতুন Newsletter Subscriber', `${item.email || 'Unknown email'}`, 10000);
+                    }
+                });
+            } else {
+                arr.forEach(item => _seenIds.newsletter.add(item.docId));
+                _firstLoad.newsletter = false;
+            }
+            
+            const newsTotalEl = document.getElementById('news-total-count');
+            if (newsTotalEl) newsTotalEl.textContent = arr.length;
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && activeTab.getAttribute('data-tab') === 'newsletter') renderNewsletter();
+        }, (err) => console.warn('Newsletter listener:', err.message));
+    } catch(e) {}
+    
+    // Reviews
+    try {
+        onSnapshot(collection(db, 'reviews'), (snap) => {
+            const arr = [];
+            snap.forEach(d => arr.push({ docId: d.id, ...d.data() }));
+            arr.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+            reviews = arr;
+            aCacheSet(ADMIN_CACHE.reviews, arr);
+            
+            if (!_firstLoad.reviews) {
+                arr.forEach(item => {
+                    if (!_seenIds.reviews.has(item.docId)) {
+                        _seenIds.reviews.add(item.docId);
+                        const stars = '⭐'.repeat(parseInt(item.rating) || 0);
+                        showAdminNotification('review', '⭐ নতুন Review এসেছে', `${item.name || 'Anonymous'} — ${stars} "${(item.text || '').substring(0, 40)}${(item.text || '').length > 40 ? '...' : ''}"`, 10000);
+                    }
+                });
+            } else {
+                arr.forEach(item => _seenIds.reviews.add(item.docId));
+                _firstLoad.reviews = false;
+            }
+            
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && activeTab.getAttribute('data-tab') === 'reviews') renderReviews();
+        }, (err) => console.warn('Reviews listener:', err.message));
+    } catch(e) {}
+    
+    // Orders
+    try {
+        onSnapshot(collection(db, 'orders'), (snap) => {
+            const arr = [];
+            snap.forEach(d => arr.push({ docId: d.id, ...d.data() }));
+            arr.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
+            orders = arr;
+            aCacheSet(ADMIN_CACHE.orders, arr);
+            
+            if (!_firstLoad.orders) {
+                arr.forEach(item => {
+                    if (!_seenIds.orders.has(item.docId)) {
+                        _seenIds.orders.add(item.docId);
+                        showAdminNotification('order', '📦 নতুন Order এসেছে!', `${item.name || 'Customer'} — ৳${item.totalAmount || 0} (${item.orderId || ''})`, 12000);
+                    }
+                });
+            } else {
+                arr.forEach(item => _seenIds.orders.add(item.docId));
+                _firstLoad.orders = false;
+            }
+            
+            recalcStatsFromCache();
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && activeTab.getAttribute('data-tab') === 'orders') renderOrders();
+        }, (err) => console.warn('Orders listener:', err.message));
+    } catch(e) {}
+    
+    console.log('✅ All realtime listeners attached');
+}
+
 // ===== TAB SWITCH =====
-window.switchTab = (name) => {
+window.switchTab = function(name) {
+    console.log('⚡ Fast switch:', name);
+    
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     const tab = document.querySelector(`.tab[data-tab="${name}"]`);
@@ -1251,17 +1134,89 @@ window.switchTab = (name) => {
     if (tab) tab.classList.add('active');
     if (sec) sec.classList.add('active');
     
-    if (name === 'products') { if (products.length) renderProducts(); else loadProducts(); }
-    else if (name === 'orders') { if (orders.length) renderOrders(); else loadOrders(); }
-    else if (name === 'reviews') { if (reviews.length) renderReviews(); else loadReviews(); }
-    else if (name === 'newsletter') { if (newsletterList.length) { document.getElementById('news-total-count').textContent = newsletterList.length; renderNewsletter(); } else loadNewsletter(); }
-    else if (name === 'coupons') { if (coupons.length) renderCoupons(); else loadCoupons(); }
-    else if (name === 'banners') { if (banners.length) renderBanners(); else loadBanners(); }
-    else if (name === 'pages') { loadPages().then(() => switchPage(currentEditingPage || 'about')); }
-    else if (name === 'content') loadContentSettings();
-    else if (name === 'settings') loadSettings();
-    else if (name === 'add' && !editingId) resetForm();
-    else if (name === 'dashboard') loadStats();
+    // Save current tab
+    localStorage.setItem('admin_current_tab', name);
+    
+    // Update URL without reload
+    try {
+        const url = new URL(window.location);
+        url.searchParams.set('tab', name);
+        window.history.replaceState({}, '', url);
+    } catch(e) {}
+    
+    // Instant render from cache
+    switch (name) {
+        case 'dashboard':
+            if (products.length || orders.length) recalcStatsFromCache();
+            else loadStats();
+            break;
+        case 'products':
+            if (products.length) renderProducts();
+            else loadProducts();
+            break;
+        case 'orders':
+            if (orders.length) renderOrders();
+            else loadOrders();
+            break;
+        case 'reviews':
+            if (reviews.length) renderReviews();
+            else loadReviews();
+            break;
+        case 'newsletter':
+            if (newsletterList.length) {
+                document.getElementById('news-total-count').textContent = newsletterList.length;
+                renderNewsletter();
+            } else loadNewsletter();
+            break;
+        case 'coupons':
+            if (coupons.length) renderCoupons();
+            else loadCoupons();
+            break;
+        case 'banners':
+            if (banners.length) renderBanners();
+            else loadBanners();
+            break;
+        case 'pages':
+            const cachedPages = aCacheGet(ADMIN_CACHE.pages) || {};
+            pagesCache = cachedPages;
+            switchPage(currentEditingPage || 'about');
+            break;
+        case 'content':
+            const cachedContent = aCacheGet(ADMIN_CACHE.contentSettings) || {};
+            document.getElementById('c-logo-url').value = cachedContent.logoUrl || DEFAULT_CONTENT.logoUrl;
+            document.getElementById('c-copyright-text').value = cachedContent.copyrightText || DEFAULT_CONTENT.copyrightText;
+            renderContactIcons(cachedContent.contactIcons || []);
+            renderPaymentMethods(cachedContent.paymentMethods || []);
+            renderCouriers(cachedContent.couriers || []);
+            const cachedFaq = aCacheGet(ADMIN_CACHE.faq);
+            if (cachedFaq) renderFAQList(cachedFaq);
+            else renderFAQList([]);
+            const cachedSC = aCacheGet(ADMIN_CACHE.sizeCharts);
+            if (cachedSC && Object.keys(cachedSC).length > 0) {
+                allSizeCharts = cachedSC;
+                loadSizeChartForCategory();
+            } else {
+                document.getElementById('size-chart-rows-container').innerHTML = '';
+                addSizeChartRow();
+            }
+            const cachedHC = aCacheGet(ADMIN_CACHE.homeCollections);
+            if (cachedHC) renderHomeCollections(cachedHC);
+            else renderHomeCollections([]);
+            setTimeout(() => loadContentSettings(), 50);
+            break;
+        case 'settings':
+            const cachedSettings = aCacheGet(ADMIN_CACHE.settings);
+            if (cachedSettings) {
+                settingsCache = { ...DEFAULT_SETTINGS, ...cachedSettings };
+                fillSettingsForm();
+            } else {
+                loadSettings();
+            }
+            break;
+        case 'add':
+            if (!editingId) resetForm();
+            break;
+    }
 };
 
 // ===== DASHBOARD STATS =====
@@ -1573,19 +1528,26 @@ window.submitProduct = async (e) => {
         const cleanImg = extractUrl(image) || image;
         const uniqueImages = [...new Set([cleanImg, ...additionalImages])];
         const data = { name, category, price, stock, image: cleanImg, video: videoUrl || null, badge: badge || null, badgeText: badge ? badge.toUpperCase() : null, sizes, colors, images: uniqueImages, fullDescription: desc, updatedAt: new Date().toISOString() };
+        
         if (editId) {
             await updateDoc(doc(db, 'products', editId), data);
+            // Update local instantly
+            const idx = products.findIndex(p => p.docId === editId);
+            if (idx > -1) products[idx] = { docId: editId, ...products[idx], ...data };
+            aCacheSet(ADMIN_CACHE.products, products);
             showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
-            setTimeout(() => { resetForm(); switchTab('products'); loadProducts(true); loadStats(); }, 500);
+            setTimeout(() => { resetForm(); switchTab('products'); renderProducts(); setTimeout(() => loadProducts(), 500); }, 400);
         } else {
             const snap = await getDocs(collection(db, 'products'));
             let maxId = 0;
             snap.forEach(d => { const v = parseInt(d.data().id) || 0; if (v > maxId) maxId = v; });
             data.id = maxId + 1;
             data.createdAt = new Date().toISOString();
-            await addDoc(collection(db, 'products'), data);
+            const docRef = await addDoc(collection(db, 'products'), data);
+            products.push({ docId: docRef.id, ...data });
+            aCacheSet(ADMIN_CACHE.products, products);
             showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
-            setTimeout(() => { resetForm(); switchTab('products'); loadProducts(true); loadStats(); }, 500);
+            setTimeout(() => { resetForm(); switchTab('products'); renderProducts(); setTimeout(() => loadProducts(), 500); }, 400);
         }
     } catch (err) {
         showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
@@ -1704,13 +1666,29 @@ window.renderOrders = () => {
 
 window.updateOrderStatus = async (docId, newStatus) => {
     if (!confirm('Status পরিবর্তন করুন?')) return;
-    try { await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() }); alert('✅'); loadOrders(true); loadStats(); }
+    try { 
+        await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() }); 
+        // Update local
+        const idx = orders.findIndex(o => o.docId === docId);
+        if (idx > -1) orders[idx].status = newStatus;
+        aCacheSet(ADMIN_CACHE.orders, orders);
+        renderOrders();
+        recalcStatsFromCache();
+        alert('✅');
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
 window.deleteOrder = async (docId, orderId) => {
     if (!confirm('অর্ডার মুছে ফেলতে চান?\n\n' + orderId)) return;
-    try { await deleteDoc(doc(db, 'orders', docId)); alert('✅'); loadOrders(true); loadStats(); }
+    try { 
+        await deleteDoc(doc(db, 'orders', docId)); 
+        orders = orders.filter(o => o.docId !== docId);
+        aCacheSet(ADMIN_CACHE.orders, orders);
+        renderOrders();
+        recalcStatsFromCache();
+        alert('✅'); 
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
@@ -1787,7 +1765,13 @@ window.renderReviews = () => {
 
 window.deleteReview = async (docId, name) => {
     if (!confirm('রিভিউ মুছে ফেলতে চান? "' + name + '"')) return;
-    try { await deleteDoc(doc(db, 'reviews', docId)); alert('✅'); loadReviews(); }
+    try { 
+        await deleteDoc(doc(db, 'reviews', docId)); 
+        reviews = reviews.filter(r => r.docId !== docId);
+        aCacheSet(ADMIN_CACHE.reviews, reviews);
+        renderReviews();
+        alert('✅'); 
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
@@ -1847,7 +1831,14 @@ window.exportNewsletterCSV = () => {
 };
 window.deleteNewsletter = async (docId, email) => {
     if (!confirm('মুছে ফেলতে চান?\n\n' + email)) return;
-    try { await deleteDoc(doc(db, 'newsletter', docId)); alert('✅'); loadNewsletter(); }
+    try { 
+        await deleteDoc(doc(db, 'newsletter', docId)); 
+        newsletterList = newsletterList.filter(n => n.docId !== docId);
+        aCacheSet(ADMIN_CACHE.newsletter, newsletterList);
+        document.getElementById('news-total-count').textContent = newsletterList.length;
+        renderNewsletter();
+        alert('✅'); 
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
@@ -1967,8 +1958,23 @@ window.submitCoupon = async () => {
         if (!code || !type || !value || !expiry) { showMsg('coupon-form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
         if (!/^[A-Z0-9]+$/.test(code)) { showMsg('coupon-form-msg', '⚠️ শুধু বড় হাতের অক্ষর ও সংখ্যা।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
         const data = { code, type, value, minOrder, expiry, description, active, updatedAt: new Date().toISOString() };
-        if (editId) { await updateDoc(doc(db, 'coupons', editId), data); showMsg('coupon-form-msg', '✅ আপডেট!', 'ok'); setTimeout(() => { closeCouponModal(); loadCoupons(); }, 500); }
-        else { data.createdAt = new Date().toISOString(); data.usedCount = 0; await addDoc(collection(db, 'coupons'), data); showMsg('coupon-form-msg', '✅ তৈরি!', 'ok'); setTimeout(() => { closeCouponModal(); loadCoupons(); }, 500); }
+        if (editId) { 
+            await updateDoc(doc(db, 'coupons', editId), data); 
+            const idx = coupons.findIndex(co => co.docId === editId);
+            if (idx > -1) coupons[idx] = { ...coupons[idx], ...data };
+            aCacheSet(ADMIN_CACHE.coupons, coupons);
+            showMsg('coupon-form-msg', '✅ আপডেট!', 'ok'); 
+            setTimeout(() => { closeCouponModal(); renderCoupons(); }, 400); 
+        }
+        else { 
+            data.createdAt = new Date().toISOString(); 
+            data.usedCount = 0; 
+            const docRef = await addDoc(collection(db, 'coupons'), data);
+            coupons.unshift({ docId: docRef.id, ...data });
+            aCacheSet(ADMIN_CACHE.coupons, coupons);
+            showMsg('coupon-form-msg', '✅ তৈরি!', 'ok'); 
+            setTimeout(() => { closeCouponModal(); renderCoupons(); }, 400); 
+        }
     } catch (err) { showMsg('coupon-form-msg', '❌ ' + (err.message || ''), 'bad'); btn.disabled = false; btn.innerHTML = orig; }
 };
 
@@ -1977,13 +1983,25 @@ window.toggleCouponActive = async (docId) => {
     if (!co) return;
     const newState = !co.active;
     if (!confirm('কুপনটি ' + (newState ? 'চালু' : 'বন্ধ') + ' করতে চান?')) return;
-    try { await updateDoc(doc(db, 'coupons', docId), { active: newState, updatedAt: new Date().toISOString() }); alert('✅'); loadCoupons(); }
+    try { 
+        await updateDoc(doc(db, 'coupons', docId), { active: newState, updatedAt: new Date().toISOString() }); 
+        const idx = coupons.findIndex(c => c.docId === docId);
+        if (idx > -1) coupons[idx].active = newState;
+        aCacheSet(ADMIN_CACHE.coupons, coupons);
+        renderCoupons();
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
 window.deleteCoupon = async (docId, code) => {
     if (!confirm('কুপন মুছে ফেলতে চান? কোড: ' + code)) return;
-    try { await deleteDoc(doc(db, 'coupons', docId)); alert('✅'); loadCoupons(); }
+    try { 
+        await deleteDoc(doc(db, 'coupons', docId)); 
+        coupons = coupons.filter(c => c.docId !== docId);
+        aCacheSet(ADMIN_CACHE.coupons, coupons);
+        renderCoupons();
+        alert('✅'); 
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
@@ -2089,8 +2107,22 @@ window.submitBanner = async () => {
         else if (linkType === 'tab') link = 'tab:' + document.getElementById('b-tab-value').value;
         else if (linkType === 'external') link = document.getElementById('b-external-value').value.trim();
         const data = { image: cleanImg, title, link, linkType, order, active, updatedAt: new Date().toISOString() };
-        if (editId) { await updateDoc(doc(db, 'banners', editId), data); showMsg('banner-form-msg', '✅ আপডেট!', 'ok'); setTimeout(() => { closeBannerModal(); loadBanners(); }, 500); }
-        else { data.createdAt = new Date().toISOString(); await addDoc(collection(db, 'banners'), data); showMsg('banner-form-msg', '✅ তৈরি!', 'ok'); setTimeout(() => { closeBannerModal(); loadBanners(); }, 500); }
+        if (editId) { 
+            await updateDoc(doc(db, 'banners', editId), data); 
+            const idx = banners.findIndex(b => b.docId === editId);
+            if (idx > -1) banners[idx] = { ...banners[idx], ...data };
+            aCacheSet(ADMIN_CACHE.banners, banners);
+            showMsg('banner-form-msg', '✅ আপডেট!', 'ok'); 
+            setTimeout(() => { closeBannerModal(); renderBanners(); }, 400); 
+        }
+        else { 
+            data.createdAt = new Date().toISOString(); 
+            const docRef = await addDoc(collection(db, 'banners'), data);
+            banners.push({ docId: docRef.id, ...data });
+            aCacheSet(ADMIN_CACHE.banners, banners);
+            showMsg('banner-form-msg', '✅ তৈরি!', 'ok'); 
+            setTimeout(() => { closeBannerModal(); renderBanners(); }, 400); 
+        }
     } catch (err) { showMsg('banner-form-msg', '❌ ' + (err.message || ''), 'bad'); btn.disabled = false; btn.innerHTML = orig; }
 };
 
@@ -2099,13 +2131,25 @@ window.toggleBannerActive = async (docId) => {
     if (!b) return;
     const newState = !b.active;
     if (!confirm('Banner ' + (newState ? 'চালু' : 'বন্ধ') + '?')) return;
-    try { await updateDoc(doc(db, 'banners', docId), { active: newState, updatedAt: new Date().toISOString() }); alert('✅'); loadBanners(); }
+    try { 
+        await updateDoc(doc(db, 'banners', docId), { active: newState, updatedAt: new Date().toISOString() }); 
+        const idx = banners.findIndex(bn => bn.docId === docId);
+        if (idx > -1) banners[idx].active = newState;
+        aCacheSet(ADMIN_CACHE.banners, banners);
+        renderBanners();
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
 window.deleteBanner = async (docId, title) => {
     if (!confirm('Banner মুছে ফেলতে চান?\n\n' + title)) return;
-    try { await deleteDoc(doc(db, 'banners', docId)); alert('✅'); loadBanners(); }
+    try { 
+        await deleteDoc(doc(db, 'banners', docId)); 
+        banners = banners.filter(b => b.docId !== docId);
+        aCacheSet(ADMIN_CACHE.banners, banners);
+        renderBanners();
+        alert('✅'); 
+    }
     catch (err) { alert('❌ ' + (err.message || '')); }
 };
 
@@ -2125,6 +2169,8 @@ window.switchPage = function(pageId) {
     currentEditingPage = pageId;
     document.querySelectorAll('#page-filter button').forEach(b => b.classList.toggle('active', b.getAttribute('data-page') === pageId));
     document.getElementById('page-editor-title').innerHTML = '<i class="fas fa-edit"></i> Editing: ' + (PAGE_NAMES[pageId] || pageId);
+    const cached = aCacheGet(ADMIN_CACHE.pages) || {};
+    pagesCache = cached;
     const html = pagesCache[pageId] || DEFAULT_PAGES[pageId] || '';
     document.getElementById('page-html-editor').value = html;
     document.getElementById('page-editor-status').innerHTML = pagesCache[pageId] ? '<span style="color: var(--ok);">✅ সেভ আছে</span>' : '<span style="color: var(--muted);">📝 Default</span>';
@@ -2423,8 +2469,7 @@ window.saveContentSettings = async function() {
             if (name && url) couriersList.push({ name, description, url, logoUrl, enabled });
         });
         contentData.couriers = couriersList;
-        await setDoc(doc(db, 'settings', 'store'), contentData, { merge: true });
-        aCacheSet(ADMIN_CACHE.contentSettings, contentData);
+        
         const faqList = [];
         document.querySelectorAll('#faq-container .faq-item-box').forEach((box, idx) => {
             const cat = box.querySelector('.faq-cat').value;
@@ -2432,20 +2477,15 @@ window.saveContentSettings = async function() {
             const a = box.querySelector('.faq-a').value.trim();
             if (q && a) faqList.push({ category: cat, q, a, order: idx + 1 });
         });
-        const oldFAQ = await getDocs(collection(db, 'faq'));
-        for (const d of oldFAQ.docs) await deleteDoc(doc(db, 'faq', d.id));
-        for (const f of faqList) await addDoc(collection(db, 'faq'), f);
-        aCacheSet(ADMIN_CACHE.faq, faqList);
+        
         const currentCat = currentSizeChartCategory;
         const chartTitle = document.getElementById('size-chart-title-input').value.trim();
-        const rows = [];
+        const sizeRows = [];
         document.querySelectorAll('#size-chart-rows-container .size-row-item').forEach(item => {
             const size = item.querySelector('.sz-size').value.trim();
-            if (size) rows.push({ size, chest: parseFloat(item.querySelector('.sz-chest').value) || 0, waist: parseFloat(item.querySelector('.sz-waist').value) || 0, length: parseFloat(item.querySelector('.sz-length').value) || 0, shoulder: parseFloat(item.querySelector('.sz-shoulder').value) || 0, sleeve: parseFloat(item.querySelector('.sz-sleeve').value) || 0 });
+            if (size) sizeRows.push({ size, chest: parseFloat(item.querySelector('.sz-chest').value) || 0, waist: parseFloat(item.querySelector('.sz-waist').value) || 0, length: parseFloat(item.querySelector('.sz-length').value) || 0, shoulder: parseFloat(item.querySelector('.sz-shoulder').value) || 0, sleeve: parseFloat(item.querySelector('.sz-sleeve').value) || 0 });
         });
-        await setDoc(doc(db, 'sizeCharts', currentCat), { title: chartTitle, rows, updatedAt: new Date().toISOString() }, { merge: true });
-        allSizeCharts[currentCat] = { title: chartTitle, rows };
-        aCacheSet(ADMIN_CACHE.sizeCharts, allSizeCharts);
+        
         const hcList = [];
         document.querySelectorAll('#home-collections-container .content-item-box').forEach(box => {
             const name = box.querySelector('.hc-name').value.trim();
@@ -2454,11 +2494,35 @@ window.saveContentSettings = async function() {
             const enabled = box.querySelector('.hc-enabled').checked;
             if (name && image) hcList.push({ name, image, order, enabled });
         });
-        const oldHC = await getDocs(collection(db, 'homeCollections'));
-        for (const d of oldHC.docs) await deleteDoc(doc(db, 'homeCollections', d.id));
-        for (const hc of hcList) await addDoc(collection(db, 'homeCollections'), hc);
+        
+        // PARALLEL SAVE — সব একসাথে!
+        const [_, faqOld, hcOld] = await Promise.all([
+            setDoc(doc(db, 'settings', 'store'), contentData, { merge: true }),
+            getDocs(collection(db, 'faq')),
+            getDocs(collection(db, 'homeCollections'))
+        ]);
+        
+        const faqDeletes = faqOld.docs.map(d => deleteDoc(doc(db, 'faq', d.id)));
+        const hcDeletes = hcOld.docs.map(d => deleteDoc(doc(db, 'homeCollections', d.id)));
+        await Promise.all([...faqDeletes, ...hcDeletes]);
+        
+        const faqAdds = faqList.map(f => addDoc(collection(db, 'faq'), f));
+        const hcAdds = hcList.map(hc => addDoc(collection(db, 'homeCollections'), hc));
+        await Promise.all([
+            ...faqAdds,
+            ...hcAdds,
+            setDoc(doc(db, 'sizeCharts', currentCat), { title: chartTitle, rows: sizeRows, updatedAt: new Date().toISOString() }, { merge: true })
+        ]);
+        
+        // Update caches
+        aCacheSet(ADMIN_CACHE.contentSettings, contentData);
+        aCacheSet(ADMIN_CACHE.faq, faqList);
         aCacheSet(ADMIN_CACHE.homeCollections, hcList);
+        allSizeCharts[currentCat] = { title: chartTitle, rows: sizeRows };
+        aCacheSet(ADMIN_CACHE.sizeCharts, allSizeCharts);
+        
         showMsg('content-msg', '✅ সব Content সেভ!', 'ok');
+        showToast('✅ Saved!');
     } catch (err) { showMsg('content-msg', '❌ ' + (err.message || ''), 'bad'); }
     btn.disabled = false;
     btn.innerHTML = orig;
@@ -2639,7 +2703,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-console.log('✅ Admin Panel Ready — Complete Version');
+console.log('✅ Admin Panel Ready — Ultra Fast Version with Realtime Notifications');
 </script>
 </body>
 </html>
