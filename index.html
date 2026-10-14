@@ -6,63 +6,28 @@
 <title>Admin Panel — Burqa Bazaar & Boutiques</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png">
-
-<!-- ⚡ SPEED: Preconnect -->
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link rel="dns-prefetch" href="https://firestore.googleapis.com">
-<link rel="dns-prefetch" href="https://i.ibb.co">
-
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
-<!-- ⚡ INSTANT CACHE SYSTEM -->
 <script>
 window.ADMIN_CACHE = {
-    products: 'bq_admin_products_v2',
-    orders: 'bq_admin_orders_v2',
-    customers: 'bq_admin_customers_v2',
-    coupons: 'bq_admin_coupons_v2',
-    banners: 'bq_admin_banners_v2',
-    reviews: 'bq_admin_reviews_v2',
-    newsletter: 'bq_admin_newsletter_v2',
-    settings: 'bq_admin_settings_v2',
-    content: 'bq_admin_content_v2',
-    stats: 'bq_admin_stats_v2'
+    products: 'bq_admin_products_v3', orders: 'bq_admin_orders_v3', customers: 'bq_admin_customers_v3',
+    coupons: 'bq_admin_coupons_v3', banners: 'bq_admin_banners_v3', reviews: 'bq_admin_reviews_v3',
+    newsletter: 'bq_admin_newsletter_v3', settings: 'bq_admin_settings_v3', stats: 'bq_admin_stats_v3'
 };
-
-window.aCacheGet = function(key) {
-    try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return null;
-        return JSON.parse(raw).data;
-    } catch(e) { return null; }
-};
-
-window.aCacheSet = function(key, data) {
-    try {
-        localStorage.setItem(key, JSON.stringify({ data, t: Date.now() }));
-    } catch(e) {}
-};
-
-window.aCacheClear = function() {
-    try {
-        Object.keys(ADMIN_CACHE).forEach(k => localStorage.removeItem(ADMIN_CACHE[k]));
-    } catch(e) {}
-};
-
+window.aCacheGet = function(key) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw).data : null; } catch(e) { return null; } };
+window.aCacheSet = function(key, data) { try { localStorage.setItem(key, JSON.stringify({ data, t: Date.now() })); } catch(e) {} };
+window.aCacheClear = function() { try { Object.keys(ADMIN_CACHE).forEach(k => localStorage.removeItem(ADMIN_CACHE[k])); } catch(e) {} };
 console.log('⚡ Instant cache ready');
 </script>
 
-<!-- ImgBB Upload System -->
 <script>
 window.IMGBB_API_KEY = 'eb9005b90193cd312248ce197c18b25e';
-
 window.compressImage = function(file, maxWidth = 1600, quality = 0.85) {
     return new Promise((resolve, reject) => {
         if (!file || !file.type.startsWith('image/')) return reject(new Error('শুধু image file'));
@@ -87,7 +52,6 @@ window.compressImage = function(file, maxWidth = 1600, quality = 0.85) {
         reader.onerror = () => reject(new Error('Read failed'));
     });
 };
-
 window.uploadToImgBB = async function(file) {
     if (!file) throw new Error('No file');
     if (!file.type.startsWith('image/')) throw new Error('শুধু image allowed');
@@ -100,7 +64,6 @@ window.uploadToImgBB = async function(file) {
     if (!data.success) throw new Error(data.error?.message || 'Upload failed');
     return data.data.url;
 };
-
 console.log('✅ ImgBB ready');
 </script>
 
@@ -108,7 +71,6 @@ console.log('✅ ImgBB ready');
 :root{--gold:#dfb15b;--bg:#0b0b0d;--card:#16161a;--dark:#121214;--text:#f3f3f6;--muted:#9e9ea6;--border:rgba(223,177,91,0.2);--ok:#22c55e;--bad:#ef4444;--warn:#f59e0b;--info:#3b82f6}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
-
 #login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 0%,rgba(223,177,91,.08),transparent 60%);z-index:1000}
 .lbox{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px 30px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .llogo{width:80px;height:80px;border-radius:50%;border:2px solid var(--gold);overflow:hidden;margin:0 auto 20px;background:#000;box-shadow:0 0 25px rgba(223,177,91,.4)}
@@ -123,7 +85,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .login-btn:disabled{opacity:.6;cursor:not-allowed}
 .err{background:rgba(239,68,68,.15);border:1px solid var(--bad);color:#fca5a5;padding:10px 15px;border-radius:8px;font-size:13px;margin-bottom:15px;display:none}
 .err.show{display:block}
-
 #admin{display:none;min-height:100vh;padding-bottom:40px}
 #admin.active{display:block}
 .head{background:var(--dark);border-bottom:1px solid var(--border);padding:15px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
@@ -148,7 +109,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .shead{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .shead h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:20px;display:flex;align-items:center;gap:10px}
 .btn-p{background:var(--gold);color:#0b0b0d;border:none;padding:11px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px}
-.btn-p:hover{opacity:.9}
 .btn-s{background:transparent;border:1.5px solid var(--border);color:var(--text);padding:10px 18px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px}
 .btn-s:hover{border-color:var(--gold);color:var(--gold)}
 .loading{text-align:center;padding:60px 20px;color:var(--muted)}
@@ -191,7 +151,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .crow{display:grid;grid-template-columns:1.5fr 2fr auto auto auto;gap:8px;margin-bottom:8px;align-items:center}
 .crow input{padding:10px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit;width:100%}
 .crow .rm{background:transparent;border:1px solid var(--bad);color:var(--bad);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.crow .rm:hover{background:var(--bad);color:#fff}
 .crow .mini-upl{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:none;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .crow .preview-thumb{width:36px;height:36px;border-radius:6px;border:1px solid var(--border);overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center}
 .crow .preview-thumb img{width:100%;height:100%;object-fit:cover}
@@ -270,8 +229,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .size-row-item{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:6px;align-items:center}
 .size-row-item input{padding:8px 10px;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;outline:none;font-family:inherit;width:100%}
 .size-row-item .rm{background:transparent;border:1px solid var(--bad);color:var(--bad);width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px}
-.size-chart-header-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:8px}
-.size-chart-header-row span{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;text-align:center}
 .contact-icon-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px}
 .contact-icon-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
 .contact-icon-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#0b0b0d;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0}
@@ -314,20 +271,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .cust-meta{font-size:12px;color:var(--muted);line-height:1.8}
 .cust-meta strong{color:var(--gold)}
 .cust-actions{display:flex;gap:6px;flex-wrap:wrap;align-self:flex-start}
-.report-stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center}
-.report-stat .val{font-size:28px;font-weight:800;color:var(--gold);font-family:'Playfair Display',serif;margin-bottom:5px}
-.report-stat .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.timeline{background:var(--bg);border-radius:10px;padding:15px;margin-top:10px}
-.timeline-item{display:flex;gap:12px;padding:8px 0;position:relative}
-.timeline-item::before{content:'';position:absolute;left:8px;top:30px;bottom:-8px;width:2px;background:var(--border)}
-.timeline-item:last-child::before{display:none}
-.timeline-dot{width:18px;height:18px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px;display:flex;align-items:center;justify-content:center;color:#0b0b0d;font-size:9px}
-.timeline-content{flex:1;font-size:12px}
-.timeline-content .time{font-size:10px;color:var(--muted);margin-top:2px}
-
-/* ⚡ FAST: loading state */
-.instant-loaded { transition: opacity 0.15s ease; }
-
 @media (max-width:500px){
 .head{padding:12px 15px}
 .head h1{font-size:14px}
@@ -338,8 +281,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .news-count-big{font-size:32px}
 .coupon-code-big{font-size:18px}
 .weekly-chart{height:140px}
-.size-row-item{grid-template-columns:1fr 1fr}
-.size-chart-header-row{display:none}
 .img-preview{width:100%;height:150px}
 }
 </style>
@@ -396,7 +337,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div class="stat"><i class="fas fa-clock"></i><div class="val" id="st-pending">0</div><div class="lbl">Pending</div></div>
                 <div class="stat"><i class="fas fa-check-circle"></i><div class="val" id="st-completed">0</div><div class="lbl">Completed</div></div>
             </div>
-
             <div class="shead"><h2><i class="fas fa-chart-line"></i> Sales Summary</h2></div>
             <div class="stats" style="margin-bottom:25px;">
                 <div class="stat" style="background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(34,197,94,.03));border-color:rgba(34,197,94,.4);">
@@ -420,12 +360,10 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                     <div class="lbl">Today Orders</div>
                 </div>
             </div>
-
             <div class="shead"><h2><i class="fas fa-trophy"></i> Top 5 Products</h2></div>
             <div id="top-products" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:25px;">
                 <div class="loading" style="padding:30px;"><i class="fas fa-spinner"></i><p>Loading...</p></div>
             </div>
-
             <div class="shead"><h2><i class="fas fa-chart-bar"></i> Last 7 Days</h2></div>
             <div id="weekly-chart" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:25px;">
                 <div class="loading" style="padding:30px;"><i class="fas fa-spinner"></i><p>Loading...</p></div>
@@ -463,7 +401,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div class="fg"><label>📦 Stock *</label>
                     <input type="number" id="p-stock" placeholder="10" required min="0" value="1">
                 </div>
-
                 <div class="fg">
                     <label>🖼️ Main Image *</label>
                     <div class="img-upload-box">
@@ -483,7 +420,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                         </div>
                     </div>
                 </div>
-
                 <div class="fg">
                     <label>🖼️ Additional Images (ঐচ্ছিক)</label>
                     <div id="additional-images"></div>
@@ -493,9 +429,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                         <button type="button" class="upload-btn" onclick="document.getElementById('additional-files').click()" style="flex:1;min-width:140px;justify-content:center;"><i class="fas fa-cloud-upload-alt"></i> Upload Multiple</button>
                     </div>
                 </div>
-
                 <div class="fg"><label>🎥 Video URL</label><input type="text" id="p-video" placeholder="YouTube / Facebook / Vimeo"></div>
-
                 <div class="fg"><label>🏷️ Badge</label>
                     <select id="p-badge">
                         <option value="">None</option>
@@ -505,12 +439,10 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                         <option value="soldout">SOLD OUT</option>
                     </select>
                 </div>
-
                 <div class="fg" id="size-section" style="display:none;">
                     <label>📏 Sizes</label>
                     <div class="size-box" id="size-box"></div>
                 </div>
-
                 <div class="fg">
                     <label>🎨 Colors *</label>
                     <div id="colors"></div>
@@ -520,9 +452,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                         <button type="button" class="upload-btn" onclick="document.getElementById('color-file-input').click()" style="flex:1;min-width:140px;justify-content:center;"><i class="fas fa-cloud-upload-alt"></i> Add Color (Upload)</button>
                     </div>
                 </div>
-
                 <div class="fg"><label>📄 Description *</label><textarea id="p-desc" rows="8" required></textarea></div>
-
                 <div style="display:flex;gap:10px;margin-top:25px;flex-wrap:wrap;">
                     <button type="submit" class="btn-p" id="submit-btn" style="flex:1;min-width:150px;justify-content:center;padding:14px;"><i class="fas fa-save"></i> Save</button>
                     <button type="button" class="btn-s" onclick="resetForm()" style="flex:1;min-width:150px;justify-content:center;padding:14px;"><i class="fas fa-times"></i> Cancel</button>
@@ -618,7 +548,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <button class="btn-s" onclick="loadContentSettings()"><i class="fas fa-sync-alt"></i> Reload</button>
             </div>
             <div id="content-msg" class="msg"></div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-image"></i> Logo</h3>
                 <div class="fg">
@@ -634,43 +563,36 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 </div>
                 <div class="fg"><label>📝 Copyright</label><input type="text" id="c-copyright-text" placeholder="© 2026 Burqa Bazar"></div>
             </div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-share-alt"></i> Social Media</h3>
                 <div id="social-links-container"></div>
                 <button type="button" class="btn-s" onclick="addSocialLink()" style="margin-top:10px;width:100%;justify-content:center;"><i class="fas fa-plus"></i> Add Social Media</button>
             </div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-icons"></i> Contact Icons</h3>
                 <div id="contact-icons-container"></div>
                 <button type="button" class="btn-s" onclick="addContactIcon()" style="margin-top:10px;width:100%;justify-content:center;"><i class="fas fa-plus"></i> Add Contact</button>
             </div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-credit-card"></i> Payment Methods</h3>
                 <div id="payment-methods-container"></div>
                 <button type="button" class="btn-s" onclick="addPaymentMethod()" style="margin-top:10px;width:100%;justify-content:center;"><i class="fas fa-plus"></i> Add Payment</button>
             </div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-truck"></i> Couriers</h3>
                 <div id="couriers-container"></div>
                 <button type="button" class="btn-s" onclick="addCourier()" style="margin-top:10px;width:100%;justify-content:center;"><i class="fas fa-plus"></i> Add Courier</button>
             </div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-question-circle"></i> FAQ</h3>
                 <div id="faq-container"></div>
                 <button type="button" class="btn-s" onclick="addFAQ()" style="margin-top:10px;width:100%;justify-content:center;"><i class="fas fa-plus"></i> Add FAQ</button>
             </div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-th-large"></i> Home Collections</h3>
                 <div id="home-collections-container"></div>
                 <button type="button" class="btn-s" onclick="addHomeCollection()" style="margin-top:10px;width:100%;justify-content:center;"><i class="fas fa-plus"></i> Add Collection</button>
             </div>
-
             <div style="position:sticky;bottom:20px;background:var(--bg);padding:15px;border-radius:12px;border:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;">
                 <button class="btn-p" id="content-save-btn" onclick="saveContentSettings()" style="flex:1;min-width:200px;justify-content:center;padding:14px;"><i class="fas fa-save"></i> Save All Content</button>
             </div>
@@ -683,65 +605,48 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <button class="btn-s" onclick="loadTrackingSettings()"><i class="fas fa-sync-alt"></i> Reload</button>
             </div>
             <div id="tracking-msg" class="msg"></div>
-
             <div class="tracking-card">
                 <div class="tracking-header">
                     <div class="tracking-icon" style="background:linear-gradient(135deg,#f9ab00,#e37400);">
                         <i class="fas fa-chart-bar" style="color:#fff;font-size:18px;"></i>
                     </div>
-                    <div style="flex:1;">
-                        <h3>Google Analytics</h3>
-                        <p>Traffic, visitor, page views</p>
-                    </div>
+                    <div style="flex:1;"><h3>Google Analytics</h3><p>Traffic, visitor, page views</p></div>
                     <label class="toggle-switch"><input type="checkbox" id="t-ga-enabled" checked><span class="toggle-slider"></span></label>
                 </div>
                 <div class="fg"><label>🆔 Measurement ID</label><input type="text" id="t-ga-id" placeholder="G-XXXXXXXXXX" style="font-family:'Courier New',monospace;"></div>
                 <div id="t-ga-status" class="tracking-status"></div>
             </div>
-
             <div class="tracking-card">
                 <div class="tracking-header">
                     <div class="tracking-icon" style="background:linear-gradient(135deg,#1877f2,#0c5fcc);">
                         <i class="fab fa-facebook-f" style="color:#fff;font-size:18px;"></i>
                     </div>
-                    <div style="flex:1;">
-                        <h3>Facebook Pixel</h3>
-                        <p>FB ads tracking</p>
-                    </div>
+                    <div style="flex:1;"><h3>Facebook Pixel</h3><p>FB ads tracking</p></div>
                     <label class="toggle-switch"><input type="checkbox" id="t-fb-enabled"><span class="toggle-slider"></span></label>
                 </div>
                 <div class="fg"><label>🆔 Pixel ID</label><input type="text" id="t-fb-id" placeholder="123456789012345" style="font-family:'Courier New',monospace;"></div>
                 <div id="t-fb-status" class="tracking-status"></div>
             </div>
-
             <div class="tracking-card">
                 <div class="tracking-header">
                     <div class="tracking-icon" style="background:linear-gradient(135deg,#000,#25f4ee,#fe2c55);">
                         <i class="fab fa-tiktok" style="color:#fff;font-size:18px;"></i>
                     </div>
-                    <div style="flex:1;">
-                        <h3>TikTok Pixel</h3>
-                        <p>TikTok ads tracking</p>
-                    </div>
+                    <div style="flex:1;"><h3>TikTok Pixel</h3><p>TikTok ads tracking</p></div>
                     <label class="toggle-switch"><input type="checkbox" id="t-tt-enabled"><span class="toggle-slider"></span></label>
                 </div>
                 <div class="fg"><label>🆔 Pixel ID</label><input type="text" id="t-tt-id" placeholder="XXXXXXXXXXXXXXXXXX" style="font-family:'Courier New',monospace;"></div>
                 <div id="t-tt-status" class="tracking-status"></div>
             </div>
-
             <div class="tracking-card">
                 <div class="tracking-header">
                     <div class="tracking-icon" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">
                         <i class="fas fa-code" style="color:#fff;font-size:18px;"></i>
                     </div>
-                    <div style="flex:1;">
-                        <h3>Custom Head Code</h3>
-                        <p>Extra script</p>
-                    </div>
+                    <div style="flex:1;"><h3>Custom Head Code</h3><p>Extra script</p></div>
                 </div>
                 <div class="fg"><label>📝 HTML / Script</label><textarea id="t-custom-code" rows="6" placeholder="<!-- custom code -->" style="font-family:'Courier New',monospace;font-size:12px;"></textarea></div>
             </div>
-
             <div style="position:sticky;bottom:20px;background:var(--bg);padding:15px;border-radius:12px;border:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;">
                 <button class="btn-p" id="tracking-save-btn" onclick="saveTrackingSettings()" style="flex:1;min-width:200px;justify-content:center;padding:14px;"><i class="fas fa-save"></i> Save Tracking</button>
             </div>
@@ -754,7 +659,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <button class="btn-s" onclick="loadSettings()"><i class="fas fa-sync-alt"></i> Reload</button>
             </div>
             <div id="settings-msg" class="msg"></div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-store"></i> Store Info</h3>
                 <div class="fg"><label>🏪 Store Name</label><input type="text" id="s-store-name"></div>
@@ -770,7 +674,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                     <div class="fg"><label>🚚 Outside Feni</label><input type="number" id="s-delivery-outside" value="130"></div>
                 </div>
             </div>
-
             <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:15px;">
                 <h3 style="color:var(--gold);font-size:15px;margin-bottom:15px;font-family:'Playfair Display',serif;"><i class="fas fa-tools"></i> Tools</h3>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -778,7 +681,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                     <button type="button" class="btn-s" onclick="clearCache()" style="justify-content:center;padding:12px;"><i class="fas fa-broom"></i> Clear Cache</button>
                 </div>
             </div>
-
             <div style="position:sticky;bottom:20px;background:var(--bg);padding:15px;border-radius:12px;border:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;">
                 <button class="btn-p" id="settings-save-btn" onclick="saveSettings()" style="flex:1;min-width:200px;justify-content:center;padding:14px;"><i class="fas fa-save"></i> Save Settings</button>
             </div>
@@ -873,14 +775,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-window._db = db;
-window._auth = auth;
-window._fb = { collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc };
-
+// ===== GLOBALS (all in one scope) =====
 let products = [], orders = [], reviews = [], newsletterList = [], coupons = [], banners = [], customers = [];
 let editingId = null, editingCouponId = null, editingBannerId = null;
 let selectedSizes = [];
 let orderFilter = 'all', couponFilter = 'all';
+let socialLinksDraft = [];
+let settingsCache = {};
 const SIZES = ["50", "52", "54", "56"];
 
 const DEFAULT_SETTINGS = {
@@ -902,6 +803,7 @@ const DEFAULT_SETTINGS = {
     customHeadCode: ''
 };
 
+// ===== UTILITIES =====
 window.showToast = function(msg) {
     const el = document.createElement('div');
     el.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--gold);color:#0b0b0d;padding:12px 24px;border-radius:30px;font-weight:700;font-size:14px;z-index:99999;box-shadow:0 10px 30px rgba(0,0,0,.5);';
@@ -929,7 +831,7 @@ window.updateImagePreview = function(previewId, url) {
     }
 };
 
-// AUTH
+// ===== AUTH =====
 window.doLogin = async function(e) {
     e.preventDefault();
     const email = document.getElementById('email').value.trim();
@@ -945,7 +847,7 @@ window.doLogin = async function(e) {
         let msg = 'লগইন ব্যর্থ। ';
         if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = '❌ পাসওয়ার্ড ভুল।';
         else if (err.code === 'auth/user-not-found') msg = '❌ এই ইমেইলে অ্যাকাউন্ট নেই।';
-        else if (err.code === 'auth/too-many-requests') msg = '⏳ অনেকবার চেষ্টা। পরে করুন।';
+        else if (err.code === 'auth/too-many-requests') msg = '⏳ অনেকবার চেষ্টা।';
         else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট নেই।';
         errBox.textContent = msg;
         errBox.classList.add('show');
@@ -967,9 +869,7 @@ onAuthStateChanged(auth, (user) => {
         ls.style.display = 'none';
         ad.classList.add('active');
         document.getElementById('ubadge').textContent = user.email;
-        // Instant cache load
         instantLoadFromCache();
-        // Background sync
         preloadEverything();
     } else {
         ls.style.display = 'flex';
@@ -979,26 +879,25 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// ⚡ INSTANT CACHE LOAD
+// ===== INSTANT CACHE LOAD =====
 function instantLoadFromCache() {
-    const cachedProducts = aCacheGet(ADMIN_CACHE.products);
-    const cachedOrders = aCacheGet(ADMIN_CACHE.orders);
-    const cachedCustomers = aCacheGet(ADMIN_CACHE.customers);
-    if (cachedProducts) { products = cachedProducts; renderProducts(); }
-    if (cachedOrders) { orders = cachedOrders; }
-    if (cachedCustomers) customers = cachedCustomers;
-    // Update dashboard from cache
+    const cP = aCacheGet(ADMIN_CACHE.products);
+    const cO = aCacheGet(ADMIN_CACHE.orders);
+    const cC = aCacheGet(ADMIN_CACHE.customers);
+    if (cP) { products = cP; renderProducts(); }
+    if (cO) orders = cO;
+    if (cC) customers = cC;
     const stats = aCacheGet(ADMIN_CACHE.stats);
     if (stats) applyStats(stats);
     console.log('⚡ Instant from cache');
 }
 
-// ⚡ BACKGROUND PRELOAD
+// ===== BACKGROUND PRELOAD =====
 async function preloadEverything() {
     console.log('🔄 Background sync started...');
     const t0 = performance.now();
     try {
-        const [pS, oS, rS, nS, cS, bS, setS] = await Promise.all([
+        const results = await Promise.all([
             getDocs(collection(db, 'products')).catch(() => null),
             getDocs(collection(db, 'orders')).catch(() => null),
             getDocs(collection(db, 'reviews')).catch(() => null),
@@ -1007,6 +906,7 @@ async function preloadEverything() {
             getDocs(collection(db, 'banners')).catch(() => null),
             getDoc(doc(db, 'settings', 'store')).catch(() => null)
         ]);
+        const [pS, oS, rS, nS, cS, bS, setS] = results;
         if (pS) { const arr = []; pS.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a,b) => (parseInt(a.id)||0)-(parseInt(b.id)||0)); products = arr; aCacheSet(ADMIN_CACHE.products, arr); renderProducts(); }
         if (oS) { const arr = []; oS.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a,b) => new Date(b.date||b.createdAt||0)-new Date(a.date||a.createdAt||0)); orders = arr; aCacheSet(ADMIN_CACHE.orders, arr); }
         if (rS) { const arr = []; rS.forEach(d => arr.push({ docId: d.id, ...d.data() })); reviews = arr; aCacheSet(ADMIN_CACHE.reviews, arr); }
@@ -1014,18 +914,13 @@ async function preloadEverything() {
         if (cS) { const arr = []; cS.forEach(d => arr.push({ docId: d.id, ...d.data() })); coupons = arr; aCacheSet(ADMIN_CACHE.coupons, arr); }
         if (bS) { const arr = []; bS.forEach(d => arr.push({ docId: d.id, ...d.data() })); banners = arr; aCacheSet(ADMIN_CACHE.banners, arr); }
         if (setS && setS.exists()) { const data = setS.data(); aCacheSet(ADMIN_CACHE.settings, data); }
-        
-        // Update dashboard
         updateDashboard();
-        
-        // Build customers from orders
-        buildCustomersFromOrders();
-        
-        console.log(`✅ Background sync done: ${(performance.now()-t0).toFixed(0)}ms`);
+        buildCustomers();
+        console.log(`✅ Sync done: ${(performance.now()-t0).toFixed(0)}ms`);
     } catch(e) { console.warn('Preload error:', e); }
 }
 
-// TAB SWITCH
+// ===== TAB SWITCH =====
 window.switchTab = function(name) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1033,8 +928,7 @@ window.switchTab = function(name) {
     const sec = document.getElementById('sec-' + name);
     if (tab) tab.classList.add('active');
     if (sec) sec.classList.add('active');
-    
-    // Render from cache immediately
+
     if (name === 'products') { if (products.length) renderProducts(); else loadProducts(); }
     else if (name === 'orders') { if (orders.length) renderOrders(); else loadOrders(); }
     else if (name === 'customers') { if (customers.length) renderCustomers(); else loadCustomers(); }
@@ -1049,7 +943,7 @@ window.switchTab = function(name) {
     else if (name === 'dashboard') updateDashboard();
 };
 
-// DASHBOARD
+// ===== DASHBOARD =====
 function updateDashboard() {
     document.getElementById('st-products').textContent = products.length;
     document.getElementById('st-orders').textContent = orders.length;
@@ -1083,12 +977,8 @@ function updateDashboard() {
     document.getElementById('st-month-rev').textContent = '৳' + monthRev.toLocaleString();
     document.getElementById('st-total-rev').textContent = '৳' + totalRev.toLocaleString();
     document.getElementById('st-today-ord').textContent = todayOrd;
-    
-    const statsData = { pending, completed, todayRev, monthRev, totalRev, todayOrd };
-    aCacheSet(ADMIN_CACHE.stats, statsData);
-    
-    const topProducts = Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5);
-    renderTop(topProducts);
+    aCacheSet(ADMIN_CACHE.stats, { pending, completed, todayRev, monthRev, totalRev, todayOrd });
+    renderTop(Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5));
     renderWeekly(Object.values(weeklyData));
 }
 
@@ -1135,7 +1025,7 @@ function renderWeekly(data) {
     c.innerHTML = html;
 }
 
-// UPLOAD HANDLERS
+// ===== UPLOAD HANDLERS =====
 window.handleMainImageUpload = async function(e) {
     const file = e.target.files[0]; if (!file) return;
     const preview = document.getElementById('p-main-preview');
@@ -1155,9 +1045,9 @@ window.handleMainImageUpload = async function(e) {
 
 window.handleAdditionalImagesUpload = async function(e) {
     const files = Array.from(e.target.files); if (!files.length) return;
-    window.showToast('⏳ Uploading ' + files.length + ' image(s)...');
+    window.showToast('⏳ Uploading ' + files.length + '...');
     for (const file of files) { try { const url = await window.uploadToImgBB(file); addAdditionalImage(url); } catch(err) {} }
-    window.showToast('✅ ' + files.length + ' uploaded!');
+    window.showToast('✅ Done!');
     e.target.value = '';
 };
 
@@ -1267,8 +1157,8 @@ window.handleSocialIconUpload = async function(e, idx) {
     const file = e.target.files[0]; if (!file) return;
     try {
         const url = await window.uploadToImgBB(file);
-        if (window.socialLinksDraft && window.socialLinksDraft[idx]) window.socialLinksDraft[idx].iconUrl = url;
-        if (typeof renderSocialLinks === 'function') renderSocialLinks();
+        if (socialLinksDraft[idx]) socialLinksDraft[idx].iconUrl = url;
+        renderSocialLinks();
     } catch(err) { alert('❌ ' + err.message); }
     e.target.value = '';
 };
@@ -1287,7 +1177,7 @@ window.handleBannerImageUpload = async function(e) {
     e.target.value = '';
 };
 
-// PRODUCTS
+// ===== PRODUCTS =====
 window.addAdditionalImage = function(url) {
     const c = document.getElementById('additional-images');
     const id = 'ai-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
@@ -1491,7 +1381,7 @@ window.submitProduct = async function(e) {
     } catch (err) { showMsg('form-msg', '❌ ' + err.message, 'bad'); btn.disabled = false; btn.innerHTML = orig; }
 };
 
-// ORDERS
+// ===== ORDERS =====
 window.loadOrders = async function(force) {
     const c = document.getElementById('orders-container');
     if (!force) {
@@ -1521,9 +1411,7 @@ window.renderOrders = function() {
     if (orderFilter === 'pending') filtered = filtered.filter(o => o.status !== 'completed' && o.status !== 'shipped');
     else if (orderFilter === 'shipped') filtered = filtered.filter(o => o.status === 'shipped');
     else if (orderFilter === 'completed') filtered = filtered.filter(o => o.status === 'completed');
-    if (filtered.length === 0) {
-        c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>কোনো অর্ডার নেই</h3></div>'; return;
-    }
+    if (filtered.length === 0) { c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>No orders</h3></div>'; return; }
     let html = '';
     filtered.forEach(o => {
         const st = o.status === 'completed' ? 'completed' : (o.status === 'shipped' ? 'shipped' : 'pending');
@@ -1565,8 +1453,8 @@ window.deleteOrder = async function(docId, oid) {
     catch (err) { alert('❌ ' + err.message); }
 };
 
-// CUSTOMERS (build from orders)
-function buildCustomersFromOrders() {
+// ===== CUSTOMERS (build from orders) =====
+function buildCustomers() {
     const custMap = {};
     orders.forEach(o => {
         const phone = (o.phone || '').replace(/[^0-9]/g, '');
@@ -1581,7 +1469,6 @@ function buildCustomersFromOrders() {
         if (oDate && (!custMap[phone].lastOrder || new Date(oDate) > new Date(custMap[phone].lastOrder))) {
             custMap[phone].lastOrder = oDate;
             custMap[phone].name = o.name || custMap[phone].name;
-            custMap[phone].address = `${o.address || ''}, ${o.thana || ''}, ${o.city || ''}`.trim();
         }
     });
     customers = Object.values(custMap).sort((a, b) => b.totalSpent - a.totalSpent);
@@ -1597,7 +1484,7 @@ window.loadCustomers = async function() {
         orders = [];
         snap.forEach(d => orders.push({ docId: d.id, ...d.data() }));
         aCacheSet(ADMIN_CACHE.orders, orders);
-        buildCustomersFromOrders();
+        buildCustomers();
         renderCustomers();
     } catch (err) { c.innerHTML = '<div class="empty"><h3>Load failed</h3></div>'; }
 };
@@ -1607,9 +1494,8 @@ window.renderCustomers = function() {
     document.getElementById('st-total-cust').textContent = customers.length;
     document.getElementById('st-vip-cust').textContent = customers.filter(x => x.orderCount >= 5).length;
     document.getElementById('st-active-cust').textContent = customers.filter(x => (Date.now() - new Date(x.lastOrder).getTime()) / 86400000 <= 30).length;
-    
     if (customers.length === 0) {
-        c.innerHTML = '<div class="empty"><i class="fas fa-users"></i><h3>কোনো customer নেই</h3><p style="margin-top:8px;font-size:13px;">অর্ডার এলে automatically customer list এ যোগ হবে</p></div>';
+        c.innerHTML = '<div class="empty"><i class="fas fa-users"></i><h3>কোনো customer নেই</h3></div>';
         return;
     }
     let html = '';
@@ -1621,24 +1507,12 @@ window.renderCustomers = function() {
         let badges = '';
         if (isVIP) badges += '<span style="background:linear-gradient(135deg,#ffd700,#b8860b);color:#000;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;margin-left:8px;">👑 VIP</span>';
         if (isActive) badges += '<span style="background:rgba(34,197,94,.2);color:#22c55e;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;margin-left:8px;">🟢 Active</span>';
-        html += `<div class="cust-card"><div class="cust-avatar">${initial}</div><div class="cust-info"><div class="cust-name">${cust.name}${badges}</div><div class="cust-meta"><div>📞 <strong>${cust.phone}</strong></div><div>📍 ${cust.address || 'No address'}</div><div>📦 <strong>${cust.orderCount}</strong> orders • 💰 <strong>৳${cust.totalSpent.toLocaleString()}</strong> spent</div><div>🕐 Last: ${lastDate}</div></div></div><div class="cust-actions"><a href="https://wa.me/88${cust.phone.startsWith('0') ? cust.phone.substring(1) : cust.phone}" target="_blank" class="abtn edit" style="text-decoration:none;"><i class="fab fa-whatsapp"></i> Message</a></div></div>`;
+        html += `<div class="cust-card"><div class="cust-avatar">${initial}</div><div class="cust-info"><div class="cust-name">${cust.name}${badges}</div><div class="cust-meta"><div>📞 <strong>${cust.phone}</strong></div><div>📍 ${cust.address || 'No address'}</div><div>📦 <strong>${cust.orderCount}</strong> orders • 💰 <strong>৳${cust.totalSpent.toLocaleString()}</strong></div><div>🕐 Last: ${lastDate}</div></div></div><div class="cust-actions"><a href="https://wa.me/88${cust.phone.startsWith('0') ? cust.phone.substring(1) : cust.phone}" target="_blank" class="abtn edit" style="text-decoration:none;"><i class="fab fa-whatsapp"></i> WA</a></div></div>`;
     });
     c.innerHTML = html;
 };
 
-console.log('✅ Part 3 loaded');
-</script>
-<script type="module">
-import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-const db = window._db;
-
-let settingsCache = {};
-let currentSizeChartCategory = 'default';
-let allSizeCharts = {};
-window.socialLinksDraft = [];
-
-// REVIEWS
+// ===== REVIEWS =====
 window.loadReviews = async function() {
     const c = document.getElementById('reviews-container');
     const cached = aCacheGet(ADMIN_CACHE.reviews);
@@ -1674,7 +1548,7 @@ window.deleteReview = async function(docId) {
     catch (err) { alert('❌'); }
 };
 
-// NEWSLETTER
+// ===== NEWSLETTER =====
 window.loadNewsletter = async function() {
     const c = document.getElementById('newsletter-container');
     const cached = aCacheGet(ADMIN_CACHE.newsletter);
@@ -1712,7 +1586,7 @@ window.deleteNewsletter = async function(docId) {
     catch (err) { alert('❌'); }
 };
 
-// COUPONS
+// ===== COUPONS =====
 window.loadCoupons = async function() {
     const c = document.getElementById('coupons-container');
     const cached = aCacheGet(ADMIN_CACHE.coupons);
@@ -1819,7 +1693,6 @@ window.submitCoupon = async function() {
         const active = document.getElementById('c-active').checked;
         const editId = document.getElementById('c-edit-id').value;
         if (!code || !value || !expiry) { showMsg('coupon-form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
-        if (!/^[A-Z0-9]+$/.test(code)) { showMsg('coupon-form-msg', '⚠️ শুধু বড় হাতের অক্ষর।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
         const data = { code, type, value, minOrder, expiry, description, active, updatedAt: new Date().toISOString() };
         if (editId) { await updateDoc(doc(db, 'coupons', editId), data); showMsg('coupon-form-msg', '✅ Updated!', 'ok'); setTimeout(() => { closeCouponModal(); loadCoupons(); }, 1000); }
         else { data.createdAt = new Date().toISOString(); await addDoc(collection(db, 'coupons'), data); showMsg('coupon-form-msg', '✅ Created!', 'ok'); setTimeout(() => { closeCouponModal(); loadCoupons(); }, 1000); }
@@ -1832,7 +1705,7 @@ window.deleteCoupon = async function(docId) {
     catch (err) { alert('❌'); }
 };
 
-// BANNERS
+// ===== BANNERS =====
 window.loadBanners = async function() {
     const c = document.getElementById('banners-container');
     const cached = aCacheGet(ADMIN_CACHE.banners);
@@ -1894,10 +1767,7 @@ window.editBanner = function(docId) {
     document.getElementById('b-image').value = b.image || '';
     document.getElementById('b-title').value = b.title || '';
     document.getElementById('b-link-type').value = b.linkType || 'none';
-    if (b.linkType === 'external') {
-        document.getElementById('b-external-value').value = b.link || '';
-        document.getElementById('b-external-group').style.display = 'block';
-    }
+    if (b.linkType === 'external') { document.getElementById('b-external-value').value = b.link || ''; document.getElementById('b-external-group').style.display = 'block'; }
     document.getElementById('b-order').value = b.order || 1;
     document.getElementById('b-active').checked = b.active !== false;
     document.getElementById('b-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
@@ -1935,73 +1805,53 @@ document.getElementById('b-link-type')?.addEventListener('change', function() {
     document.getElementById('b-external-group').style.display = this.value === 'external' ? 'block' : 'none';
 });
 
-// CONTENT MANAGER
+// ===== CONTENT MANAGER =====
 window.loadContentSettings = async function() {
     try {
         const cached = aCacheGet(ADMIN_CACHE.settings);
-        if (cached) {
-            document.getElementById('c-logo-url').value = cached.logoUrl || DEFAULT_SETTINGS.logoUrl;
-            if (cached.logoUrl) document.getElementById('c-logo-preview').innerHTML = `<img src="${cached.logoUrl}">`;
-            document.getElementById('c-copyright-text').value = cached.copyrightText || DEFAULT_SETTINGS.copyrightText;
-            window.socialLinksDraft = Array.isArray(cached.socialLinks) ? cached.socialLinks : [];
-            renderSocialLinks();
-            renderContactIcons(cached.contactIcons || []);
-            renderPaymentMethods(cached.paymentMethods || []);
-            renderCouriers(cached.couriers || []);
-        }
+        if (cached) fillContentForm(cached);
         const sSnap = await getDoc(doc(db, 'settings', 'store'));
         if (sSnap.exists()) {
             const sData = sSnap.data();
             aCacheSet(ADMIN_CACHE.settings, sData);
-            document.getElementById('c-logo-url').value = sData.logoUrl || DEFAULT_SETTINGS.logoUrl;
-            if (sData.logoUrl) document.getElementById('c-logo-preview').innerHTML = `<img src="${sData.logoUrl}">`;
-            document.getElementById('c-copyright-text').value = sData.copyrightText || DEFAULT_SETTINGS.copyrightText;
-            window.socialLinksDraft = Array.isArray(sData.socialLinks) ? sData.socialLinks : [];
-            renderSocialLinks();
-            renderContactIcons(Array.isArray(sData.contactIcons) ? sData.contactIcons : []);
-            renderPaymentMethods(Array.isArray(sData.paymentMethods) ? sData.paymentMethods : []);
-            renderCouriers(Array.isArray(sData.couriers) ? sData.couriers : []);
+            fillContentForm(sData);
         }
         await loadFAQFromFirebase();
         await loadHomeCollectionsFromFirebase();
     } catch (err) { console.error(err); }
 };
 
-window.addSocialLink = function() {
-    window.socialLinksDraft.push({ name: '', iconUrl: '', link: '', enabled: true });
+function fillContentForm(sData) {
+    document.getElementById('c-logo-url').value = sData.logoUrl || DEFAULT_SETTINGS.logoUrl;
+    if (sData.logoUrl) document.getElementById('c-logo-preview').innerHTML = `<img src="${sData.logoUrl}">`;
+    document.getElementById('c-copyright-text').value = sData.copyrightText || DEFAULT_SETTINGS.copyrightText;
+    socialLinksDraft = Array.isArray(sData.socialLinks) ? sData.socialLinks : [];
     renderSocialLinks();
-};
+    renderContactIcons(Array.isArray(sData.contactIcons) ? sData.contactIcons : []);
+    renderPaymentMethods(Array.isArray(sData.paymentMethods) ? sData.paymentMethods : []);
+    renderCouriers(Array.isArray(sData.couriers) ? sData.couriers : []);
+}
+
+window.addSocialLink = function() { socialLinksDraft.push({ name: '', iconUrl: '', link: '', enabled: true }); renderSocialLinks(); };
 
 window.renderSocialLinks = function() {
     const c = document.getElementById('social-links-container');
     if (!c) return;
-    const draft = window.socialLinksDraft || [];
-    if (draft.length === 0) {
-        c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;border:1px dashed var(--border);border-radius:10px;">কোনো social link নেই।</div>';
-        return;
-    }
+    if (socialLinksDraft.length === 0) { c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;border:1px dashed var(--border);border-radius:10px;">কোনো social link নেই।</div>'; return; }
     c.innerHTML = '';
-    draft.forEach((s, idx) => {
+    socialLinksDraft.forEach((s, idx) => {
         const box = document.createElement('div');
         box.className = 'content-item-box';
-        box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx + 1}</div><button type="button" class="content-item-remove" onclick="removeSocialLink(${idx})"><i class="fas fa-trash"></i></button></div><div class="fg"><label>Name</label><input type="text" value="${(s.name || '').replace(/"/g, '&quot;')}" oninput="window.socialLinksDraft[${idx}].name = this.value" placeholder="WhatsApp"></div><div class="fg"><label>Icon Image</label><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;"><div class="contact-icon-preview" id="sl-preview-${idx}" style="width:50px;height:50px;">${s.iconUrl ? `<img src="${s.iconUrl}">` : '<i class="fas fa-image"></i>'}</div><input type="file" accept="image/*" style="display:none" id="sl-file-${idx}" onchange="handleSocialIconUpload(event, ${idx})"><button type="button" class="upload-btn" onclick="document.getElementById('sl-file-${idx}').click()"><i class="fas fa-cloud-upload-alt"></i> Upload</button><input type="text" value="${(s.iconUrl || '').replace(/"/g, '&quot;')}" placeholder="or URL" style="flex:1;min-width:150px;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit;" oninput="window.socialLinksDraft[${idx}].iconUrl = this.value; updateSocialPreview(${idx}, this.value)"></div></div><div class="fg"><label>Link URL</label><input type="text" value="${(s.link || '').replace(/"/g, '&quot;')}" oninput="window.socialLinksDraft[${idx}].link = this.value" placeholder="https://..."></div><div class="fg" style="display:flex;align-items:center;gap:10px;"><label style="flex:1;margin:0;">Enabled</label><label class="toggle-switch"><input type="checkbox" ${s.enabled !== false ? 'checked' : ''} onchange="window.socialLinksDraft[${idx}].enabled = this.checked"><span class="toggle-slider"></span></label></div>`;
+        box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx + 1}</div><button type="button" class="content-item-remove" onclick="removeSocialLink(${idx})"><i class="fas fa-trash"></i></button></div><div class="fg"><label>Name</label><input type="text" value="${(s.name || '').replace(/"/g, '&quot;')}" oninput="socialLinksDraft[${idx}].name = this.value" placeholder="WhatsApp"></div><div class="fg"><label>Icon Image</label><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;"><div class="contact-icon-preview" id="sl-preview-${idx}" style="width:50px;height:50px;">${s.iconUrl ? `<img src="${s.iconUrl}">` : '<i class="fas fa-image"></i>'}</div><input type="file" accept="image/*" style="display:none" id="sl-file-${idx}" onchange="handleSocialIconUpload(event, ${idx})"><button type="button" class="upload-btn" onclick="document.getElementById('sl-file-${idx}').click()"><i class="fas fa-cloud-upload-alt"></i> Upload</button><input type="text" value="${(s.iconUrl || '').replace(/"/g, '&quot;')}" placeholder="or URL" style="flex:1;min-width:150px;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit;" oninput="socialLinksDraft[${idx}].iconUrl = this.value; updateSocialPreview(${idx}, this.value)"></div></div><div class="fg"><label>Link URL</label><input type="text" value="${(s.link || '').replace(/"/g, '&quot;')}" oninput="socialLinksDraft[${idx}].link = this.value" placeholder="https://..."></div><div class="fg" style="display:flex;align-items:center;gap:10px;"><label style="flex:1;margin:0;">Enabled</label><label class="toggle-switch"><input type="checkbox" ${s.enabled !== false ? 'checked' : ''} onchange="socialLinksDraft[${idx}].enabled = this.checked"><span class="toggle-slider"></span></label></div>`;
         c.appendChild(box);
     });
 };
 
-window.updateSocialPreview = function(idx, url) {
-    const p = document.getElementById('sl-preview-' + idx);
-    if (p) p.innerHTML = url && url.startsWith('http') ? `<img src="${url}">` : '<i class="fas fa-image"></i>';
-};
-window.removeSocialLink = function(idx) {
-    if (!confirm('Remove?')) return;
-    window.socialLinksDraft.splice(idx, 1);
-    renderSocialLinks();
-};
+window.updateSocialPreview = function(idx, url) { const p = document.getElementById('sl-preview-' + idx); if (p) p.innerHTML = url && url.startsWith('http') ? `<img src="${url}">` : '<i class="fas fa-image"></i>'; };
+window.removeSocialLink = function(idx) { if (!confirm('Remove?')) return; socialLinksDraft.splice(idx, 1); renderSocialLinks(); };
 
 window.renderContactIcons = function(list) {
-    const c = document.getElementById('contact-icons-container');
-    if (!c) return;
+    const c = document.getElementById('contact-icons-container'); if (!c) return;
     c.innerHTML = '';
     if (!Array.isArray(list)) list = [];
     list.forEach((icon, idx) => {
@@ -2022,14 +1872,13 @@ window.addContactIcon = function() {
 };
 
 window.renderPaymentMethods = function(list) {
-    const c = document.getElementById('payment-methods-container');
-    if (!c) return;
+    const c = document.getElementById('payment-methods-container'); if (!c) return;
     c.innerHTML = '';
     if (!Array.isArray(list)) list = [];
     list.forEach((pm, idx) => {
         const box = document.createElement('div');
         box.className = 'content-item-box';
-        box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx + 1}</div><button type="button" class="content-item-remove" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"></i></button></div><div class="fg"><label>Method Name</label><input type="text" class="pm-name" value="${(pm.name || '').replace(/"/g, '&quot;')}"></div><div class="fg"><label>Display Label</label><input type="text" class="pm-label" value="${(pm.label || '').replace(/"/g, '&quot;')}"></div><div class="fg"><label>Value (Number)</label><input type="text" class="pm-value" value="${(pm.value || '').replace(/"/g, '&quot;')}"></div>`;
+        box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx + 1}</div><button type="button" class="content-item-remove" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"></i></button></div><div class="fg"><label>Name</label><input type="text" class="pm-name" value="${(pm.name || '').replace(/"/g, '&quot;')}"></div><div class="fg"><label>Label</label><input type="text" class="pm-label" value="${(pm.label || '').replace(/"/g, '&quot;')}"></div><div class="fg"><label>Value</label><input type="text" class="pm-value" value="${(pm.value || '').replace(/"/g, '&quot;')}"></div>`;
         c.appendChild(box);
     });
 };
@@ -2039,13 +1888,12 @@ window.addPaymentMethod = function() {
     const idx = c.children.length + 1;
     const box = document.createElement('div');
     box.className = 'content-item-box';
-    box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx}</div><button type="button" class="content-item-remove" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"></i></button></div><div class="fg"><label>Method Name</label><input type="text" class="pm-name" placeholder="bKash"></div><div class="fg"><label>Display Label</label><input type="text" class="pm-label" placeholder="bKash Personal"></div><div class="fg"><label>Value (Number)</label><input type="text" class="pm-value" placeholder="01832140613"></div>`;
+    box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx}</div><button type="button" class="content-item-remove" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"></i></button></div><div class="fg"><label>Name</label><input type="text" class="pm-name" placeholder="bKash"></div><div class="fg"><label>Label</label><input type="text" class="pm-label" placeholder="bKash Personal"></div><div class="fg"><label>Value</label><input type="text" class="pm-value" placeholder="01832140613"></div>`;
     c.appendChild(box);
 };
 
 window.renderCouriers = function(list) {
-    const c = document.getElementById('couriers-container');
-    if (!c) return;
+    const c = document.getElementById('couriers-container'); if (!c) return;
     c.innerHTML = '';
     if (!Array.isArray(list)) list = [];
     list.forEach((co, idx) => {
@@ -2076,8 +1924,7 @@ window.loadFAQFromFirebase = async function() {
 };
 
 window.renderFAQList = function(list) {
-    const c = document.getElementById('faq-container');
-    if (!c) return;
+    const c = document.getElementById('faq-container'); if (!c) return;
     c.innerHTML = '';
     list.forEach((f, idx) => {
         const box = document.createElement('div');
@@ -2107,8 +1954,7 @@ window.loadHomeCollectionsFromFirebase = async function() {
 };
 
 window.renderHomeCollections = function(list) {
-    const c = document.getElementById('home-collections-container');
-    if (!c) return;
+    const c = document.getElementById('home-collections-container'); if (!c) return;
     c.innerHTML = '';
     list.forEach((hc, idx) => {
         const box = document.createElement('div');
@@ -2133,7 +1979,7 @@ window.saveContentSettings = async function() {
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     try {
         const contentData = { logoUrl: document.getElementById('c-logo-url').value.trim(), copyrightText: document.getElementById('c-copyright-text').value.trim() };
-        contentData.socialLinks = (window.socialLinksDraft || []).filter(s => s.name && s.link);
+        contentData.socialLinks = socialLinksDraft.filter(s => s.name && s.link);
         const contacts = [];
         document.querySelectorAll('#contact-icons-container .contact-icon-box').forEach(box => {
             const l = box.querySelector('.ci-label').value.trim();
@@ -2182,7 +2028,7 @@ window.saveContentSettings = async function() {
     btn.disabled = false; btn.innerHTML = orig;
 };
 
-// TRACKING
+// ===== TRACKING =====
 window.loadTrackingSettings = async function() {
     try {
         const cached = aCacheGet(ADMIN_CACHE.settings);
@@ -2202,7 +2048,7 @@ function validateTracking() {
     const gaId = document.getElementById('t-ga-id').value.trim();
     const gaSt = document.getElementById('t-ga-status');
     if (!gaId) gaSt.innerHTML = '<span style="color:var(--muted);">ℹ️ খালি</span>';
-    else if (/^G-[A-Z0-9]{8,}$/i.test(gaId)) gaSt.innerHTML = '<span style="color:var(--ok);">✅ Format সঠিক</span>';
+    else if (/^G-[A-Z0-9]{8,}$/i.test(gaId)) gaSt.innerHTML = '<span style="color:var(--ok);">✅ সঠিক</span>';
     else gaSt.innerHTML = '<span style="color:var(--bad);">⚠️ Format ভুল</span>';
     const fbId = document.getElementById('t-fb-id').value.trim();
     const fbSt = document.getElementById('t-fb-status');
@@ -2229,8 +2075,6 @@ window.saveTrackingSettings = async function() {
         const fbId = document.getElementById('t-fb-id').value.trim();
         const ttId = document.getElementById('t-tt-id').value.trim();
         const customCode = document.getElementById('t-custom-code').value.trim();
-        if (gaId && !/^G-[A-Z0-9]{8,}$/i.test(gaId)) { showMsg('tracking-msg', '⚠️ GA ID ভুল', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
-        if (fbId && !/^\d{10,20}$/.test(fbId)) { showMsg('tracking-msg', '⚠️ FB ID ভুল', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
         const data = { gaEnabled: document.getElementById('t-ga-enabled').checked, googleAnalyticsId: gaId, fbEnabled: document.getElementById('t-fb-enabled').checked, facebookPixelId: fbId, ttEnabled: document.getElementById('t-tt-enabled').checked, tiktokPixelId: ttId, customHeadCode: customCode, trackingUpdatedAt: new Date().toISOString() };
         await setDoc(doc(db, 'settings', 'store'), data, { merge: true });
         showMsg('tracking-msg', '✅ Saved! Website refresh করুন।', 'ok');
@@ -2238,7 +2082,7 @@ window.saveTrackingSettings = async function() {
     btn.disabled = false; btn.innerHTML = orig;
 };
 
-// SETTINGS
+// ===== SETTINGS =====
 window.loadSettings = async function() {
     try {
         const cached = aCacheGet(ADMIN_CACHE.settings);
@@ -2255,16 +2099,11 @@ window.loadSettings = async function() {
 
 function fillSettingsForm(s) {
     const safe = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    safe('s-store-name', s.storeName);
-    safe('s-welcome-text', s.welcomeText);
-    safe('s-phone', s.phone);
-    safe('s-whatsapp', s.whatsapp);
-    safe('s-email', s.email);
-    safe('s-address', s.address);
-    safe('s-bkash', s.bkash);
-    safe('s-nagad', s.nagad);
-    safe('s-delivery-inside', s.deliveryInside || 60);
-    safe('s-delivery-outside', s.deliveryOutside || 130);
+    safe('s-store-name', s.storeName); safe('s-welcome-text', s.welcomeText);
+    safe('s-phone', s.phone); safe('s-whatsapp', s.whatsapp);
+    safe('s-email', s.email); safe('s-address', s.address);
+    safe('s-bkash', s.bkash); safe('s-nagad', s.nagad);
+    safe('s-delivery-inside', s.deliveryInside || 60); safe('s-delivery-outside', s.deliveryOutside || 130);
 }
 
 window.saveSettings = async function() {
@@ -2274,19 +2113,7 @@ window.saveSettings = async function() {
     try {
         const storeName = document.getElementById('s-store-name').value.trim();
         if (!storeName) { showMsg('settings-msg', '⚠️ Store name দরকার।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
-        const data = {
-            storeName,
-            welcomeText: document.getElementById('s-welcome-text').value.trim(),
-            phone: document.getElementById('s-phone').value.trim(),
-            whatsapp: document.getElementById('s-whatsapp').value.trim().replace(/[^0-9]/g, ''),
-            email: document.getElementById('s-email').value.trim(),
-            address: document.getElementById('s-address').value.trim(),
-            bkash: document.getElementById('s-bkash').value.trim(),
-            nagad: document.getElementById('s-nagad').value.trim(),
-            deliveryInside: parseInt(document.getElementById('s-delivery-inside').value) || 60,
-            deliveryOutside: parseInt(document.getElementById('s-delivery-outside').value) || 130,
-            updatedAt: new Date().toISOString()
-        };
+        const data = { storeName, welcomeText: document.getElementById('s-welcome-text').value.trim(), phone: document.getElementById('s-phone').value.trim(), whatsapp: document.getElementById('s-whatsapp').value.trim().replace(/[^0-9]/g, ''), email: document.getElementById('s-email').value.trim(), address: document.getElementById('s-address').value.trim(), bkash: document.getElementById('s-bkash').value.trim(), nagad: document.getElementById('s-nagad').value.trim(), deliveryInside: parseInt(document.getElementById('s-delivery-inside').value) || 60, deliveryOutside: parseInt(document.getElementById('s-delivery-outside').value) || 130, updatedAt: new Date().toISOString() };
         await setDoc(doc(db, 'settings', 'store'), data, { merge: true });
         aCacheSet(ADMIN_CACHE.settings, { ...(aCacheGet(ADMIN_CACHE.settings) || {}), ...data });
         showMsg('settings-msg', '✅ Saved!', 'ok');
@@ -2323,7 +2150,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { closeCouponModal(); closeBannerModal(); }
 });
 
-console.log('✅ Part 4 loaded — Full Admin Panel Ready');
+console.log('✅ Admin Panel Ready — Full Single-Script Version');
 </script>
 </body>
 </html>
