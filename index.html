@@ -25,13 +25,13 @@
 <!-- ⚡ INSTANT CACHE SYSTEM -->
 <script>
 window.ADMIN_CACHE = {
-    products: 'bq_admin_products_v4', orders: 'bq_admin_orders_v4',
-    reviews: 'bq_admin_reviews_v4', newsletter: 'bq_admin_newsletter_v4',
-    coupons: 'bq_admin_coupons_v4', banners: 'bq_admin_banners_v4',
-    pages: 'bq_admin_pages_v4', faq: 'bq_admin_faq_v4',
-    sizeCharts: 'bq_admin_sizeCharts_v4', homeCollections: 'bq_admin_homeCollections_v4',
-    settings: 'bq_admin_settings_v4', contentSettings: 'bq_admin_content_v4',
-    stats: 'bq_admin_stats_v4'
+    products: 'bq_admin_products_v5', orders: 'bq_admin_orders_v5',
+    reviews: 'bq_admin_reviews_v5', newsletter: 'bq_admin_newsletter_v5',
+    coupons: 'bq_admin_coupons_v5', banners: 'bq_admin_banners_v5',
+    pages: 'bq_admin_pages_v5', faq: 'bq_admin_faq_v5',
+    sizeCharts: 'bq_admin_sizeCharts_v5', homeCollections: 'bq_admin_homeCollections_v5',
+    settings: 'bq_admin_settings_v5', contentSettings: 'bq_admin_content_v5',
+    stats: 'bq_admin_stats_v5'
 };
 window.aCacheGet = function(key) {
     try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw).data : null; } catch(e) { return null; }
@@ -43,6 +43,446 @@ window.aCacheClear = function() {
     try { Object.keys(ADMIN_CACHE).forEach(k => localStorage.removeItem(ADMIN_CACHE[k])); } catch(e) {}
 };
 console.log('⚡ Instant cache ready');
+</script>
+
+<!-- 🎨 CUSTOM POPUP SYSTEM — Emerald Noir Style -->
+<script>
+(function() {
+    if (document.getElementById('bq-popup-style')) return;
+    const style = document.createElement('style');
+    style.id = 'bq-popup-style';
+    style.textContent = `
+        /* ===== POPUP OVERLAY ===== */
+        .bq-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 999998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            font-family: 'Poppins', sans-serif;
+        }
+        .bq-popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ===== POPUP BOX ===== */
+        .bq-popup-box {
+            background: linear-gradient(135deg, #0f1c17, #08110d);
+            border: 1.5px solid #10b981;
+            border-radius: 20px;
+            padding: 28px 24px 22px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(16, 185, 129, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .bq-popup-overlay.active .bq-popup-box {
+            transform: translateY(0) scale(1);
+        }
+        .bq-popup-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+            animation: bqPopupGlow 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes bqPopupGlow {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.4; }
+            50% { transform: scale(1.15) rotate(90deg); opacity: 0.8; }
+        }
+        
+        /* ===== ICON ===== */
+        .bq-popup-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 18px;
+            position: relative;
+            z-index: 2;
+            animation: bqIconPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        @keyframes bqIconPop {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        .bq-popup-icon.danger {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: #ffffff;
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.5), 0 0 0 0 rgba(239, 68, 68, 0.5);
+            animation: bqIconPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), bqDangerPulse 2s ease-in-out 0.5s infinite;
+        }
+        @keyframes bqDangerPulse {
+            0%, 100% { box-shadow: 0 8px 30px rgba(239, 68, 68, 0.5), 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            50% { box-shadow: 0 8px 30px rgba(239, 68, 68, 0.5), 0 0 0 15px rgba(239, 68, 68, 0); }
+        }
+        .bq-popup-icon.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+        }
+        .bq-popup-icon.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff;
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.5);
+        }
+        .bq-popup-icon.info {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #ffffff;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+        }
+        .bq-popup-icon.question {
+            background: linear-gradient(135deg, #10b981, #065f46);
+            color: #ffffff;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+        }
+        
+        /* ===== TEXT ===== */
+        .bq-popup-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #10b981;
+            text-align: center;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 0.3px;
+        }
+        .bq-popup-message {
+            font-size: 14px;
+            color: #9eb3a8;
+            text-align: center;
+            line-height: 1.7;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 2;
+            word-break: break-word;
+        }
+        .bq-popup-message strong {
+            color: #f5f5f5;
+            font-weight: 700;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 2px 0;
+        }
+        
+        /* ===== BUTTONS ===== */
+        .bq-popup-buttons {
+            display: flex;
+            gap: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        .bq-popup-btn {
+            flex: 1;
+            padding: 13px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .bq-popup-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+        .bq-popup-btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        .bq-popup-btn:hover {
+            transform: translateY(-2px);
+        }
+        .bq-popup-btn:active {
+            transform: translateY(0);
+        }
+        .bq-popup-btn.cancel {
+            background: transparent;
+            border: 1.5px solid rgba(158, 179, 168, 0.3);
+            color: #9eb3a8;
+        }
+        .bq-popup-btn.cancel:hover {
+            border-color: #9eb3a8;
+            color: #f5f5f5;
+            background: rgba(158, 179, 168, 0.1);
+        }
+        .bq-popup-btn.confirm {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+        .bq-popup-btn.confirm:hover {
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.6);
+        }
+        .bq-popup-btn.danger {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+        .bq-popup-btn.danger:hover {
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.6);
+        }
+        .bq-popup-btn.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+        .bq-popup-btn.warning:hover {
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.6);
+        }
+        
+        /* ===== SINGLE BUTTON (for alerts) ===== */
+        .bq-popup-buttons.single .bq-popup-btn {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        
+        /* ===== MOBILE ===== */
+        @media (max-width: 480px) {
+            .bq-popup-box { padding: 24px 18px 18px; border-radius: 16px; }
+            .bq-popup-icon { width: 58px; height: 58px; font-size: 24px; margin-bottom: 15px; }
+            .bq-popup-title { font-size: 19px; }
+            .bq-popup-message { font-size: 13px; margin-bottom: 18px; }
+            .bq-popup-btn { padding: 12px 14px; font-size: 13px; }
+            .bq-popup-buttons { gap: 8px; }
+        }
+    `;
+    document.head.appendChild(style);
+})();
+
+window.bqPopup = {
+    overlay: null,
+    resolve: null,
+    
+    init: function() {
+        if (this.overlay) return;
+        const overlay = document.createElement('div');
+        overlay.className = 'bq-popup-overlay';
+        overlay.id = 'bq-popup-overlay';
+        overlay.innerHTML = `
+            <div class="bq-popup-box" onclick="event.stopPropagation()">
+                <div class="bq-popup-icon" id="bq-popup-icon"></div>
+                <h3 class="bq-popup-title" id="bq-popup-title"></h3>
+                <p class="bq-popup-message" id="bq-popup-message"></p>
+                <div class="bq-popup-buttons" id="bq-popup-buttons"></div>
+            </div>
+        `;
+        if (document.body) document.body.appendChild(overlay);
+        else document.addEventListener('DOMContentLoaded', () => document.body.appendChild(overlay));
+        this.overlay = overlay;
+        
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay && this.resolve) {
+                this.resolve(false);
+                this.close();
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.overlay && this.overlay.classList.contains('active')) {
+                if (this.resolve) this.resolve(false);
+                this.close();
+            }
+        });
+    },
+    
+    close: function() {
+        if (this.overlay) {
+            this.overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        this.resolve = null;
+    },
+    
+    show: function(options) {
+        this.init();
+        const opts = options || {};
+        const type = opts.type || 'question';
+        const title = opts.title || 'Are you sure?';
+        const message = opts.message || '';
+        const confirmText = opts.confirmText || 'Confirm';
+        const cancelText = opts.cancelText || 'Cancel';
+        const showCancel = opts.showCancel !== false;
+        const confirmStyle = opts.confirmStyle || (type === 'danger' ? 'danger' : 'confirm');
+        
+        const icons = {
+            danger: '<i class="fas fa-exclamation-triangle"></i>',
+            success: '<i class="fas fa-check-circle"></i>',
+            warning: '<i class="fas fa-exclamation-circle"></i>',
+            info: '<i class="fas fa-info-circle"></i>',
+            question: '<i class="fas fa-question-circle"></i>'
+        };
+        
+        document.getElementById('bq-popup-icon').className = 'bq-popup-icon ' + type;
+        document.getElementById('bq-popup-icon').innerHTML = icons[type] || icons.question;
+        document.getElementById('bq-popup-title').textContent = title;
+        document.getElementById('bq-popup-message').innerHTML = message;
+        
+        const buttons = document.getElementById('bq-popup-buttons');
+        buttons.className = 'bq-popup-buttons' + (showCancel ? '' : ' single');
+        buttons.innerHTML = '';
+        
+        return new Promise((resolve) => {
+            this.resolve = resolve;
+            
+            if (showCancel) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'bq-popup-btn cancel';
+                cancelBtn.innerHTML = '<i class="fas fa-times"></i> ' + cancelText;
+                cancelBtn.onclick = () => {
+                    resolve(false);
+                    this.close();
+                };
+                buttons.appendChild(cancelBtn);
+            }
+            
+            const confirmBtn = document.createElement('button');
+            confirmBtn.className = 'bq-popup-btn ' + confirmStyle;
+            const confirmIcon = type === 'danger' ? '<i class="fas fa-trash-alt"></i>' : (type === 'success' ? '<i class="fas fa-check"></i>' : '<i class="fas fa-check"></i>');
+            confirmBtn.innerHTML = confirmIcon + ' ' + confirmText;
+            confirmBtn.onclick = () => {
+                resolve(true);
+                this.close();
+            };
+            buttons.appendChild(confirmBtn);
+            
+            this.overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            setTimeout(() => confirmBtn.focus(), 100);
+        });
+    },
+    
+    confirm: function(message, title) {
+        return this.show({
+            type: 'question',
+            title: title || 'নিশ্চিত করুন',
+            message: message,
+            confirmText: 'হ্যাঁ, নিশ্চিত',
+            cancelText: 'না, বাতিল',
+            confirmStyle: 'confirm'
+        });
+    },
+    
+    delete: function(itemName, itemType) {
+        const type = itemType || 'আইটেম';
+        return this.show({
+            type: 'danger',
+            title: '🗑️ মুছে ফেলবেন?',
+            message: `আপনি কি <strong>${itemName}</strong> ${type} টি মুছে ফেলতে চান?<br><br style="line-height:0.5"><span style="color:#ef4444;font-size:12px;">⚠️ এই কাজটি ফিরিয়ে আনা যাবে না।</span>`,
+            confirmText: 'মুছে ফেলুন',
+            cancelText: 'বাতিল',
+            confirmStyle: 'danger'
+        });
+    },
+    
+    success: function(title, message) {
+        return this.show({
+            type: 'success',
+            title: '✅ ' + (title || 'সফল হয়েছে!'),
+            message: message || 'কাজটি সফলভাবে সম্পন্ন হয়েছে।',
+            confirmText: 'ঠিক আছে',
+            showCancel: false,
+            confirmStyle: 'confirm'
+        });
+    },
+    
+    error: function(title, message) {
+        return this.show({
+            type: 'danger',
+            title: '❌ ' + (title || 'সমস্যা হয়েছে!'),
+            message: message || 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।',
+            confirmText: 'ঠিক আছে',
+            showCancel: false,
+            confirmStyle: 'danger'
+        });
+    },
+    
+    warning: function(title, message) {
+        return this.show({
+            type: 'warning',
+            title: '⚠️ ' + (title || 'সতর্কতা'),
+            message: message,
+            confirmText: 'বুঝেছি',
+            showCancel: false,
+            confirmStyle: 'warning'
+        });
+    },
+    
+    info: function(title, message) {
+        return this.show({
+            type: 'info',
+            title: 'ℹ️ ' + (title || 'তথ্য'),
+            message: message,
+            confirmText: 'ঠিক আছে',
+            showCancel: false,
+            confirmStyle: 'confirm'
+        });
+    },
+    
+    // Override native alert
+    alert: function(message, title) {
+        return this.show({
+            type: 'info',
+            title: title || 'তথ্য',
+            message: message,
+            confirmText: 'ঠিক আছে',
+            showCancel: false
+        });
+    }
+};
+
+// Global shortcut functions
+window.bqAlert = (msg, title) => bqPopup.alert(msg, title);
+window.bqConfirm = (msg, title) => bqPopup.confirm(msg, title);
+window.bqDelete = (name, type) => bqPopup.delete(name, type);
+window.bqSuccess = (title, msg) => bqPopup.success(title, msg);
+window.bqError = (title, msg) => bqPopup.error(title, msg);
+window.bqWarning = (title, msg) => bqPopup.warning(title, msg);
+window.bqInfo = (title, msg) => bqPopup.info(title, msg);
+
+console.log('🎨 Custom Popup System ready');
 </script>
 
 <!-- 🔔 NOTIFICATION SYSTEM -->
@@ -184,7 +624,7 @@ window.uploadMainImage = async function(e) {
         input.value = url;
         if (status) { status.className = 'upload-status ok'; status.textContent = '✅ Uploaded!'; }
         window.showToast && window.showToast('✅ Image uploaded!');
-    } catch(err) { if (status) { status.className = 'upload-status bad'; status.textContent = '❌ ' + err.message; } alert('❌ ' + err.message); }
+    } catch(err) { if (status) { status.className = 'upload-status bad'; status.textContent = '❌ ' + err.message; } bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -195,8 +635,8 @@ window.uploadBannerImage = async function(e) {
         document.getElementById('b-image').value = url;
         const preview = document.getElementById('b-preview');
         if (preview) preview.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
-        alert('✅ Banner uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+        bqPopup.success('আপলোড সফল', 'ব্যানার ছবি আপলোড হয়েছে।');
+    } catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -205,8 +645,8 @@ window.uploadLogoImage = async function(e) {
     try {
         const url = await window.uploadToImgBB(file);
         document.getElementById('c-logo-url').value = url;
-        alert('✅ Logo uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+        bqPopup.success('লোগো আপলোড সফল', 'নতুন লোগো সেভ করুন।');
+    } catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -219,8 +659,8 @@ window.uploadContactIcon = async function(e, inputEl) {
         urlInput.value = url;
         const preview = box.querySelector('.contact-icon-preview');
         if (preview) preview.innerHTML = `<img src="${url}">`;
-        alert('✅ Icon uploaded!');
-    } catch(err) { alert('❌ ' + err.message); }
+        bqPopup.success('আইকন আপলোড সফল');
+    } catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -228,8 +668,8 @@ window.uploadPaymentIcon = async function(e, inputEl) {
     const file = e.target.files[0]; if (!file) return;
     const box = inputEl.closest('.content-item-box');
     const urlInput = box.querySelector('.pm-icon');
-    try { const url = await window.uploadToImgBB(file); urlInput.value = url; alert('✅ Icon uploaded!'); }
-    catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); urlInput.value = url; bqPopup.success('আইকন আপলোড সফল'); }
+    catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -237,8 +677,8 @@ window.uploadCourierLogo = async function(e, inputEl) {
     const file = e.target.files[0]; if (!file) return;
     const box = inputEl.closest('.content-item-box');
     const urlInput = box.querySelector('.co-logo');
-    try { const url = await window.uploadToImgBB(file); urlInput.value = url; alert('✅ Logo uploaded!'); }
-    catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); urlInput.value = url; bqPopup.success('লোগো আপলোড সফল'); }
+    catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -246,8 +686,8 @@ window.uploadCollectionImage = async function(e, inputEl) {
     const file = e.target.files[0]; if (!file) return;
     const box = inputEl.closest('.content-item-box');
     const urlInput = box.querySelector('.hc-image');
-    try { const url = await window.uploadToImgBB(file); urlInput.value = url; alert('✅ Image uploaded!'); }
-    catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); urlInput.value = url; bqPopup.success('ছবি আপলোড সফল'); }
+    catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -255,8 +695,8 @@ window.uploadColorRow = async function(e, rowId) {
     const file = e.target.files[0]; if (!file) return;
     const row = document.getElementById(rowId); if (!row) return;
     const input = row.querySelector('.cimg');
-    try { const url = await window.uploadToImgBB(file); input.value = url; alert('✅ Color uploaded!'); }
-    catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); input.value = url; bqPopup.success('রঙের ছবি আপলোড সফল'); }
+    catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -264,8 +704,8 @@ window.uploadAdditionalRow = async function(e, rowId) {
     const file = e.target.files[0]; if (!file) return;
     const row = document.getElementById(rowId); if (!row) return;
     const input = row.querySelector('.aimg');
-    try { const url = await window.uploadToImgBB(file); input.value = url; alert('✅ Image uploaded!'); }
-    catch(err) { alert('❌ ' + err.message); }
+    try { const url = await window.uploadToImgBB(file); input.value = url; bqPopup.success('ছবি আপলোড সফল'); }
+    catch(err) { bqPopup.error('আপলোড ব্যর্থ', err.message); }
     e.target.value = '';
 };
 
@@ -323,9 +763,12 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .logout:hover{background:var(--bad);color:#fff}
 .wrap{max-width:1100px;margin:0 auto;padding:20px 15px}
 .tabs{display:flex;gap:8px;margin-bottom:25px;overflow-x:auto;padding-bottom:5px}
-.tab{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.tab{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:7px;position:relative}
 .tab:hover{border-color:var(--gold)}
 .tab.active{background:var(--gold);color:#08110d;border-color:var(--gold)}
+.tab-count-badge{background:rgba(16,185,129,.3);color:#10b981;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:800;margin-left:6px;animation:badgeAppear 0.3s ease-out}
+.tab.active .tab-count-badge{background:rgba(8,17,13,.3);color:#08110d}
+@keyframes badgeAppear{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 .section{display:none}
 .section.active{display:block}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:25px}
@@ -400,140 +843,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .select-all-btn:hover{opacity:.9}
 .select-all-btn.deselect{background:linear-gradient(135deg,#666,#333)}
 
-.ocard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
-.ohead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px}
-.oid{font-family:'Playfair Display',serif;color:var(--gold);font-size:15px;font-weight:700}
-.ostatus{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase}
-.ostatus.pending{background:rgba(245,158,11,.15);color:var(--warn);border:1px solid var(--warn)}
-.ostatus.completed{background:rgba(34,197,94,.15);color:var(--ok);border:1px solid var(--ok)}
-.obody{font-size:13px;line-height:1.8}
-.obody strong{color:var(--gold)}
-.olist{margin-top:10px;padding-left:20px;font-size:12px;color:var(--muted)}
-.ototal{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:13px;font-weight:700;color:var(--gold);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-
-.oactions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.oactions button,.oactions a{padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
-.btn-complete{background:rgba(34,197,94,.15);color:var(--ok);border:1px solid var(--ok)}
-.btn-complete:hover{background:var(--ok);color:#fff}
-.btn-pending{background:rgba(245,158,11,.15);color:var(--warn);border:1px solid var(--warn)}
-.btn-pending:hover{background:var(--warn);color:#fff}
-.btn-od{background:rgba(239,68,68,.15);color:var(--bad);border:1px solid var(--bad)}
-.btn-od:hover{background:var(--bad);color:#fff}
-
-.ofilter{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap}
-.ofilter button{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid var(--border);background:var(--card);color:var(--text)}
-.ofilter button.active{background:var(--gold);color:#08110d;border-color:var(--gold)}
-
-.news-hero{background:linear-gradient(135deg,rgba(16,185,129,.18) 0%,rgba(16,185,129,.04) 100%);border:1px solid var(--gold);border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.news-hero-left{display:flex;align-items:center;gap:15px}
-.news-hero-icon{width:55px;height:55px;border-radius:50%;background:var(--gold);color:#08110d;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(16,185,129,.4)}
-.news-hero-text h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:16px;margin-bottom:4px}
-.news-hero-text p{color:var(--muted);font-size:12px}
-.news-count-big{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;color:var(--gold);line-height:1}
-.news-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.news-card:hover{border-color:var(--gold)}
-.news-card-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
-.news-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);color:#08110d;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0}
-.news-info{flex:1;min-width:0}
-.news-email{font-size:14px;font-weight:600;color:var(--text);word-break:break-all;margin-bottom:3px}
-.news-meta{font-size:11px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
-.news-meta .badge-new{background:rgba(34,197,94,.15);color:var(--ok);border:1px solid var(--ok);padding:1px 8px;border-radius:10px;font-weight:700}
-.news-actions{display:flex;gap:6px;flex-wrap:wrap}
-.news-btn-copy{background:rgba(59,130,246,.15);color:var(--info);border:1px solid var(--info);padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
-.news-btn-copy:hover{background:var(--info);color:#fff}
-.news-export-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
-.news-export-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px}
-.news-export-btn:hover{opacity:0.9}
-.search-news-box{position:relative;margin-bottom:15px}
-.search-news-box input{width:100%;padding:11px 15px 11px 42px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none;font-family:inherit}
-.search-news-box input:focus{border-color:var(--gold)}
-.search-news-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--gold)}
-
-.coupon-hero{background:linear-gradient(135deg,rgba(16,185,129,.15) 0%,rgba(5,150,105,.08) 100%);border:1px solid rgba(16,185,129,.4);border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.coupon-hero-left{display:flex;align-items:center;gap:15px}
-.coupon-hero-icon{width:55px;height:55px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(16,185,129,.4)}
-.coupon-hero-text h3{font-family:'Playfair Display',serif;color:#34d399;font-size:16px;margin-bottom:4px}
-.coupon-hero-text p{color:var(--muted);font-size:12px}
-.coupon-count-big{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;background:linear-gradient(135deg,#10b981,#34d399);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.coupon-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
-.coupon-card:hover{border-color:var(--gold)}
-.coupon-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#10b981,#059669)}
-.coupon-card.inactive{opacity:0.55}
-.coupon-card.inactive::before{background:#666}
-.coupon-card.expired::before{background:#ef4444}
-.coupon-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap}
-.coupon-code-big{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--gold);letter-spacing:2px;background:rgba(16,185,129,.1);border:1.5px dashed var(--gold);padding:6px 14px;border-radius:8px;display:inline-block}
-.coupon-status{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
-.coupon-status.active{background:rgba(34,197,94,.15);color:var(--ok);border:1px solid var(--ok)}
-.coupon-status.inactive{background:rgba(107,114,128,.15);color:#9ca3af;border:1px solid #9ca3af}
-.coupon-status.expired{background:rgba(239,68,68,.15);color:var(--bad);border:1px solid var(--bad)}
-.coupon-discount-badge{display:inline-block;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:800;margin-bottom:12px;letter-spacing:0.5px}
-.coupon-details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px;padding:12px;background:var(--bg);border-radius:10px}
-.coupon-detail-item{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
-.coupon-detail-item strong{color:var(--text);font-weight:700}
-.coupon-detail-item i{color:var(--gold);width:14px}
-.coupon-actions{display:flex;gap:8px;flex-wrap:wrap}
-.coupon-form-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
-.coupon-form-modal.active{display:flex}
-.coupon-form-box{background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:25px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.8)}
-.coupon-form-box h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:18px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-
-.toggle-switch{position:relative;display:inline-block;width:50px;height:26px;flex-shrink:0}
-.toggle-switch input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.3s;border-radius:26px}
-.toggle-slider::before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%}
-.toggle-switch input:checked + .toggle-slider{background:linear-gradient(135deg,#10b981,#059669)}
-.toggle-switch input:checked + .toggle-slider::before{transform:translateX(24px)}
-
-.content-item-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px;position:relative}
-.content-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.content-item-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#08110d;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
-.content-item-remove{background:transparent;border:1px solid var(--bad);color:var(--bad);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px}
-.content-item-remove:hover{background:var(--bad);color:#fff}
-.faq-item-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px}
-.size-row-item{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:6px;align-items:center}
-.size-row-item input{padding:8px 10px;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;outline:none;font-family:inherit;width:100%}
-.size-row-item input:focus{border-color:var(--gold)}
-.size-row-item .rm{background:transparent;border:1px solid var(--bad);color:var(--bad);width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px}
-.size-row-item .rm:hover{background:var(--bad);color:#fff}
-.size-chart-header-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:8px;padding:0 2px}
-.size-chart-header-row span{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;text-align:center}
-
-.contact-icon-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px}
-.contact-icon-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
-.contact-icon-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#08110d;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0}
-.contact-icon-preview{width:40px;height:40px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
-.contact-icon-preview img{width:100%;height:100%;object-fit:contain}
-.contact-icon-preview i{color:var(--muted);font-size:16px}
-
-.review-stars-row{color:#ffb800;font-size:14px}
-
-.top-product-row{display:flex;align-items:center;gap:12px;padding:12px 8px;border-bottom:1px solid var(--border)}
-.top-product-row:last-child{border-bottom:none}
-.top-product-rank{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;font-family:'Playfair Display',serif}
-.top-product-rank.rank-1{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 0 12px rgba(16,185,129,.5)}
-.top-product-rank.rank-2{background:linear-gradient(135deg,#34d399,#10b981);color:#08110d}
-.top-product-rank.rank-3{background:linear-gradient(135deg,#6ee7b7,#34d399);color:#08110d}
-.top-product-rank.rank-other{background:rgba(16,185,129,.15);color:var(--gold);border:1px solid var(--gold)}
-.top-product-img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:#000;border:1px solid var(--border);flex-shrink:0}
-.top-product-info{flex:1;min-width:0}
-.top-product-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.top-product-meta{font-size:11px;color:var(--muted)}
-.top-product-meta strong{color:var(--gold)}
-.top-product-sales{text-align:right;flex-shrink:0}
-.top-product-sales .count{font-size:16px;font-weight:800;color:var(--gold);line-height:1;font-family:'Playfair Display',serif}
-.top-product-sales .unit{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-
-.weekly-chart{display:flex;align-items:flex-end;justify-content:space-around;gap:8px;height:180px;padding:10px 0;border-bottom:1px solid var(--border)}
-.weekly-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;min-width:0}
-.weekly-bar{width:100%;max-width:42px;background:linear-gradient(180deg,var(--gold),#059669);border-radius:6px 6px 0 0;min-height:4px;position:relative}
-.weekly-bar:hover{background:linear-gradient(180deg,#34d399,var(--gold));box-shadow:0 0 15px rgba(16,185,129,.5)}
-.weekly-bar-value{font-size:10px;font-weight:800;color:var(--gold);margin-bottom:3px}
-.weekly-bar-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
-.weekly-bar-label.today{color:var(--gold);font-weight:800}
-.weekly-summary{display:flex;justify-content:space-between;padding-top:15px;margin-top:15px;border-top:1px dashed var(--border);font-size:13px;color:var(--muted);flex-wrap:wrap;gap:10px}
-.weekly-summary strong{color:var(--gold);font-weight:800}
-
 @media (max-width:500px){
 .head{padding:12px 15px}
 .head h1{font-size:14px}
@@ -541,18 +850,11 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .login-box{padding:30px 20px}
 .crow{grid-template-columns:1fr 1fr auto}
 .select-all-btn{margin-left:0;width:100%;justify-content:center}
-.news-count-big{font-size:32px}
-.coupon-code-big{font-size:18px}
-.coupon-count-big{font-size:32px}
-.weekly-chart{height:140px}
-.weekly-bar-value{font-size:9px}
-.weekly-bar-label{font-size:9px}
-.size-row-item{grid-template-columns:1fr 1fr}
-.size-chart-header-row{display:none}
 }
 </style>
 </head>
 <body>
+
 <div id="login-screen">
     <div class="login-box">
         <div class="login-logo"><img src="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png" alt="Logo"></div>
@@ -594,6 +896,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
             <button class="tab" data-tab="settings" onclick="switchTab('settings')"><i class="fas fa-cog"></i> Settings</button>
         </div>
 
+        <!-- DASHBOARD -->
         <div class="section active" id="sec-dashboard">
             <div class="stats">
                 <div class="stat"><i class="fas fa-box"></i><div class="val" id="st-products">0</div><div class="lbl">Products</div></div>
@@ -614,11 +917,13 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
             <div id="weekly-chart-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 25px;"><div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading chart...</p></div></div>
         </div>
 
+        <!-- PRODUCTS -->
         <div class="section" id="sec-products">
             <div class="shead"><h2><i class="fas fa-box"></i> All Products</h2><button class="btn-p" onclick="switchTab('add')"><i class="fas fa-plus"></i> Add New</button></div>
             <div id="products-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
+        <!-- ADD/EDIT PRODUCT -->
         <div class="section" id="sec-add">
             <div class="shead"><h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Product</h2><button class="btn-s" onclick="switchTab('products')"><i class="fas fa-arrow-left"></i> Back</button></div>
             <div id="form-msg" class="msg"></div>
@@ -638,7 +943,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
                 <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;"><button type="submit" class="btn-p" id="submit-btn" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save</button><button type="button" class="btn-s" onclick="resetForm()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button></div>
             </form>
         </div>
-
+        <!-- ORDERS -->
         <div class="section" id="sec-orders">
             <div class="shead"><h2><i class="fas fa-shopping-bag"></i> All Orders</h2><button class="btn-s" onclick="loadOrders(true)"><i class="fas fa-sync-alt"></i> Refresh</button></div>
             <div style="position: relative; margin-bottom: 15px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold);"></i><input type="text" id="order-search" placeholder="Phone, Order ID, Name বা Address দিয়ে খুঁজুন..." oninput="applyOrderFilters()" style="width: 100%; padding: 13px 40px 13px 45px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;"><button id="order-search-clear" onclick="clearOrderSearch()" style="display: none; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 5px;"><i class="fas fa-times-circle"></i></button></div>
@@ -649,11 +954,13 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
             <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
+        <!-- REVIEWS -->
         <div class="section" id="sec-reviews">
             <div class="shead"><h2><i class="fas fa-star"></i> Customer Reviews</h2><button class="btn-s" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
             <div id="reviews-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
+        <!-- NEWSLETTER -->
         <div class="section" id="sec-newsletter">
             <div class="shead"><h2><i class="fas fa-envelope"></i> Newsletter Subscribers</h2><button class="btn-s" onclick="loadNewsletter()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
             <div class="news-hero"><div class="news-hero-left"><div class="news-hero-icon"><i class="fas fa-users"></i></div><div class="news-hero-text"><h3>Total Subscribers</h3><p>নতুন কালেকশন ও অফার এদের কাছে পাঠাতে পারবেন</p></div></div><div class="news-count-big" id="news-total-count">0</div></div>
@@ -662,6 +969,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
             <div id="newsletter-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
+        <!-- COUPONS -->
         <div class="section" id="sec-coupons">
             <div class="shead"><h2><i class="fas fa-ticket-alt"></i> Discount Coupons</h2><button class="btn-p" onclick="openCouponModal()"><i class="fas fa-plus"></i> Add Coupon</button></div>
             <div class="coupon-hero"><div class="coupon-hero-left"><div class="coupon-hero-icon"><i class="fas fa-tags"></i></div><div class="coupon-hero-text"><h3>Active Coupons</h3><p>এই কুপনগুলো দিয়ে কাস্টমাররা ছাড় পাবে</p></div></div><div class="coupon-count-big" id="coupon-total-count">0</div></div>
@@ -669,12 +977,14 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
             <div id="coupons-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
         </div>
 
+        <!-- BANNERS -->
         <div class="section" id="sec-banners">
             <div class="shead"><h2><i class="fas fa-images"></i> Promo Banners</h2><button class="btn-p" onclick="openBannerModal()"><i class="fas fa-plus"></i> Add Banner</button></div>
             <div class="coupon-hero" style="background: linear-gradient(135deg, rgba(16,185,129,.15) 0%, rgba(16,185,129,.03) 100%); border-color: rgba(16,185,129,.4);"><div class="coupon-hero-left"><div class="coupon-hero-icon" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 20px rgba(16,185,129,.4);"><i class="fas fa-images"></i></div><div class="coupon-hero-text"><h3 style="color: #34d399;">Active Banners</h3><p>ওয়েবসাইটের হোম পেজে এই ব্যানারগুলো স্লাইড হবে</p></div></div><div class="coupon-count-big" id="banner-total-count" style="background: linear-gradient(135deg, #10b981, #34d399); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">0</div></div>
             <div id="banners-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading Banners...</p></div></div>
         </div>
 
+        <!-- PAGES EDITOR -->
         <div class="section" id="sec-pages">
             <div class="shead"><h2><i class="fas fa-file-alt"></i> Website Pages Editor</h2><button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
             <div class="ofilter" id="page-filter"><button class="active" data-page="about" onclick="switchPage('about')">🌸 About Us</button><button data-page="privacy" onclick="switchPage('privacy')">🔒 Privacy</button><button data-page="terms" onclick="switchPage('terms')">📜 Terms</button><button data-page="return-policy" onclick="switchPage('return-policy')">🔄 Return Policy</button><button data-page="contact" onclick="switchPage('contact')">📞 Contact</button><button data-page="track-order" onclick="switchPage('track-order')">📦 Track Order</button></div>
@@ -686,6 +996,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
             </div>
         </div>
 
+        <!-- CONTENT MANAGER -->
         <div class="section" id="sec-content">
             <div class="shead"><h2><i class="fas fa-edit"></i> Content Manager</h2><button class="btn-s" onclick="loadContentSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
             <div id="content-msg" class="msg"></div>
@@ -731,6 +1042,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
             </div>
         </div>
 
+        <!-- SETTINGS -->
         <div class="section" id="sec-settings">
             <div class="shead"><h2><i class="fas fa-cog"></i> Store Settings</h2><button class="btn-s" onclick="loadSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
             <div id="settings-msg" class="msg"></div>
@@ -796,6 +1108,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
     </div>
 </div>
 
+<!-- COUPON MODAL -->
 <div class="coupon-form-modal" id="coupon-modal">
     <div class="coupon-form-box">
         <h3 id="coupon-modal-title"><i class="fas fa-ticket-alt"></i> Add New Coupon</h3>
@@ -812,6 +1125,7 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
     </div>
 </div>
 
+<!-- BANNER MODAL -->
 <div class="coupon-form-modal" id="banner-modal">
     <div class="coupon-form-box">
         <h3 id="banner-modal-title"><i class="fas fa-image"></i> Add New Banner</h3>
@@ -829,7 +1143,6 @@ body{background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;"><button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Banner</button><button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button></div>
     </div>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -847,6 +1160,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+window.db = db;
+window.auth = auth;
+window.fbGetDocs = getDocs;
+window.fbGetDoc = getDoc;
+window.fbAddDoc = addDoc;
+window.fbCollection = collection;
+window.fbDoc = doc;
+window.fbUpdateDoc = updateDoc;
+window.fbDeleteDoc = deleteDoc;
+window.fbSetDoc = setDoc;
+window.fbOnSnapshot = onSnapshot;
 
 let products = [], orders = [], reviews = [], newsletterList = [], coupons = [], banners = [];
 let editingId = null, editingCouponId = null, editingBannerId = null;
@@ -915,6 +1239,32 @@ window.showToast = function(msg) {
     setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 2000);
 };
 
+// ============================================================
+// 📡 BROADCAST SYSTEM — instant sync to website
+// ============================================================
+window.broadcastToWebsite = function(type, payload) {
+    try {
+        const bc = new BroadcastChannel('bq_realtime_sync');
+        bc.postMessage({
+            type: 'UPDATE',
+            key: type,
+            data: payload,
+            timestamp: Date.now(),
+            adminUser: (window.auth && window.auth.currentUser) ? window.auth.currentUser.email : 'admin'
+        });
+        bc.close();
+        try {
+            const eventKey = 'bq_sync_event_' + Date.now();
+            localStorage.setItem(eventKey, JSON.stringify({ type: 'UPDATE', key: type, data: payload, timestamp: Date.now() }));
+            setTimeout(() => localStorage.removeItem(eventKey), 2000);
+        } catch(e) {}
+        console.log('📡 Broadcast sent:', type);
+    } catch(e) { console.warn('Broadcast failed:', e); }
+};
+
+// ============================================================
+// 🔐 AUTH
+// ============================================================
 window.doLogin = async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value.trim();
@@ -940,7 +1290,8 @@ window.doLogin = async (e) => {
 };
 
 window.doLogout = async () => {
-    if (!confirm('লগআউট করতে চান?')) return;
+    const ok = await bqPopup.confirm('আপনি কি লগআউট করতে চান?', 'লগআউট নিশ্চিত করুন');
+    if (!ok) return;
     await signOut(auth);
 };
 
@@ -969,6 +1320,9 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+// ============================================================
+// ⚡ INSTANT CACHE LOAD
+// ============================================================
 function instantLoadFromCache() {
     const t0 = performance.now();
     const cP = aCacheGet(ADMIN_CACHE.products);
@@ -986,9 +1340,36 @@ function instantLoadFromCache() {
     const cachedStats = aCacheGet(ADMIN_CACHE.stats);
     if (cachedStats) applyStatsToUI(cachedStats, cP || [], cO || []);
     else if (cP || cO) recalcStatsFromCache();
+    updateTabBadges();
     console.log(`⚡ Instant from cache: ${(performance.now() - t0).toFixed(2)}ms`);
 }
 
+function updateTabBadges() {
+    const badgeData = {
+        'products': products.length,
+        'orders': orders.length,
+        'newsletter': newsletterList.length,
+        'coupons': coupons.length,
+        'reviews': reviews.length
+    };
+    Object.keys(badgeData).forEach(tabName => {
+        const tab = document.querySelector(`.tab[data-tab="${tabName}"]`);
+        if (!tab) return;
+        const oldBadge = tab.querySelector('.tab-count-badge');
+        if (oldBadge) oldBadge.remove();
+        const count = badgeData[tabName];
+        if (count > 0) {
+            const badge = document.createElement('span');
+            badge.className = 'tab-count-badge';
+            badge.textContent = count > 99 ? '99+' : count;
+            tab.appendChild(badge);
+        }
+    });
+}
+
+// ============================================================
+// 🔄 BACKGROUND SYNC
+// ============================================================
 async function preloadEverything() {
     console.log('🔄 Background sync...');
     const t0 = performance.now();
@@ -1019,6 +1400,7 @@ async function preloadEverything() {
         if (hcS) { const arr = []; hcS.forEach(d => arr.push({ docId: d.id, ...d.data() })); aCacheSet(ADMIN_CACHE.homeCollections, arr); }
         if (setS && setS.exists()) { const data = setS.data(); settingsCache = { ...DEFAULT_SETTINGS, ...data }; aCacheSet(ADMIN_CACHE.settings, settingsCache); }
         recalcStatsFromCache();
+        updateTabBadges();
         const activeTab = document.querySelector('.tab.active');
         if (activeTab) {
             const tabName = activeTab.getAttribute('data-tab');
@@ -1033,6 +1415,9 @@ async function preloadEverything() {
     } catch(e) { console.warn('Preload error:', e); }
 }
 
+// ============================================================
+// 🔴 REALTIME LISTENERS
+// ============================================================
 function attachRealtimeListeners() {
     if (!onSnapshot) { console.warn('onSnapshot not available'); return; }
     console.log('🔴 Attaching realtime listeners...');
@@ -1057,6 +1442,7 @@ function attachRealtimeListeners() {
             }
             const newsTotalEl = document.getElementById('news-total-count');
             if (newsTotalEl) newsTotalEl.textContent = arr.length;
+            updateTabBadges();
             const activeTab = document.querySelector('.tab.active');
             if (activeTab && activeTab.getAttribute('data-tab') === 'newsletter') renderNewsletter();
         }, (err) => console.warn('Newsletter listener:', err.message));
@@ -1081,6 +1467,7 @@ function attachRealtimeListeners() {
                 arr.forEach(item => _seenIds.reviews.add(item.docId));
                 _firstLoad.reviews = false;
             }
+            updateTabBadges();
             const activeTab = document.querySelector('.tab.active');
             if (activeTab && activeTab.getAttribute('data-tab') === 'reviews') renderReviews();
         }, (err) => console.warn('Reviews listener:', err.message));
@@ -1105,6 +1492,7 @@ function attachRealtimeListeners() {
                 _firstLoad.orders = false;
             }
             recalcStatsFromCache();
+            updateTabBadges();
             const activeTab = document.querySelector('.tab.active');
             if (activeTab && activeTab.getAttribute('data-tab') === 'orders') renderOrders();
         }, (err) => console.warn('Orders listener:', err.message));
@@ -1113,6 +1501,9 @@ function attachRealtimeListeners() {
     console.log('✅ All realtime listeners attached');
 }
 
+// ============================================================
+// ⚡ TAB SWITCH
+// ============================================================
 window.switchTab = function(name) {
     console.log('⚡ Fast switch:', name);
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1202,6 +1593,9 @@ window.switchTab = function(name) {
     }
 };
 
+// ============================================================
+// 📊 DASHBOARD STATS
+// ============================================================
 window.loadStats = async () => {
     const cachedP = aCacheGet(ADMIN_CACHE.products);
     const cachedO = aCacheGet(ADMIN_CACHE.orders);
@@ -1214,6 +1608,7 @@ window.loadStats = async () => {
         if (pSnap) { const arr = []; pSnap.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0)); products = arr; aCacheSet(ADMIN_CACHE.products, arr); }
         if (oSnap) { const arr = []; oSnap.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0)); orders = arr; aCacheSet(ADMIN_CACHE.orders, arr); }
         recalcStatsFromCache();
+        updateTabBadges();
     } catch (err) { console.error('Stats:', err); }
 };
 
@@ -1296,6 +1691,9 @@ function renderWeeklyChartFromCache(weeklyData) {
     c.innerHTML = html;
 }
 
+// ============================================================
+// 🛍️ PRODUCT: ADDITIONAL IMAGES / COLORS
+// ============================================================
 window.addAdditionalImage = (url) => {
     const c = document.getElementById('additional-images');
     if (!c) return;
@@ -1389,6 +1787,9 @@ window.resetForm = () => {
     addAdditionalImage();
 };
 
+// ============================================================
+// 🛍️ PRODUCTS
+// ============================================================
 window.loadProducts = async (forceRefresh = false) => {
     const c = document.getElementById('products-container');
     if (!forceRefresh) {
@@ -1403,6 +1804,7 @@ window.loadProducts = async (forceRefresh = false) => {
         products.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
         aCacheSet(ADMIN_CACHE.products, products);
         renderProducts();
+        updateTabBadges();
     } catch (err) {
         if (!products.length) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
     }
@@ -1434,14 +1836,25 @@ window.renderProducts = () => {
 };
 
 window.deleteProduct = async (docId, name) => {
-    if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
-    try { await deleteDoc(doc(db, 'products', docId)); alert('✅ মুছে ফেলা হয়েছে।'); loadProducts(true); loadStats(); }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    const ok = await bqPopup.delete(name, 'প্রোডাক্ট');
+    if (!ok) return;
+    try { 
+        await deleteDoc(doc(db, 'products', docId)); 
+        products = products.filter(p => p.docId !== docId);
+        aCacheSet(ADMIN_CACHE.products, products);
+        renderProducts();
+        updateTabBadges();
+        loadStats(); 
+        window.broadcastToWebsite('products', products);
+        window.broadcastToWebsite('notification', { icon: '🗑️', title: 'প্রোডাক্ট মুছে ফেলা হয়েছে', message: name + ' আর পাওয়া যাবে না', color: 'red' });
+        bqPopup.success('মুছে ফেলা হয়েছে', name + ' সফলভাবে মুছে ফেলা হয়েছে।');
+    }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || 'মুছে ফেলা যায়নি'); }
 };
 
 window.editProduct = (docId) => {
     const p = products.find(x => x.docId === docId);
-    if (!p) { alert('প্রোডাক্ট পাওয়া যায়নি'); return; }
+    if (!p) { bqPopup.error('প্রোডাক্ট পাওয়া যায়নি'); return; }
     const btn = document.getElementById('submit-btn');
     if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Update'; }
     document.getElementById('p-form').reset();
@@ -1478,6 +1891,8 @@ window.submitProduct = async (e) => {
     const btn = document.getElementById('submit-btn');
     if (btn.disabled) return;
     const orig = btn.innerHTML;
+    const editId = document.getElementById('edit-id').value;
+    const isEdit = !!editId;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     try {
@@ -1489,8 +1904,7 @@ window.submitProduct = async (e) => {
         const videoUrl = document.getElementById('p-video') ? document.getElementById('p-video').value.trim() : '';
         const badge = document.getElementById('p-badge').value;
         const desc = document.getElementById('p-desc').value.trim();
-        const editId = document.getElementById('edit-id').value;
-        if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') { showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
+        if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') { bqPopup.warning('সব ফিল্ড পূরণ করুন', 'প্রয়োজনীয় সব তথ্য দিন।'); btn.disabled = false; btn.innerHTML = orig; return; }
         let price;
         if (priceRaw.toLowerCase().includes('coming')) price = 'Coming Soon';
         else { const p = parseInt(priceRaw.replace(/[^0-9]/g, '')); price = isNaN(p) ? 'Coming Soon' : p; }
@@ -1498,24 +1912,28 @@ window.submitProduct = async (e) => {
         let sizes = [];
         if (category === 'Burqa Collection' || category === 'Abaya Collection') {
             sizes = selectedSizes.slice();
-            if (sizes.length === 0) { showMsg('form-msg', '⚠️ অন্তত একটি Size সিলেক্ট করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
+            if (sizes.length === 0) { bqPopup.warning('Size সিলেক্ট করুন', 'অন্তত একটি size সিলেক্ট করুন।'); btn.disabled = false; btn.innerHTML = orig; return; }
         }
         const colors = [];
         document.querySelectorAll('#colors .crow').forEach(row => { const n = row.querySelector('.cname').value.trim(); const i = row.querySelector('.cimg').value.trim(); if (n && i) colors.push({ name: n, image: extractUrl(i) || i }); });
-        if (colors.length === 0) { showMsg('form-msg', '⚠️ অন্তত একটি Color যোগ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
+        if (colors.length === 0) { bqPopup.warning('Color যোগ করুন', 'অন্তত একটি color যোগ করুন।'); btn.disabled = false; btn.innerHTML = orig; return; }
         const additionalImages = [];
         document.querySelectorAll('#additional-images .crow-img').forEach(row => { const urlInput = row.querySelector('.aimg'); if (urlInput) { const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim(); if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl); } });
         const cleanImg = extractUrl(image) || image;
         const uniqueImages = [...new Set([cleanImg, ...additionalImages])];
         const data = { name, category, price, stock, image: cleanImg, video: videoUrl || null, badge: badge || null, badgeText: badge ? badge.toUpperCase() : null, sizes, colors, images: uniqueImages, fullDescription: desc, updatedAt: new Date().toISOString() };
         
-        if (editId) {
+        if (isEdit) {
             await updateDoc(doc(db, 'products', editId), data);
             const idx = products.findIndex(p => p.docId === editId);
             if (idx > -1) products[idx] = { docId: editId, ...products[idx], ...data };
             aCacheSet(ADMIN_CACHE.products, products);
-            showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
-            setTimeout(() => { resetForm(); switchTab('products'); renderProducts(); setTimeout(() => loadProducts(), 500); }, 400);
+            window.broadcastToWebsite('products', products);
+            window.broadcastToWebsite('notification', { icon: '✏️', title: 'প্রোডাক্ট আপডেট হয়েছে', message: name + ' এর তথ্য আপডেট হয়েছে', color: 'emerald' });
+            await bqPopup.success('আপডেট সফল!', name + ' সফলভাবে আপডেট হয়েছে।');
+            resetForm(); 
+            switchTab('products'); 
+            renderProducts();
         } else {
             const snap = await getDocs(collection(db, 'products'));
             let maxId = 0;
@@ -1525,16 +1943,24 @@ window.submitProduct = async (e) => {
             const docRef = await addDoc(collection(db, 'products'), data);
             products.push({ docId: docRef.id, ...data });
             aCacheSet(ADMIN_CACHE.products, products);
-            showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
-            setTimeout(() => { resetForm(); switchTab('products'); renderProducts(); setTimeout(() => loadProducts(), 500); }, 400);
+            window.broadcastToWebsite('products', products);
+            window.broadcastToWebsite('notification', { icon: '✨', title: 'নতুন প্রোডাক্ট এসেছে!', message: name + ' এখন স্টকে আছে', color: 'emerald' });
+            await bqPopup.success('প্রোডাক্ট যোগ হয়েছে!', name + ' সফলভাবে যোগ করা হয়েছে।');
+            resetForm();
+            switchTab('products');
+            renderProducts();
         }
+        updateTabBadges();
     } catch (err) {
-        showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+        await bqPopup.error('সেভ করা যায়নি', err.message || 'কিছু ভুল হয়েছে।');
         btn.disabled = false;
         btn.innerHTML = orig;
     }
 };
 
+// ============================================================
+// 📦 ORDERS
+// ============================================================
 window.loadOrders = async (forceRefresh = false) => {
     const c = document.getElementById('orders-container');
     if (!forceRefresh) {
@@ -1549,6 +1975,7 @@ window.loadOrders = async (forceRefresh = false) => {
         orders.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
         aCacheSet(ADMIN_CACHE.orders, orders);
         renderOrders();
+        updateTabBadges();
     } catch (err) { if (!orders.length) c.innerHTML = '<div class="empty"><h3>Load failed</h3></div>'; }
 };
 
@@ -1643,7 +2070,9 @@ window.renderOrders = () => {
 };
 
 window.updateOrderStatus = async (docId, newStatus) => {
-    if (!confirm('Status পরিবর্তন করুন?')) return;
+    const statusText = newStatus === 'completed' ? 'সম্পন্ন' : 'পেন্ডিং';
+    const ok = await bqPopup.confirm(`আপনি কি এই অর্ডারটি <strong>${statusText}</strong> করতে চান?`, 'স্টেটাস পরিবর্তন');
+    if (!ok) return;
     try { 
         await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() }); 
         const idx = orders.findIndex(o => o.docId === docId);
@@ -1651,27 +2080,29 @@ window.updateOrderStatus = async (docId, newStatus) => {
         aCacheSet(ADMIN_CACHE.orders, orders);
         renderOrders();
         recalcStatsFromCache();
-        alert('✅');
+        bqPopup.success('স্টেটাস আপডেট হয়েছে', `অর্ডারটি এখন ${statusText}।`);
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
 window.deleteOrder = async (docId, orderId) => {
-    if (!confirm('অর্ডার মুছে ফেলতে চান?\n\n' + orderId)) return;
+    const ok = await bqPopup.delete(orderId, 'অর্ডার');
+    if (!ok) return;
     try { 
         await deleteDoc(doc(db, 'orders', docId)); 
         orders = orders.filter(o => o.docId !== docId);
         aCacheSet(ADMIN_CACHE.orders, orders);
         renderOrders();
         recalcStatsFromCache();
-        alert('✅'); 
+        updateTabBadges();
+        bqPopup.success('মুছে ফেলা হয়েছে', orderId + ' মুছে ফেলা হয়েছে।');
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
 window.printInvoice = function(docId) {
     const order = orders.find(o => o.docId === docId);
-    if (!order) { alert('Order পাওয়া যায়নি!'); return; }
+    if (!order) { bqPopup.error('Order পাওয়া যায়নি'); return; }
     const s = settingsCache || {};
     const storeName = s.storeName || 'Burqa Bazar and Boutiques';
     const phone = s.phone || '';
@@ -1697,6 +2128,9 @@ window.printInvoice = function(docId) {
     w.document.close();
 };
 
+// ============================================================
+// ⭐ REVIEWS
+// ============================================================
 window.loadReviews = async () => {
     const c = document.getElementById('reviews-container');
     const cached = aCacheGet(ADMIN_CACHE.reviews);
@@ -1709,6 +2143,7 @@ window.loadReviews = async () => {
         reviews.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
         aCacheSet(ADMIN_CACHE.reviews, reviews);
         renderReviews();
+        updateTabBadges();
     } catch (err) { if (!reviews.length) c.innerHTML = '<div class="empty"><h3>Load failed</h3></div>'; }
 };
 
@@ -1740,17 +2175,22 @@ window.renderReviews = () => {
 };
 
 window.deleteReview = async (docId, name) => {
-    if (!confirm('রিভিউ মুছে ফেলতে চান? "' + name + '"')) return;
+    const ok = await bqPopup.delete(name + ' এর রিভিউ', '');
+    if (!ok) return;
     try { 
         await deleteDoc(doc(db, 'reviews', docId)); 
         reviews = reviews.filter(r => r.docId !== docId);
         aCacheSet(ADMIN_CACHE.reviews, reviews);
         renderReviews();
-        alert('✅'); 
+        updateTabBadges();
+        bqPopup.success('রিভিউ মুছে ফেলা হয়েছে');
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
+// ============================================================
+// 📧 NEWSLETTER
+// ============================================================
 window.loadNewsletter = async () => {
     const c = document.getElementById('newsletter-container');
     const cached = aCacheGet(ADMIN_CACHE.newsletter);
@@ -1764,6 +2204,7 @@ window.loadNewsletter = async () => {
         aCacheSet(ADMIN_CACHE.newsletter, newsletterList);
         document.getElementById('news-total-count').textContent = newsletterList.length;
         renderNewsletter();
+        updateTabBadges();
     } catch (err) { if (!newsletterList.length) c.innerHTML = '<div class="empty"><h3>Load failed</h3></div>'; }
 };
 
@@ -1787,14 +2228,14 @@ window.renderNewsletter = () => {
 };
 
 window.filterNewsletter = () => { const i = document.getElementById('news-search'); newsSearchQuery = i ? i.value : ''; renderNewsletter(); };
-window.copyNewsEmail = (email) => { navigator.clipboard.writeText(email).then(() => alert('✅ কপি হয়েছে: ' + email)); };
+window.copyNewsEmail = (email) => { navigator.clipboard.writeText(email).then(() => window.showToast('✅ কপি হয়েছে: ' + email)); };
 window.copyAllEmails = () => {
-    if (newsletterList.length === 0) { alert('⚠️ কোনো ইমেইল নেই।'); return; }
+    if (newsletterList.length === 0) { bqPopup.warning('কোনো ইমেইল নেই'); return; }
     const allEmails = newsletterList.map(n => n.email).filter(e => e).join(', ');
-    navigator.clipboard.writeText(allEmails).then(() => alert('✅ সব কপি হয়েছে (' + newsletterList.length + 'টি)'));
+    navigator.clipboard.writeText(allEmails).then(() => bqPopup.success('কপি হয়েছে', newsletterList.length + 'টি ইমেইল কপি করা হয়েছে।'));
 };
 window.exportNewsletterCSV = () => {
-    if (newsletterList.length === 0) { alert('⚠️ কোনো ইমেইল নেই।'); return; }
+    if (newsletterList.length === 0) { bqPopup.warning('কোনো ইমেইল নেই'); return; }
     let csv = 'Email,Date\n';
     newsletterList.forEach(n => { const email = (n.email || '').replace(/"/g, '""'); const dStr = n.date || n.createdAt || ''; const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB').replace(/,/g, ' ') : ''; csv += `"${email}","${niceDate}"\n`; });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1802,21 +2243,26 @@ window.exportNewsletterCSV = () => {
     link.href = URL.createObjectURL(blob);
     link.download = 'newsletter_' + new Date().toISOString().split('T')[0] + '.csv';
     document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    alert('✅ CSV ডাউনলোড হয়েছে');
+    bqPopup.success('CSV ডাউনলোড হয়েছে');
 };
 window.deleteNewsletter = async (docId, email) => {
-    if (!confirm('মুছে ফেলতে চান?\n\n' + email)) return;
+    const ok = await bqPopup.delete(email, 'সাবস্ক্রাইবার');
+    if (!ok) return;
     try { 
         await deleteDoc(doc(db, 'newsletter', docId)); 
         newsletterList = newsletterList.filter(n => n.docId !== docId);
         aCacheSet(ADMIN_CACHE.newsletter, newsletterList);
         document.getElementById('news-total-count').textContent = newsletterList.length;
         renderNewsletter();
-        alert('✅'); 
+        updateTabBadges();
+        bqPopup.success('মুছে ফেলা হয়েছে');
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
+// ============================================================
+// 🎟️ COUPONS
+// ============================================================
 window.loadCoupons = async () => {
     const c = document.getElementById('coupons-container');
     const cached = aCacheGet(ADMIN_CACHE.coupons);
@@ -1829,6 +2275,7 @@ window.loadCoupons = async () => {
         coupons.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         aCacheSet(ADMIN_CACHE.coupons, coupons);
         renderCoupons();
+        updateTabBadges();
     } catch (err) { if (!coupons.length) c.innerHTML = '<div class="empty"><h3>Load failed</h3></div>'; }
 };
 
@@ -1898,7 +2345,7 @@ window.closeCouponModal = () => { document.getElementById('coupon-modal').classL
 
 window.editCoupon = (docId) => {
     const co = coupons.find(x => x.docId === docId);
-    if (!co) return alert('পাওয়া যায়নি');
+    if (!co) return bqPopup.error('পাওয়া যায়নি');
     editingCouponId = docId;
     document.getElementById('coupon-modal-title').innerHTML = '<i class="fas fa-edit"></i> Edit Coupon';
     document.getElementById('c-edit-id').value = docId;
@@ -1929,16 +2376,17 @@ window.submitCoupon = async () => {
         const description = document.getElementById('c-desc').value.trim();
         const active = document.getElementById('c-active').checked;
         const editId = document.getElementById('c-edit-id').value;
-        if (!code || !type || !value || !expiry) { showMsg('coupon-form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
-        if (!/^[A-Z0-9]+$/.test(code)) { showMsg('coupon-form-msg', '⚠️ শুধু বড় হাতের অক্ষর ও সংখ্যা।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
+        if (!code || !type || !value || !expiry) { bqPopup.warning('সব ফিল্ড পূরণ করুন'); btn.disabled = false; btn.innerHTML = orig; return; }
+        if (!/^[A-Z0-9]+$/.test(code)) { bqPopup.warning('শুধু বড় হাতের অক্ষর ও সংখ্যা'); btn.disabled = false; btn.innerHTML = orig; return; }
         const data = { code, type, value, minOrder, expiry, description, active, updatedAt: new Date().toISOString() };
         if (editId) { 
             await updateDoc(doc(db, 'coupons', editId), data); 
             const idx = coupons.findIndex(co => co.docId === editId);
             if (idx > -1) coupons[idx] = { ...coupons[idx], ...data };
             aCacheSet(ADMIN_CACHE.coupons, coupons);
-            showMsg('coupon-form-msg', '✅ আপডেট!', 'ok'); 
-            setTimeout(() => { closeCouponModal(); renderCoupons(); }, 400); 
+            closeCouponModal();
+            renderCoupons();
+            bqPopup.success('কুপন আপডেট হয়েছে', code + ' সফলভাবে আপডেট হয়েছে।');
         }
         else { 
             data.createdAt = new Date().toISOString(); 
@@ -1946,39 +2394,49 @@ window.submitCoupon = async () => {
             const docRef = await addDoc(collection(db, 'coupons'), data);
             coupons.unshift({ docId: docRef.id, ...data });
             aCacheSet(ADMIN_CACHE.coupons, coupons);
-            showMsg('coupon-form-msg', '✅ তৈরি!', 'ok'); 
-            setTimeout(() => { closeCouponModal(); renderCoupons(); }, 400); 
+            closeCouponModal();
+            renderCoupons();
+            updateTabBadges();
+            bqPopup.success('কুপন তৈরি হয়েছে', code + ' সফলভাবে যোগ করা হয়েছে।');
         }
-    } catch (err) { showMsg('coupon-form-msg', '❌ ' + (err.message || ''), 'bad'); btn.disabled = false; btn.innerHTML = orig; }
+        window.broadcastToWebsite('coupons', coupons);
+    } catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); btn.disabled = false; btn.innerHTML = orig; }
 };
 
 window.toggleCouponActive = async (docId) => {
     const co = coupons.find(x => x.docId === docId);
     if (!co) return;
     const newState = !co.active;
-    if (!confirm('কুপনটি ' + (newState ? 'চালু' : 'বন্ধ') + ' করতে চান?')) return;
+    const ok = await bqPopup.confirm(`আপনি কি এই কুপনটি <strong>${newState ? 'চালু' : 'বন্ধ'}</strong> করতে চান?`, 'কুপন স্টেটাস');
+    if (!ok) return;
     try { 
         await updateDoc(doc(db, 'coupons', docId), { active: newState, updatedAt: new Date().toISOString() }); 
         const idx = coupons.findIndex(c => c.docId === docId);
         if (idx > -1) coupons[idx].active = newState;
         aCacheSet(ADMIN_CACHE.coupons, coupons);
         renderCoupons();
+        bqPopup.success(newState ? 'কুপন চালু হয়েছে' : 'কুপন বন্ধ হয়েছে');
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
 window.deleteCoupon = async (docId, code) => {
-    if (!confirm('কুপন মুছে ফেলতে চান? কোড: ' + code)) return;
+    const ok = await bqPopup.delete(code, 'কুপন');
+    if (!ok) return;
     try { 
         await deleteDoc(doc(db, 'coupons', docId)); 
         coupons = coupons.filter(c => c.docId !== docId);
         aCacheSet(ADMIN_CACHE.coupons, coupons);
         renderCoupons();
-        alert('✅'); 
+        updateTabBadges();
+        bqPopup.success('কুপন মুছে ফেলা হয়েছে');
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
+// ============================================================
+// 🖼️ BANNERS
+// ============================================================
 window.loadBanners = async () => {
     const c = document.getElementById('banners-container');
     if (!c) return;
@@ -2040,7 +2498,7 @@ window.closeBannerModal = () => { document.getElementById('banner-modal').classL
 
 window.editBanner = (docId) => {
     const b = banners.find(x => x.docId === docId);
-    if (!b) return alert('পাওয়া যায়নি');
+    if (!b) return bqPopup.error('পাওয়া যায়নি');
     editingBannerId = docId;
     document.getElementById('banner-modal-title').innerHTML = '<i class="fas fa-edit"></i> Edit Banner';
     document.getElementById('b-edit-id').value = docId;
@@ -2073,7 +2531,7 @@ window.submitBanner = async () => {
         const order = parseInt(document.getElementById('b-order').value) || 1;
         const active = document.getElementById('b-active').checked;
         const editId = document.getElementById('b-edit-id').value;
-        if (!imageRaw) { showMsg('banner-form-msg', '⚠️ Image দিন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
+        if (!imageRaw) { bqPopup.warning('Image দিন'); btn.disabled = false; btn.innerHTML = orig; return; }
         const cleanImg = extractUrl(imageRaw) || imageRaw;
         let link = '';
         if (linkType === 'category') link = 'category:' + document.getElementById('b-category-value').value;
@@ -2085,47 +2543,57 @@ window.submitBanner = async () => {
             const idx = banners.findIndex(b => b.docId === editId);
             if (idx > -1) banners[idx] = { ...banners[idx], ...data };
             aCacheSet(ADMIN_CACHE.banners, banners);
-            showMsg('banner-form-msg', '✅ আপডেট!', 'ok'); 
-            setTimeout(() => { closeBannerModal(); renderBanners(); }, 400); 
+            closeBannerModal();
+            renderBanners();
+            window.broadcastToWebsite('banners', banners.filter(b => b.active !== false));
+            bqPopup.success('ব্যানার আপডেট হয়েছে');
         }
         else { 
             data.createdAt = new Date().toISOString(); 
             const docRef = await addDoc(collection(db, 'banners'), data);
             banners.push({ docId: docRef.id, ...data });
             aCacheSet(ADMIN_CACHE.banners, banners);
-            showMsg('banner-form-msg', '✅ তৈরি!', 'ok'); 
-            setTimeout(() => { closeBannerModal(); renderBanners(); }, 400); 
+            closeBannerModal();
+            renderBanners();
+            window.broadcastToWebsite('banners', banners.filter(b => b.active !== false));
+            bqPopup.success('নতুন ব্যানার যোগ হয়েছে');
         }
-    } catch (err) { showMsg('banner-form-msg', '❌ ' + (err.message || ''), 'bad'); btn.disabled = false; btn.innerHTML = orig; }
+    } catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); btn.disabled = false; btn.innerHTML = orig; }
 };
 
 window.toggleBannerActive = async (docId) => {
     const b = banners.find(x => x.docId === docId);
     if (!b) return;
     const newState = !b.active;
-    if (!confirm('Banner ' + (newState ? 'চালু' : 'বন্ধ') + '?')) return;
+    const ok = await bqPopup.confirm(`Banner <strong>${newState ? 'চালু' : 'বন্ধ'}</strong> করতে চান?`);
+    if (!ok) return;
     try { 
         await updateDoc(doc(db, 'banners', docId), { active: newState, updatedAt: new Date().toISOString() }); 
         const idx = banners.findIndex(bn => bn.docId === docId);
         if (idx > -1) banners[idx].active = newState;
         aCacheSet(ADMIN_CACHE.banners, banners);
         renderBanners();
+        bqPopup.success(newState ? 'Banner চালু হয়েছে' : 'Banner বন্ধ হয়েছে');
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
 window.deleteBanner = async (docId, title) => {
-    if (!confirm('Banner মুছে ফেলতে চান?\n\n' + title)) return;
+    const ok = await bqPopup.delete(title || 'Banner', '');
+    if (!ok) return;
     try { 
         await deleteDoc(doc(db, 'banners', docId)); 
         banners = banners.filter(b => b.docId !== docId);
         aCacheSet(ADMIN_CACHE.banners, banners);
         renderBanners();
-        alert('✅'); 
+        bqPopup.success('ব্যানার মুছে ফেলা হয়েছে');
     }
-    catch (err) { alert('❌ ' + (err.message || '')); }
+    catch (err) { bqPopup.error('সমস্যা হয়েছে', err.message || ''); }
 };
 
+// ============================================================
+// 📄 PAGES
+// ============================================================
 window.loadPages = async function() {
     const cached = aCacheGet(ADMIN_CACHE.pages);
     if (cached && Object.keys(cached).length > 0) pagesCache = cached;
@@ -2153,23 +2621,26 @@ window.savePage = async function() {
     const btn = document.getElementById('page-save-btn');
     const orig = btn.innerHTML;
     const html = document.getElementById('page-html-editor').value;
-    if (!html.trim()) { showMsg('page-form-msg', '⚠️ খালি রাখা যাবে না।', 'bad'); return; }
+    if (!html.trim()) { bqPopup.warning('খালি রাখা যাবে না'); return; }
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     try {
         const pageId = currentEditingPage;
         await setDoc(doc(db, 'pages', pageId), { pageId, pageName: PAGE_NAMES[pageId] || pageId, html, updatedAt: new Date().toISOString() }, { merge: true });
         pagesCache[pageId] = html;
         aCacheSet(ADMIN_CACHE.pages, pagesCache);
-        showMsg('page-form-msg', '✅ Saved!', 'ok');
         document.getElementById('page-editor-status').innerHTML = '<span style="color: var(--ok);">✅ সেভ</span>';
-    } catch (err) { showMsg('page-form-msg', '❌ ' + (err.message || ''), 'bad'); }
+        window.broadcastToWebsite('pages', pagesCache);
+        window.broadcastToWebsite('notification', { icon: '📄', title: 'পেজ আপডেট হয়েছে', message: (PAGE_NAMES[pageId] || pageId) + ' আপডেট হয়েছে', color: 'blue' });
+        bqPopup.success('পেজ সেভ হয়েছে', (PAGE_NAMES[pageId] || pageId) + ' সফলভাবে সেভ হয়েছে।');
+    } catch (err) { bqPopup.error('সেভ হয়নি', err.message || ''); }
     btn.disabled = false; btn.innerHTML = orig;
 };
 
-window.resetPageToDefault = function() {
-    if (!confirm('Default এ ফিরবেন?')) return;
+window.resetPageToDefault = async function() {
+    const ok = await bqPopup.confirm('Default এ ফিরে যেতে চান?<br><span style="font-size:12px;color:#ef4444;">আপনার বর্তমান পরিবর্তন হারিয়ে যাবে।</span>', 'Default Restore');
+    if (!ok) return;
     document.getElementById('page-html-editor').value = DEFAULT_PAGES[currentEditingPage] || '';
-    showMsg('page-form-msg', 'ℹ️ Default loaded', 'ok');
+    bqPopup.info('Default লোড হয়েছে', 'Save করলে সেভ হবে।');
 };
 
 window.previewPage = function() {
@@ -2179,6 +2650,9 @@ window.previewPage = function() {
     w.document.close();
 };
 
+// ============================================================
+// 📝 CONTENT MANAGER
+// ============================================================
 window.loadContentSettings = async function() {
     const cached = aCacheGet(ADMIN_CACHE.contentSettings);
     if (cached) {
@@ -2359,7 +2833,7 @@ window.addSizeChartRow = function(row) {
     item.className = 'size-row-item';
     const r = row || { size: '', chest: '', waist: '', length: '', shoulder: '', sleeve: '' };
     item.innerHTML = `<input type="text" class="sz-size" placeholder="Size" value="${r.size || ''}"><input type="number" class="sz-chest" placeholder="Chest" value="${r.chest || ''}"><input type="number" class="sz-waist" placeholder="Waist" value="${r.waist || ''}"><input type="number" class="sz-length" placeholder="Length" value="${r.length || ''}"><input type="number" class="sz-shoulder" placeholder="Shoulder" value="${r.shoulder || ''}"><input type="number" class="sz-sleeve" placeholder="Sleeve" value="${r.sleeve || ''}"><button type="button" class="rm" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-    c.appendChild(row);
+    c.appendChild(item);
 };
 
 window.loadHomeCollectionsFromFirebase = async function() {
@@ -2490,15 +2964,18 @@ window.saveContentSettings = async function() {
         allSizeCharts[currentCat] = { title: chartTitle, rows: sizeRows };
         aCacheSet(ADMIN_CACHE.sizeCharts, allSizeCharts);
         
-        showMsg('content-msg', '✅ সব Content সেভ!', 'ok');
-        showToast('✅ Saved!');
-    } catch (err) { showMsg('content-msg', '❌ ' + (err.message || ''), 'bad'); }
+        window.broadcastToWebsite('content', contentData);
+        window.broadcastToWebsite('notification', { icon: '📝', title: 'কনটেন্ট আপডেট হয়েছে', message: 'Website এ সব পরিবর্তন দেখা যাচ্ছে', color: 'emerald' });
+        
+        bqPopup.success('সব Content সেভ হয়েছে!', 'আপনার সব পরিবর্তন সংরক্ষিত হয়েছে।');
+    } catch (err) { bqPopup.error('সেভ হয়নি', err.message || ''); }
     btn.disabled = false;
     btn.innerHTML = orig;
 };
 
-window.resetContentToDefault = function() {
-    if (!confirm('সব Content Default এ ফিরবে?')) return;
+window.resetContentToDefault = async function() {
+    const ok = await bqPopup.confirm('সব Content Default এ ফিরবে?<br><span style="font-size:12px;color:#ef4444;">এই কাজ ফিরিয়ে আনা যাবে না।</span>', 'Reset Content');
+    if (!ok) return;
     document.getElementById('c-logo-url').value = DEFAULT_CONTENT.logoUrl;
     document.getElementById('c-copyright-text').value = DEFAULT_CONTENT.copyrightText;
     renderContactIcons([]);
@@ -2506,9 +2983,12 @@ window.resetContentToDefault = function() {
     renderCouriers([]);
     renderFAQList([]);
     renderHomeCollections([]);
-    showMsg('content-msg', 'ℹ️ Reset। Save করলে যাবে।', 'ok');
+    bqPopup.info('Reset হয়েছে', 'Save করলে সেভ হবে।');
 };
 
+// ============================================================
+// ⚙️ SETTINGS
+// ============================================================
 window.loadSettings = async function() {
     const cached = aCacheGet(ADMIN_CACHE.settings);
     if (cached) { settingsCache = { ...DEFAULT_SETTINGS, ...cached }; fillSettingsForm(); }
@@ -2552,8 +3032,8 @@ window.saveSettings = async function() {
     try {
         const storeName = document.getElementById('s-store-name').value.trim();
         const whatsapp = document.getElementById('s-whatsapp').value.trim().replace(/[^0-9]/g, '');
-        if (!storeName) { showMsg('settings-msg', '⚠️ Store name দরকার।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
-        if (!whatsapp || whatsapp.length < 10) { showMsg('settings-msg', '⚠️ WhatsApp number সঠিক নয়।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
+        if (!storeName) { bqPopup.warning('Store name দরকার'); btn.disabled = false; btn.innerHTML = orig; return; }
+        if (!whatsapp || whatsapp.length < 10) { bqPopup.warning('WhatsApp number সঠিক নয়'); btn.disabled = false; btn.innerHTML = orig; return; }
         const data = {
             storeName,
             welcomeText: document.getElementById('s-welcome-text').value.trim(),
@@ -2582,21 +3062,28 @@ window.saveSettings = async function() {
         await setDoc(doc(db, 'settings', 'store'), data, { merge: true });
         settingsCache = { ...settingsCache, ...data };
         aCacheSet(ADMIN_CACHE.settings, settingsCache);
-        showMsg('settings-msg', '✅ সব সেভ!', 'ok');
-    } catch (err) { showMsg('settings-msg', '❌ ' + (err.message || ''), 'bad'); }
+        window.broadcastToWebsite('settings', settingsCache);
+        window.broadcastToWebsite('notification', { icon: '⚙️', title: 'সেটিংস আপডেট হয়েছে', message: 'সব তথ্য আপডেট হয়েছে', color: 'blue' });
+        bqPopup.success('সেটিংস সেভ হয়েছে!');
+    } catch (err) { bqPopup.error('সেভ হয়নি', err.message || ''); }
     btn.disabled = false;
     btn.innerHTML = orig;
 };
 
-window.resetSettingsToDefault = function() {
-    if (!confirm('Default এ ফিরবে?')) return;
+window.resetSettingsToDefault = async function() {
+    const ok = await bqPopup.confirm('Default এ ফিরবে?<br><span style="font-size:12px;color:#ef4444;">বর্তমান সব পরিবর্তন হারিয়ে যাবে।</span>', 'Reset Settings');
+    if (!ok) return;
     settingsCache = { ...DEFAULT_SETTINGS };
     fillSettingsForm();
-    showMsg('settings-msg', 'ℹ️ Default loaded।', 'ok');
+    bqPopup.info('Default লোড হয়েছে', 'Save করলে সেভ হবে।');
 };
 
+// ============================================================
+// 🔧 BACKUP / SYNC
+// ============================================================
 window.backupAllData = async function() {
-    if (!confirm('সব Data Backup নিতে চান?')) return;
+    const ok = await bqPopup.confirm('সব Data Backup নিতে চান?', 'Backup Data');
+    if (!ok) return;
     try {
         const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'sizeCharts', 'homeCollections'];
         const backup = { version: '1.0', timestamp: new Date().toISOString(), storeName: (settingsCache && settingsCache.storeName) || 'Burqa Bazar', data: {} };
@@ -2612,8 +3099,8 @@ window.backupAllData = async function() {
         link.download = `burqa-backup-${new Date().toISOString().split('T')[0]}.json`;
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
         URL.revokeObjectURL(url);
-        alert('✅ Backup সফল!');
-    } catch (err) { alert('❌ ' + (err.message || '')); }
+        bqPopup.success('Backup সফল!', 'ফাইল ডাউনলোড হয়েছে।');
+    } catch (err) { bqPopup.error('Backup ব্যর্থ', err.message || ''); }
 };
 
 window.restoreAllData = function() {
@@ -2624,11 +3111,12 @@ window.restoreAllData = function() {
 window.handleRestoreFile = async function(event) {
     const file = event.target.files[0];
     if (!file) return;
-    if (!confirm('⚠️ Restore করলে Data merge হবে?')) { event.target.value = ''; return; }
+    const ok = await bqPopup.confirm('Restore করলে Data merge হবে।<br><span style="font-size:12px;color:#f59e0b;">⚠️ সতর্কতার সাথে করুন।</span>', 'Restore Data');
+    if (!ok) { event.target.value = ''; return; }
     try {
         const text = await file.text();
         const backup = JSON.parse(text);
-        if (!backup.data || !backup.version) { alert('❌ Invalid file.'); event.target.value = ''; return; }
+        if (!backup.data || !backup.version) { bqPopup.error('Invalid file'); event.target.value = ''; return; }
         let total = 0;
         const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'sizeCharts', 'homeCollections'];
         for (const col of collections) {
@@ -2638,29 +3126,35 @@ window.handleRestoreFile = async function(event) {
             }
         }
         if (backup.data.settings) { try { await setDoc(doc(db, 'settings', 'store'), backup.data.settings, { merge: true }); } catch (e) {} }
-        alert(`✅ ${total}টি item restore হয়েছে। Reload হবে...`);
+        await bqPopup.success('Restore সফল!', total + 'টি item restore হয়েছে। Page reload হবে।');
         setTimeout(() => location.reload(), 1500);
-    } catch (err) { alert('❌ ' + (err.message || '')); }
+    } catch (err) { bqPopup.error('Restore ব্যর্থ', err.message || ''); }
     event.target.value = '';
 };
 
 window.forceSyncWebsite = async function() {
-    if (!confirm('Force Sync করলে সব cache clear হবে?')) return;
+    const ok = await bqPopup.confirm('Force Sync করলে সব cache clear হবে।<br>সব data আবার load হবে।', 'Force Sync');
+    if (!ok) return;
     try {
         await setDoc(doc(db, 'settings', 'cacheVersion'), { version: Date.now(), updatedAt: new Date().toISOString() });
         Object.keys(localStorage).forEach(key => { if (key.startsWith('bq_cache_') || key.startsWith('bq_admin_')) localStorage.removeItem(key); });
-        alert('✅ Force Sync সফল!');
+        window.broadcastToWebsite('notification', { icon: '⚡', title: 'Force Sync হয়েছে', message: 'Website refresh হয়ে গেছে', color: 'emerald' });
+        await bqPopup.success('Force Sync সফল!', 'Reload হবে...');
         setTimeout(() => location.reload(), 1500);
-    } catch (err) { alert('❌ ' + (err.message || '')); }
+    } catch (err) { bqPopup.error('Force Sync ব্যর্থ', err.message || ''); }
 };
 
-window.clearAdminCacheNow = function() {
-    if (!confirm('Admin Cache clear?')) return;
+window.clearAdminCacheNow = async function() {
+    const ok = await bqPopup.confirm('Admin Cache clear করতে চান?', 'Clear Cache');
+    if (!ok) return;
     aCacheClear();
-    alert('✅ Cache Clear! Reload হবে...');
+    await bqPopup.success('Cache Clear হয়েছে!', 'Reload হবে...');
     setTimeout(() => location.reload(), 1000);
 };
 
+// ============================================================
+// ⌨️ KEYBOARD SHORTCUTS
+// ============================================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         const cm = document.getElementById('coupon-modal');
@@ -2670,7 +3164,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-console.log('✅ Admin Panel Ready — Emerald Noir Theme');
+console.log('✅ Admin Panel Ready — Emerald Noir with Custom Popups');
 </script>
 </body>
 </html>
