@@ -1,217 +1,146 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel — Burqa Bazaar & Boutiques</title>
-<meta name="robots" content="noindex, nofollow">
+<title>Admin Panel — Burqa Bazaar</title>
 <link rel="icon" type="image/png" href="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png">
 
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- ⚡ ULTRA FAST CACHE -->
 <script>
 window.ADMIN_CACHE = {
-    products: 'bq_admin_products_v7', orders: 'bq_admin_orders_v7',
-    reviews: 'bq_admin_reviews_v7', newsletter: 'bq_admin_newsletter_v7',
-    coupons: 'bq_admin_coupons_v7', banners: 'bq_admin_banners_v7',
-    pages: 'bq_admin_pages_v7', faq: 'bq_admin_faq_v7',
-    sizeCharts: 'bq_admin_sizeCharts_v7', homeCollections: 'bq_admin_homeCollections_v7',
-    settings: 'bq_admin_settings_v7', contentSettings: 'bq_admin_content_v7',
-    stats: 'bq_admin_stats_v7'
+    products: 'bq_admin_products_v8', orders: 'bq_admin_orders_v8',
+    reviews: 'bq_admin_reviews_v8', newsletter: 'bq_admin_newsletter_v8',
+    coupons: 'bq_admin_coupons_v8', banners: 'bq_admin_banners_v8',
+    pages: 'bq_admin_pages_v8', faq: 'bq_admin_faq_v8',
+    sizeCharts: 'bq_admin_sizeCharts_v8', homeCollections: 'bq_admin_homeCollections_v8',
+    settings: 'bq_admin_settings_v8', contentSettings: 'bq_admin_content_v8',
+    stats: 'bq_admin_stats_v8'
 };
 window.aCacheGet = function(key) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw).data : null; } catch(e) { return null; } };
 window.aCacheSet = function(key, data) { try { localStorage.setItem(key, JSON.stringify({ data, t: Date.now() })); } catch(e) {} };
-window.aCacheClear = function() { try { Object.keys(ADMIN_CACHE).forEach(k => localStorage.removeItem(ADMIN_CACHE[k])); } catch(e) {} };
-</script>
-
-<!-- 🎨 CUSTOM POPUP SYSTEM -->
-<script>
-(function() {
-    if (document.getElementById('bq-popup-style')) return;
-    const style = document.createElement('style');
-    style.id = 'bq-popup-style';
-    style.textContent = `
-        .bq-popup-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 999998; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); font-family: 'Montserrat', sans-serif; }
-        .bq-popup-overlay.active { opacity: 1; visibility: visible; }
-        .bq-popup-box { background: linear-gradient(135deg, #111111, #050505); border: 1px solid #ffffff; border-radius: 20px; padding: 30px 25px 25px; max-width: 420px; width: 100%; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 255, 255, 0.1); position: relative; overflow: hidden; transform: translateY(30px) scale(0.95); transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-        .bq-popup-overlay.active .bq-popup-box { transform: translateY(0) scale(1); }
-        .bq-popup-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 20px; background: #ffffff; color: #050505; box-shadow: 0 8px 30px rgba(255,255,255,0.2); }
-        .bq-popup-title { font-family: 'Playfair Display', serif; font-size: 24px; color: #ffffff; text-align: center; margin-bottom: 12px; }
-        .bq-popup-message { font-size: 14px; color: #a1a1aa; text-align: center; line-height: 1.7; margin-bottom: 25px; }
-        .bq-popup-message strong { color: #ffffff; }
-        .bq-popup-buttons { display: flex; gap: 12px; }
-        .bq-popup-btn { flex: 1; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: 'Montserrat', sans-serif; border: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; }
-        .bq-popup-btn.cancel { background: transparent; border: 1.5px solid rgba(255,255,255,0.2); color: #a1a1aa; }
-        .bq-popup-btn.cancel:hover { border-color: #ffffff; color: #ffffff; }
-        .bq-popup-btn.confirm { background: #ffffff; color: #050505; }
-        .bq-popup-btn.danger { background: #ef4444; color: #ffffff; }
-        .bq-popup-buttons.single .bq-popup-btn { max-width: 200px; margin: 0 auto; }
-    `;
-    document.head.appendChild(style);
-})();
-
-window.bqPopup = {
-    overlay: null, resolve: null,
-    init: function() {
-        if (this.overlay) return;
-        const overlay = document.createElement('div');
-        overlay.className = 'bq-popup-overlay'; overlay.id = 'bq-popup-overlay';
-        overlay.innerHTML = `<div class="bq-popup-box" onclick="event.stopPropagation()"><div class="bq-popup-icon" id="bq-popup-icon"></div><h3 class="bq-popup-title" id="bq-popup-title"></h3><p class="bq-popup-message" id="bq-popup-message"></p><div class="bq-popup-buttons" id="bq-popup-buttons"></div></div>`;
-        if (document.body) document.body.appendChild(overlay);
-        this.overlay = overlay;
-        overlay.addEventListener('click', (e) => { if (e.target === overlay && this.resolve) { this.resolve(false); this.close(); } });
-    },
-    close: function() { if (this.overlay) this.overlay.classList.remove('active'); this.resolve = null; document.body.style.overflow = ''; },
-    show: function(opts) {
-        this.init();
-        const type = opts.type || 'question';
-        const icons = { danger: '<i class="fas fa-trash-alt"></i>', success: '<i class="fas fa-check"></i>', warning: '<i class="fas fa-exclamation"></i>', info: '<i class="fas fa-info"></i>', question: '<i class="fas fa-question"></i>' };
-        document.getElementById('bq-popup-icon').innerHTML = icons[type] || icons.question;
-        document.getElementById('bq-popup-title').textContent = opts.title || 'Confirm';
-        document.getElementById('bq-popup-message').innerHTML = opts.message || '';
-        const btnDiv = document.getElementById('bq-popup-buttons');
-        btnDiv.className = 'bq-popup-buttons' + (opts.showCancel === false ? ' single' : '');
-        btnDiv.innerHTML = '';
-        return new Promise((resolve) => {
-            this.resolve = resolve;
-            if (opts.showCancel !== false) {
-                const cancelBtn = document.createElement('button');
-                cancelBtn.className = 'bq-popup-btn cancel'; cancelBtn.textContent = opts.cancelText || 'Cancel';
-                cancelBtn.onclick = () => { resolve(false); this.close(); };
-                btnDiv.appendChild(cancelBtn);
-            }
-            const confirmBtn = document.createElement('button');
-            confirmBtn.className = 'bq-popup-btn ' + (opts.confirmStyle || (type === 'danger' ? 'danger' : 'confirm'));
-            confirmBtn.textContent = opts.confirmText || 'Confirm';
-            confirmBtn.onclick = () => { resolve(true); this.close(); };
-            btnDiv.appendChild(confirmBtn);
-            this.overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-    },
-    delete: function(name, type) { return this.show({ type: 'danger', title: 'Remove ' + type, message: `Are you sure you want to remove <strong>${name}</strong>?`, confirmText: 'Remove', confirmStyle: 'danger' }); },
-    success: function(title, msg) { return this.show({ type: 'success', title: title, message: msg, showCancel: false, confirmText: 'Okay' }); },
-    error: function(title, msg) { return this.show({ type: 'danger', title: title, message: msg, showCancel: false, confirmText: 'Close' }); },
-    warning: function(title, msg) { return this.show({ type: 'warning', title: title, message: msg, showCancel: false, confirmText: 'Got it' }); },
-    confirm: function(msg) { return this.show({ type: 'question', title: 'Please Confirm', message: msg, confirmText: 'Yes', cancelText: 'No' }); }
-};
-window.bqAlert = (msg, title) => bqPopup.show({ type: 'info', title: title || 'Info', message: msg, showCancel: false, confirmText: 'Close' });
-window.bqConfirm = (msg) => bqPopup.confirm(msg);
-window.bqDelete = (name, type) => bqPopup.delete(name, type);
-window.bqSuccess = (title, msg) => bqPopup.success(title, msg);
-window.bqError = (title, msg) => bqPopup.error(title, msg);
-window.bqWarning = (title, msg) => bqPopup.warning(title, msg);
 </script>
 
 <style>
 :root {
-  --gold: #ffffff;
-  --gold-hover: #e4e4e7;
-  --gold-dark: #a1a1aa;
-  --bg: #050505;
-  --card: #111111;
-  --dark: #0a0a0a;
-  --text: #f4f4f5;
-  --muted: #a1a1aa;
-  --border: rgba(255, 255, 255, 0.12);
-  --ok: #22c55e;
-  --bad: #ef4444;
-  --warn: #f59e0b;
+  /* Premium Light Theme Colors */
+  --primary: #10b981; /* Mint Green */
+  --primary-hover: #059669;
+  --bg: #f8fafc; /* Very light gray/blue */
+  --card: #ffffff;
+  --text: #0f172a; /* Dark slate */
+  --muted: #64748b;
+  --border: #e2e8f0;
+  
+  /* Status Colors */
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
   --info: #3b82f6;
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-body { background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
 
-#login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 60%); z-index: 99999; }
-.login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.8); }
-.login-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; margin: 0 auto 20px; background: #000; box-shadow: 0 0 25px rgba(255,255,255,0.15); }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
+body { background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+/* Headings */
+h1, h2, h3, h4, .font-heading { font-family: var(--font-heading); font-weight: 700; letter-spacing: -0.5px; }
+
+/* Login Screen */
+#login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: var(--bg); z-index: 99999; }
+.login-box { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 420px; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); }
+.login-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--border); overflow: hidden; margin: 0 auto 20px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 .login-logo img { width: 100%; height: 100%; object-fit: cover; }
-.login-box h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 26px; text-align: center; margin-bottom: 5px; }
-.login-box .sub { text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
+.login-box h1 { color: var(--text); font-size: 28px; text-align: center; margin-bottom: 5px; }
+.login-box .sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 30px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 .fgroup { margin-bottom: 20px; }
-.fgroup label { display: block; font-size: 11px; font-weight: 700; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-.fgroup input, .fgroup select, .fgroup textarea { width: 100%; padding: 14px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: 'Montserrat', sans-serif; }
-.fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,255,255,0.1); }
-.login-btn { width: 100%; padding: 15px; background: var(--gold); color: #050505; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
-.login-btn:hover { background: var(--gold-hover); }
+.fgroup label { display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.fgroup input, .fgroup select, .fgroup textarea { width: 100%; padding: 14px 16px; background: #fff; border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; outline: none; transition: all 0.2s; }
+.fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
+.login-btn { width: 100%; padding: 16px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+.login-btn:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
 
+/* Admin Panel Layout */
 #admin { display: none; min-height: 100vh; padding-bottom: 40px; }
 #admin.active { display: block; }
-.head { background: var(--dark); border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+.head { background: #fff; border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
 .head-left { display: flex; align-items: center; gap: 12px; }
-.head-logo { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--gold); overflow: hidden; background: #000; }
+.head-logo { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--border); overflow: hidden; }
 .head-logo img { width: 100%; height: 100%; object-fit: cover; }
-.head h1 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold); }
+.head h1 { font-size: 20px; color: var(--text); }
 .head-right { display: flex; align-items: center; gap: 10px; }
-.badge { background: rgba(255,255,255,.1); border: 1px solid var(--border); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.logout { background: transparent; border: 1px solid var(--bad); color: var(--bad); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; text-transform: uppercase; }
-.logout:hover { background: var(--bad); color: #fff; }
-.wrap { max-width: 1100px; margin: 0 auto; padding: 20px 15px; }
-.tabs { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
-.tab { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
-.tab:hover { border-color: var(--gold); }
-.tab.active { background: var(--gold); color: #050505; border-color: var(--gold); }
+.badge { background: var(--bg); border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.logout { background: #fff; border: 1.5px solid var(--danger); color: var(--danger); padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.logout:hover { background: var(--danger); color: #fff; }
+
+.wrap { max-width: 1200px; margin: 0 auto; padding: 25px 20px; }
+.tabs { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { background: #fff; border: 1.5px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+.tab:hover { border-color: var(--primary); color: var(--primary); }
+.tab.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+
+/* Sections */
 .section { display: none; }
-.section.active { display: block; animation: fadeIn 0.3s ease; }
+.section.active { display: block; animation: fadeIn 0.3s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 15px; margin-bottom: 25px; }
-.stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
-.stat i { font-size: 24px; color: var(--gold); margin-bottom: 10px; display: block; }
-.stat .val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 5px; }
-.stat .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.shead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-.shead h2 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 22px; display: flex; align-items: center; gap: 10px; }
-.btn-p { background: var(--gold); color: #050505; border: none; padding: 12px 22px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; text-transform: uppercase; letter-spacing: 1px; }
-.btn-p:hover { background: var(--gold-hover); }
-.btn-s { background: transparent; border: 1.5px solid var(--border); color: var(--text); padding: 11px 20px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; text-transform: uppercase; letter-spacing: 1px; }
-.btn-s:hover { border-color: var(--gold); color: var(--gold); }
-.loading { text-align: center; padding: 60px 20px; color: var(--muted); }
-.loading i { font-size: 40px; color: var(--gold); animation: spin 1s linear infinite; display: inline-block; margin-bottom: 15px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.empty { text-align: center; padding: 60px 20px; color: var(--muted); }
-.empty i { font-size: 60px; color: var(--gold); opacity: .4; display: block; margin-bottom: 20px; }
-.empty h3 { font-family: 'Playfair Display', serif; color: var(--text); font-size: 18px; margin-bottom: 8px; }
-.msg { padding: 12px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 15px; display: none; }
-.msg.show { display: block; }
-.msg.ok { background: rgba(34,197,94,.15); border: 1px solid var(--ok); color: #86efac; }
-.msg.bad { background: rgba(239,68,68,.15); border: 1px solid var(--bad); color: #fca5a5; }
-.pcard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; align-items: flex-start; }
-.pimg { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #000; border: 1px solid var(--border); }
-.pinfo { flex: 1; min-width: 0; }
-.pname { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.pmeta { font-size: 11px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; }
-.pprice { font-size: 16px; color: var(--gold); font-weight: 700; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
-.pacts { display: flex; gap: 8px; flex-wrap: wrap; }
-.abtn { padding: 7px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-.abtn.edit { background: rgba(255,255,255,.1); color: var(--gold); border: 1px solid var(--gold); }
-.abtn.edit:hover { background: var(--gold); color: #050505; }
-.abtn.del { background: rgba(239,68,68,.1); color: var(--bad); border: 1px solid var(--bad); }
-.abtn.del:hover { background: var(--bad); color: #fff; }
-.stock-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
-.stock-badge.instock { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
-.stock-badge.lowstock { background: rgba(245,158,11,.15); color: var(--warn); border: 1px solid var(--warn); }
-.stock-badge.outofstock { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
-.img-upload-wrap { display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
-.upload-btn { background: var(--gold); color: #050505; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
-.upload-status { font-size: 11px; font-weight: 600; margin-left: 8px; }
-.upload-status.ok { color: var(--ok); }
-.upload-status.bad { color: var(--bad); }
-.upload-status.warn { color: var(--warn); }
-.crow { display: grid; grid-template-columns: 1.5fr 2fr auto auto; gap: 8px; margin-bottom: 8px; align-items: center; }
-.crow input, .crow-img input, .size-row-item input { padding: 10px 12px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; width: 100%; }
-.crow .rm, .crow-img .rm, .size-row-item .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.crow .rm:hover, .crow-img .rm:hover { background: var(--bad); color: #fff; }
-.crow .mini-upl, .crow-img .mini-upl { background: var(--gold); color: #050505; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.crow-img { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; margin-bottom: 8px; align-items: center; }
-.size-box { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0; align-items: center; }
-.size-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
-.size-btn.selected { background: var(--gold); color: #050505; border-color: var(--gold); }
-.select-all-btn { background: var(--gold); border: none; color: #050505; padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; margin-left: auto; text-transform: uppercase; }
+
+/* Stats Dashboard */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.stat { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+.stat i { font-size: 24px; color: var(--primary); margin-bottom: 12px; display: block; }
+.stat .val { font-family: var(--font-heading); font-size: 32px; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 8px; }
+.stat .lbl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+/* Section Header */
+.shead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+.shead h2 { font-size: 24px; display: flex; align-items: center; gap: 10px; }
+
+/* Buttons */
+.btn-p { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+.btn-p:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+.btn-s { background: #fff; border: 1.5px solid var(--border); color: var(--text); padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+.btn-s:hover { background: var(--bg); border-color: #cbd5e1; }
+
+/* Product Cards */
+.pcard { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; gap: 20px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+.pimg { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; background: var(--bg); border: 1px solid var(--border); }
+.pinfo { flex: 1; }
+.pname { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.pmeta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.pprice { font-family: var(--font-heading); font-size: 18px; color: var(--primary); font-weight: 700; margin-bottom: 12px; }
+.pacts { display: flex; gap: 10px; flex-wrap: wrap; }
+.abtn { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.abtn.edit { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+.abtn.edit:hover { background: #e2e8f0; }
+.abtn.del { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
+.abtn.del:hover { background: var(--danger); color: #fff; }
+
+/* Empty State */
+.empty { text-align: center; padding: 60px 20px; background: #fff; border: 1px solid var(--border); border-radius: 16px; }
+.empty i { font-size: 50px; color: #cbd5e1; margin-bottom: 15px; }
+.empty h3 { font-size: 18px; color: var(--muted); }
+
+/* Custom Popup */
+.bq-popup-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 999998; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: all 0.3s; }
+.bq-popup-overlay.active { opacity: 1; visibility: visible; }
+.bq-popup-box { background: #fff; border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); transform: scale(0.95); transition: all 0.3s; }
+.bq-popup-overlay.active .bq-popup-box { transform: scale(1); }
+.bq-popup-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
+.bq-popup-title { font-size: 22px; text-align: center; margin-bottom: 10px; color: var(--text); }
+.bq-popup-message { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 25px; }
+.bq-popup-buttons { display: flex; gap: 12px; }
+.bq-popup-btn { flex: 1; padding: 12px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s; }
+.bq-popup-btn.cancel { background: var(--bg); color: var(--text); }
+.bq-popup-btn.confirm { background: var(--primary); color: #fff; }
+.bq-popup-btn.danger { background: var(--danger); color: #fff; }
 </style>
 </head>
 <body>
@@ -221,10 +150,9 @@ body { background: var(--bg); color: var(--text); line-height: 1.6; min-height: 
         <div class="login-logo"><img src="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png" alt="Logo"></div>
         <h1>Admin Panel</h1>
         <p class="sub">Burqa Bazaar & Boutiques</p>
-        <div class="err" id="err"></div>
         <form id="login-form" onsubmit="doLogin(event)">
-            <div class="fgroup"><label>Admin Email</label><input type="email" id="email" placeholder="admin@burqa.com" required autocomplete="email"></div>
-            <div class="fgroup"><label>Security Key</label><input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password"></div>
+            <div class="fgroup"><label>Admin Email</label><input type="email" id="email" placeholder="admin@burqa.com" required></div>
+            <div class="fgroup"><label>Password</label><input type="password" id="password" placeholder="Enter password" required></div>
             <button type="submit" class="login-btn" id="login-btn"><i class="fas fa-sign-in-alt"></i> Enter Dashboard</button>
         </form>
     </div>
@@ -253,253 +181,252 @@ body { background: var(--bg); color: var(--text); line-height: 1.6; min-height: 
             <button class="tab" data-tab="coupons" onclick="switchTab('coupons')"><i class="fas fa-ticket-alt"></i> Promo Codes</button>
             <button class="tab" data-tab="banners" onclick="switchTab('banners')"><i class="fas fa-images"></i> Hero Banners</button>
             <button class="tab" data-tab="pages" onclick="switchTab('pages')"><i class="fas fa-file-alt"></i> Content Pages</button>
-            <button class="tab" data-tab="content" onclick="switchTab('content')"><i class="fas fa-edit"></i> Content Manager</button>
             <button class="tab" data-tab="settings" onclick="switchTab('settings')"><i class="fas fa-cog"></i> Store Config</button>
         </div>
 
+        <!-- DASHBOARD -->
         <div class="section active" id="sec-dashboard">
             <div class="stats">
-                <div class="stat"><i class="fas fa-box"></i><div class="val" id="st-products">0</div><div class="lbl">Products</div></div>
+                <div class="stat"><i class="fas fa-box"></i><div class="val" id="st-products">0</div><div class="lbl">Total Products</div></div>
                 <div class="stat"><i class="fas fa-shopping-bag"></i><div class="val" id="st-orders">0</div><div class="lbl">Total Orders</div></div>
-                <div class="stat"><i class="fas fa-clock"></i><div class="val" id="st-pending">0</div><div class="lbl">Pending</div></div>
-                <div class="stat"><i class="fas fa-check-circle"></i><div class="val" id="st-completed">0</div><div class="lbl">Completed</div></div>
+                <div class="stat"><i class="fas fa-clock" style="color:var(--warning);"></i><div class="val" id="st-pending">0</div><div class="lbl">Pending</div></div>
+                <div class="stat"><i class="fas fa-check-circle" style="color:var(--success);"></i><div class="val" id="st-completed">0</div><div class="lbl">Completed</div></div>
             </div>
-            <div class="shead"><h2><i class="fas fa-chart-line"></i> Sales Summary</h2></div>
-            <div class="stats" style="margin-bottom: 25px;">
-                <div class="stat" style="background: linear-gradient(135deg, rgba(34,197,94,.1), rgba(34,197,94,.02)); border-color: rgba(34,197,94,.3);"><i class="fas fa-sun" style="color: #22c55e;"></i><div class="val" id="st-today-revenue" style="color: #22c55e;">৳0</div><div class="lbl">Today's Revenue</div></div>
-                <div class="stat" style="background: linear-gradient(135deg, rgba(59,130,246,.1), rgba(59,130,246,.02)); border-color: rgba(59,130,246,.3);"><i class="fas fa-calendar-alt" style="color: #3b82f6;"></i><div class="val" id="st-month-revenue" style="color: #3b82f6;">৳0</div><div class="lbl">This Month</div></div>
-                <div class="stat" style="background: linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.02)); border-color: rgba(255,255,255,.3);"><i class="fas fa-coins"></i><div class="val" id="st-total-revenue">৳0</div><div class="lbl">Total Revenue</div></div>
-                <div class="stat" style="background: linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.02)); border-color: rgba(255,255,255,.3);"><i class="fas fa-shopping-cart"></i><div class="val" id="st-today-orders">0</div><div class="lbl">Today's Orders</div></div>
+            
+            <div class="shead" style="margin-top:40px;"><h2><i class="fas fa-chart-line"></i> Sales Summary</h2></div>
+            <div class="stats" style="margin-bottom: 30px;">
+                <div class="stat" style="border-left: 4px solid var(--primary);"><i class="fas fa-sun" style="color: var(--primary);"></i><div class="val" id="st-today-revenue">৳0</div><div class="lbl">Today's Revenue</div></div>
+                <div class="stat" style="border-left: 4px solid var(--info);"><i class="fas fa-calendar-alt" style="color: var(--info);"></i><div class="val" id="st-month-revenue">৳0</div><div class="lbl">This Month</div></div>
+                <div class="stat" style="border-left: 4px solid var(--text);"><i class="fas fa-coins" style="color: var(--text);"></i><div class="val" id="st-total-revenue">৳0</div><div class="lbl">Total Revenue</div></div>
+                <div class="stat" style="border-left: 4px solid var(--warning);"><i class="fas fa-shopping-cart" style="color: var(--warning);"></i><div class="val" id="st-today-orders">0</div><div class="lbl">Today's Orders</div></div>
             </div>
-            <div class="shead"><h2><i class="fas fa-trophy"></i> Top 5 Best-Selling Items</h2></div>
-            <div id="top-products-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 25px;"><div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
-            <div class="shead"><h2><i class="fas fa-chart-bar"></i> Last 7 Days Sales</h2></div>
-            <div id="weekly-chart-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 25px;"><div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading chart...</p></div></div>
+
+            <div class="shead"><h2><i class="fas fa-trophy"></i> Top Selling Products</h2></div>
+            <div id="top-products-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Loading...</h3></div>
+            </div>
         </div>
 
+        <!-- INVENTORY -->
         <div class="section" id="sec-products">
             <div class="shead"><h2><i class="fas fa-box"></i> Inventory</h2><button class="btn-p" onclick="switchTab('add')"><i class="fas fa-plus"></i> Create Item</button></div>
-            <div id="products-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
+            <div id="products-container">
+                <div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Loading...</h3></div>
+            </div>
         </div>
 
+        <!-- CREATE ITEM -->
         <div class="section" id="sec-add">
             <div class="shead"><h2 id="form-title"><i class="fas fa-plus-circle"></i> Create New Item</h2><button class="btn-s" onclick="switchTab('products')"><i class="fas fa-arrow-left"></i> Back</button></div>
-            <div id="form-msg" class="msg"></div>
-            <form id="p-form" onsubmit="submitProduct(event)" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
+            <form id="p-form" onsubmit="submitProduct(event)" style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
                 <input type="hidden" id="edit-id">
                 <div class="fgroup"><label>Product Name *</label><input type="text" id="p-name" required></div>
-                <div class="fgroup"><label>Category *</label><select id="p-cat" required onchange="onCategoryChange()"><option value="">-- Select --</option><option value="Hijab Collection">Hijab Collection</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option></select></div>
-                <div class="fgroup"><label>Price (৳) *</label><input type="text" id="p-price" placeholder="1000 or Coming Soon" required></div>
-                <div class="fgroup"><label>Stock Quantity *</label><input type="number" id="p-stock" placeholder="e.g. 10" required min="0" value="1"></div>
-                <div class="fgroup"><label>Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required><div class="img-upload-wrap"><input type="file" id="p-main-file" accept="image/*" style="display:none" onchange="uploadMainImage(event)"><button type="button" class="upload-btn" onclick="document.getElementById('p-main-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload</button><span id="p-main-status" class="upload-status"></span></div></div>
-                <div class="fgroup"><label>Additional Images</label><div id="additional-images"></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn-s" onclick="addAdditionalImage()" style="flex:1;justify-content:center"><i class="fas fa-plus"></i> Add Row</button><input type="file" id="additional-files" accept="image/*" multiple style="display:none" onchange="uploadAdditionalMultiple(event)"><button type="button" class="upload-btn" onclick="document.getElementById('additional-files').click()" style="flex:1;justify-content:center"><i class="fas fa-cloud-upload-alt"></i> Upload Multi</button></div></div>
-                <div class="fgroup"><label>Video URL (Optional)</label><input type="text" id="p-video" placeholder="YouTube / Facebook Link"></div>
-                <div class="fgroup"><label>Badge</label><select id="p-badge"><option value="">None</option><option value="new">NEW</option><option value="hot">HOT</option><option value="sale">SALE</option><option value="soldout">SOLD OUT</option></select></div>
-                <div class="fgroup" id="size-section" style="display: none;"><label>Sizes</label><div class="size-box" id="size-box"></div></div>
-                <div class="fgroup"><label>Colors *</label><div id="colors"></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn-s" onclick="addColor()" style="flex:1;justify-content:center"><i class="fas fa-plus"></i> Add Color</button></div></div>
-                <div class="fgroup"><label>Description *</label><textarea id="p-desc" rows="6" required></textarea></div>
-                <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;"><button type="submit" class="btn-p" id="submit-btn" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Changes</button><button type="button" class="btn-s" onclick="resetForm()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Discard</button></div>
+                <div class="fgroup"><label>Category *</label><select id="p-cat" required><option value="">-- Select --</option><option value="Hijab Collection">Hijab Collection</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option></select></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div class="fgroup"><label>Price (৳) *</label><input type="text" id="p-price" placeholder="1000" required></div>
+                    <div class="fgroup"><label>Stock Quantity *</label><input type="number" id="p-stock" placeholder="10" required min="0" value="1"></div>
+                </div>
+                <div class="fgroup"><label>Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required></div>
+                <div class="fgroup"><label>Description *</label><textarea id="p-desc" rows="5" required></textarea></div>
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button type="submit" class="btn-p" id="submit-btn" style="flex: 1; justify-content: center;"><i class="fas fa-save"></i> Save Changes</button>
+                    <button type="button" class="btn-s" onclick="switchTab('products')" style="flex: 1; justify-content: center;"><i class="fas fa-times"></i> Discard</button>
+                </div>
             </form>
         </div>
-        <!-- CUSTOMER ORDERS -->
+<!-- CUSTOMER ORDERS -->
         <div class="section" id="sec-orders">
             <div class="shead"><h2><i class="fas fa-shopping-bag"></i> Customer Orders</h2><button class="btn-s" onclick="loadOrders(true)"><i class="fas fa-sync-alt"></i> Refresh</button></div>
-            <div style="position: relative; margin-bottom: 15px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold);"></i><input type="text" id="order-search" placeholder="Search by Phone, Order ID, Name..." oninput="applyOrderFilters()" style="width: 100%; padding: 14px 40px 14px 45px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 13px; outline: none;"><button id="order-search-clear" onclick="clearOrderSearch()" style="display: none; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 5px;"><i class="fas fa-times-circle"></i></button></div>
-            <div class="ofilter" id="date-filter" style="margin-bottom: 10px; display:flex; gap:8px; flex-wrap:wrap;"><button class="active" data-date="all" onclick="setDateFilter('all')">📆 All Time</button><button data-date="today" onclick="setDateFilter('today')">☀️ Today</button><button data-date="week" onclick="setDateFilter('week')">📅 Last 7 Days</button><button data-date="month" onclick="setDateFilter('month')">🗓️ This Month</button><button data-date="custom" onclick="setDateFilter('custom')">🎯 Custom</button></div>
-            <div id="custom-date-range" style="display: none; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 15px; gap: 10px; flex-wrap: wrap; align-items: center;"><label style="font-size: 11px; color: var(--muted); font-weight: 700; text-transform:uppercase;">From:</label><input type="date" id="date-from" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none;"><label style="font-size: 11px; color: var(--muted); font-weight: 700; text-transform:uppercase;">To:</label><input type="date" id="date-to" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none;"><button onclick="clearCustomDate()" class="btn-s" style="padding: 8px 14px; font-size: 11px;"><i class="fas fa-times"></i> Clear</button></div>
-            <div class="ofilter" id="order-filter" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:15px;"><button class="active" data-filter="all" onclick="filterOrders('all')">📦 All Status</button><button data-filter="pending" onclick="filterOrders('pending')">⏳ Pending</button><button data-filter="completed" onclick="filterOrders('completed')">✅ Completed</button></div>
-            <div id="order-result-count" style="font-size: 12px; color: var(--muted); margin-bottom: 15px; padding: 10px 15px; background: var(--card); border: 1px solid var(--border); border-radius: 10px;"><i class="fas fa-info-circle" style="color: var(--gold);"></i> <span id="order-count-text">Loading...</span></div>
-            <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
+            
+            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+                <div style="position: relative; flex:1; min-width:250px;">
+                    <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--muted);"></i>
+                    <input type="text" id="order-search" placeholder="Search by Phone, Order ID, Name..." oninput="applyOrderFilters()" style="width: 100%; padding: 14px 40px 14px 45px; background: #fff; border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; outline: none;">
+                </div>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;" id="date-filter">
+                <button class="btn-s active" data-date="all" onclick="setDateFilter('all')" style="padding:8px 16px; font-size:12px; border-radius:20px;">📆 All Time</button>
+                <button class="btn-s" data-date="today" onclick="setDateFilter('today')" style="padding:8px 16px; font-size:12px; border-radius:20px;">☀️ Today</button>
+                <button class="btn-s" data-date="week" onclick="setDateFilter('week')" style="padding:8px 16px; font-size:12px; border-radius:20px;">📅 Last 7 Days</button>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;" id="order-filter">
+                <button class="btn-s active" data-filter="all" onclick="filterOrders('all')" style="padding:8px 16px; font-size:12px; border-radius:20px;">📦 All Status</button>
+                <button class="btn-s" data-filter="pending" onclick="filterOrders('pending')" style="padding:8px 16px; font-size:12px; border-radius:20px;">⏳ Pending</button>
+                <button class="btn-s" data-filter="completed" onclick="filterOrders('completed')" style="padding:8px 16px; font-size:12px; border-radius:20px;">✅ Completed</button>
+            </div>
+
+            <div id="orders-container">
+                <div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Loading...</h3></div>
+            </div>
         </div>
 
-        <!-- FEEDBACK -->
+        <!-- FEEDBACK (REVIEWS) -->
         <div class="section" id="sec-reviews">
             <div class="shead"><h2><i class="fas fa-star"></i> Customer Feedback</h2><button class="btn-s" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
-            <div id="reviews-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
+            <div id="reviews-container">
+                <div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Loading...</h3></div>
+            </div>
         </div>
 
-        <!-- SUBSCRIBERS -->
+        <!-- SUBSCRIBERS (NEWSLETTER) -->
         <div class="section" id="sec-newsletter">
             <div class="shead"><h2><i class="fas fa-envelope"></i> Subscribers</h2><button class="btn-s" onclick="loadNewsletter()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
-            <div class="news-hero"><div class="news-hero-left"><div class="news-hero-icon"><i class="fas fa-users"></i></div><div class="news-hero-text"><h3>Total Subscribers</h3><p>Send new collections and offers to them</p></div></div><div class="news-count-big" id="news-total-count">0</div></div>
-            <div class="news-export-bar"><button class="news-export-btn" onclick="exportNewsletterCSV()"><i class="fas fa-file-csv"></i> Export CSV</button><button class="btn-s" onclick="copyAllEmails()" style="padding: 10px 18px;"><i class="fas fa-copy"></i> Copy All Emails</button></div>
-            <div class="search-news-box"><i class="fas fa-search"></i><input type="text" id="news-search" placeholder="Search email..." onkeyup="filterNewsletter()"></div>
-            <div id="newsletter-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
+            
+            <div style="background: linear-gradient(135deg, #10b981, #059669); border-radius: 16px; padding: 30px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; color: #fff; box-shadow: 0 10px 25px rgba(16,185,129,0.2);">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px;"><i class="fas fa-users"></i></div>
+                    <div>
+                        <h3 style="font-size: 20px; margin-bottom: 4px; color: #fff;">Total Subscribers</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.8);">Send new collections to them</p>
+                    </div>
+                </div>
+                <div style="font-family: var(--font-heading); font-size: 42px; font-weight: 700;" id="news-total-count">0</div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+                <button class="btn-p" onclick="exportNewsletterCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+                <button class="btn-s" onclick="copyAllEmails()"><i class="fas fa-copy"></i> Copy Emails</button>
+            </div>
+
+            <div style="position: relative; margin-bottom: 20px;">
+                <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--muted);"></i>
+                <input type="text" id="news-search" placeholder="Search email..." onkeyup="filterNewsletter()" style="width: 100%; padding: 14px 20px 14px 45px; background: #fff; border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; outline: none;">
+            </div>
+
+            <div id="newsletter-container">
+                <div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Loading...</h3></div>
+            </div>
         </div>
 
         <!-- PROMO CODES -->
         <div class="section" id="sec-coupons">
             <div class="shead"><h2><i class="fas fa-ticket-alt"></i> Promo Codes</h2><button class="btn-p" onclick="openCouponModal()"><i class="fas fa-plus"></i> Create Promo</button></div>
-            <div class="coupon-hero"><div class="coupon-hero-left"><div class="coupon-hero-icon"><i class="fas fa-tags"></i></div><div class="coupon-hero-text"><h3>Active Coupons</h3><p>Customers will get discounts using these codes</p></div></div><div class="coupon-count-big" id="coupon-total-count">0</div></div>
-            <div class="ofilter" id="coupon-filter" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:15px;"><button class="active" data-cfilter="all" onclick="filterCoupons('all')">📦 All</button><button data-cfilter="active" onclick="filterCoupons('active')">✅ Active</button><button data-cfilter="inactive" onclick="filterCoupons('inactive')">⏸️ Inactive</button><button data-cfilter="expired" onclick="filterCoupons('expired')">❌ Expired</button></div>
-            <div id="coupons-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
+            
+            <div style="background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: #ecfdf5; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="fas fa-tags"></i></div>
+                    <div>
+                        <h3 style="font-size: 18px; color: var(--text); margin-bottom: 4px;">Active Coupons</h3>
+                        <p style="font-size: 13px; color: var(--muted);">Customers will get discounts using these codes</p>
+                    </div>
+                </div>
+                <div style="font-family: var(--font-heading); font-size: 36px; font-weight: 700; color: var(--primary);" id="coupon-total-count">0</div>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;" id="coupon-filter">
+                <button class="btn-s active" data-cfilter="all" onclick="filterCoupons('all')" style="padding:8px 16px; font-size:12px; border-radius:20px;">📦 All</button>
+                <button class="btn-s" data-cfilter="active" onclick="filterCoupons('active')" style="padding:8px 16px; font-size:12px; border-radius:20px;">✅ Active</button>
+                <button class="btn-s" data-cfilter="inactive" onclick="filterCoupons('inactive')" style="padding:8px 16px; font-size:12px; border-radius:20px;">⏸️ Inactive</button>
+            </div>
+
+            <div id="coupons-container">
+                <div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Loading...</h3></div>
+            </div>
         </div>
 
         <!-- HERO BANNERS -->
         <div class="section" id="sec-banners">
             <div class="shead"><h2><i class="fas fa-images"></i> Hero Banners</h2><button class="btn-p" onclick="openBannerModal()"><i class="fas fa-plus"></i> Upload Banner</button></div>
-            <div class="coupon-hero" style="background: linear-gradient(135deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.02) 100%); border-color: rgba(255,255,255,.3);"><div class="coupon-hero-left"><div class="coupon-hero-icon" style="background: #ffffff; color: #050505; box-shadow: 0 0 20px rgba(255,255,255,.3);"><i class="fas fa-images"></i></div><div class="coupon-hero-text"><h3 style="color: #ffffff;">Active Banners</h3><p>These banners will slide on the home page</p></div></div><div class="coupon-count-big" id="banner-total-count" style="color: #ffffff;">0</div></div>
-            <div id="banners-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading Banners...</p></div></div>
+            <div id="banners-container">
+                <div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Loading...</h3></div>
+            </div>
         </div>
 
         <!-- CONTENT PAGES -->
         <div class="section" id="sec-pages">
-            <div class="shead"><h2><i class="fas fa-file-alt"></i> Content Pages Editor</h2><button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
-            <div class="ofilter" id="page-filter" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:15px;"><button class="active" data-page="about" onclick="switchPage('about')">🌸 About Us</button><button data-page="privacy" onclick="switchPage('privacy')">🔒 Privacy</button><button data-page="terms" onclick="switchPage('terms')">📜 Terms</button><button data-page="return-policy" onclick="switchPage('return-policy')">🔄 Return Policy</button><button data-page="contact" onclick="switchPage('contact')">📞 Contact</button><button data-page="track-order" onclick="switchPage('track-order')">📦 Track Order</button></div>
-            <div id="page-editor-wrapper" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
-                <div class="shead" style="margin-bottom: 12px;"><h2 id="page-editor-title" style="font-size: 18px;"><i class="fas fa-edit"></i> Editing: About Us</h2><span id="page-editor-status" style="font-size: 11px; color: var(--muted);"></span></div>
-                <div class="fgroup"><label>HTML Content</label><textarea id="page-html-editor" rows="15" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 400px;"></textarea></div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;"><button class="btn-p" id="page-save-btn" onclick="savePage()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Changes</button><button class="btn-s" onclick="resetPageToDefault()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button><button class="btn-s" onclick="previewPage()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-eye"></i> Preview</button></div>
-                <div id="page-form-msg" class="msg" style="margin-top: 12px;"></div>
-            </div>
-        </div>
-
-        <!-- CONTENT MANAGER -->
-        <div class="section" id="sec-content">
-            <div class="shead"><h2><i class="fas fa-edit"></i> Content Manager</h2><button class="btn-s" onclick="loadContentSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
-            <div id="content-msg" class="msg"></div>
+            <div class="shead"><h2><i class="fas fa-file-alt"></i> Content Pages</h2><button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
             
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-image"></i> Logo & Branding</h3>
-                <div class="fgroup"><label>Main Logo URL</label><input type="text" id="c-logo-url" placeholder="https://i.ibb.co/xxxxx/logo.png"><div class="img-upload-wrap"><input type="file" id="c-logo-file" accept="image/*" style="display:none" onchange="uploadLogoImage(event)"><button type="button" class="upload-btn" onclick="document.getElementById('c-logo-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Logo</button></div></div>
-                <div class="fgroup"><label>Footer Copyright Text</label><input type="text" id="c-copyright-text" placeholder="© 2026 Your Store. All rights reserved."></div>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-icons"></i> Contact Icons</h3>
-                <div id="contact-icons-container"></div>
-                <button type="button" class="btn-s" onclick="addContactIcon()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add New Contact Icon</button>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-credit-card"></i> Payment Methods</h3>
-                <div id="payment-methods-container"></div>
-                <button type="button" class="btn-s" onclick="addPaymentMethod()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Payment Method</button>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Track Order Couriers</h3>
-                <div id="couriers-container"></div>
-                <button type="button" class="btn-s" onclick="addCourier()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Courier</button>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-question-circle"></i> FAQ Manager</h3>
-                <div id="faq-container"></div>
-                <button type="button" class="btn-s" onclick="addFAQ()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add FAQ</button>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-ruler"></i> Size Chart Manager</h3>
-                <div class="fgroup"><label>Select Category</label><select id="size-chart-category" onchange="loadSizeChartForCategory()"><option value="default">Default / সাধারণ</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option><option value="Hijab Collection">Hijab Collection</option></select></div>
-                <div class="fgroup"><label>Chart Title</label><input type="text" id="size-chart-title-input" placeholder="বোরকা সাইজ চার্ট"></div>
-                <div class="fgroup"><label>Size Rows</label><div class="size-chart-header-row" style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto; gap:6px; margin-bottom:8px;"><span style="font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; text-align:center;">Size</span><span style="font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; text-align:center;">Chest</span><span style="font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; text-align:center;">Waist</span><span style="font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; text-align:center;">Length</span><span style="font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; text-align:center;">Shoulder</span><span style="font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; text-align:center;">Sleeve</span><span></span></div><div id="size-chart-rows-container"></div><button type="button" class="btn-s" onclick="addSizeChartRow()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Size Row</button></div>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-th-large"></i> Home Collections</h3>
-                <div id="home-collections-container"></div>
-                <button type="button" class="btn-s" onclick="addHomeCollection()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Collection Card</button>
+            <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;" id="page-filter">
+                <button class="btn-s active" data-page="about" onclick="switchPage('about')" style="padding:8px 16px; font-size:12px; border-radius:20px;">🌸 About Us</button>
+                <button class="btn-s" data-page="privacy" onclick="switchPage('privacy')" style="padding:8px 16px; font-size:12px; border-radius:20px;">🔒 Privacy</button>
+                <button class="btn-s" data-page="terms" onclick="switchPage('terms')" style="padding:8px 16px; font-size:12px; border-radius:20px;">📜 Terms</button>
+                <button class="btn-s" data-page="return-policy" onclick="switchPage('return-policy')" style="padding:8px 16px; font-size:12px; border-radius:20px;">🔄 Return Policy</button>
+                <button class="btn-s" data-page="contact" onclick="switchPage('contact')" style="padding:8px 16px; font-size:12px; border-radius:20px;">📞 Contact</button>
+                <button class="btn-s" data-page="track-order" onclick="switchPage('track-order')" style="padding:8px 16px; font-size:12px; border-radius:20px;">📦 Track Order</button>
             </div>
 
-            <div style="position: sticky; bottom: 20px; background: var(--bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="btn-p" id="content-save-btn" onclick="saveContentSettings()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Changes</button>
-                <button class="btn-s" onclick="resetContentToDefault()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset All</button>
-            </div>
-        </div>
-
-        <!-- STORE CONFIG -->
-        <div class="section" id="sec-settings">
-            <div class="shead"><h2><i class="fas fa-cog"></i> Store Config</h2><button class="btn-s" onclick="loadSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
-            <div id="settings-msg" class="msg"></div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-store"></i> Basic Information</h3>
-                <div class="fgroup"><label>Store Name *</label><input type="text" id="s-store-name" placeholder="Burqa Bazar and Boutiques"></div>
-                <div class="fgroup"><label>Welcome Text (Homepage)</label><input type="text" id="s-welcome-text" placeholder="WELCOME TO BURQA BAZAR AND BOUTIQUES ✨"></div>
-                <div class="fgroup"><label>Website Title (Browser Tab)</label><input type="text" id="s-page-title" placeholder="Burqa Bazar & Boutiques | Premium Collection"></div>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-phone"></i> Contact Details</h3>
-                <div class="fgroup"><label>Phone Number</label><input type="text" id="s-phone" placeholder="+880 1832-140613"></div>
-                <div class="fgroup"><label>WhatsApp Number (No Space/+/)</label><input type="text" id="s-whatsapp" placeholder="8801832140613"></div>
-                <div class="fgroup"><label>Email Address</label><input type="email" id="s-email" placeholder="burqabazaarandboutiques@gmail.com"></div>
-                <div class="fgroup"><label>Store Address</label><textarea id="s-address" rows="2" placeholder="ফেনী সওদাগর পট্টি..."></textarea></div>
-            </div>
-
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-money-bill-wave"></i> Payment Numbers</h3>
-                <div class="fgroup"><label>bKash Number</label><input type="text" id="s-bkash" placeholder="01832140613"></div>
-                <div class="fgroup"><label>Nagad Number</label><input type="text" id="s-nagad" placeholder="01832140613"></div>
-                <div class="fgroup"><label>Upay Number</label><input type="text" id="s-upay" placeholder="01832140613"></div>
-                <div class="fgroup"><label>Rocket Number</label><input type="text" id="s-rocket" placeholder="01832140613"></div>
-                <div class="fgroup"><label>SureCash Number</label><input type="text" id="s-surecash" placeholder="01832140613"></div>
-            </div>
-            
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Delivery Charges</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="fgroup"><label>Inside Feni (৳) *</label><input type="number" id="s-delivery-inside" placeholder="60" min="0"></div>
-                    <div class="fgroup"><label>Outside Feni (৳) *</label><input type="number" id="s-delivery-outside" placeholder="130" min="0"></div>
+            <div style="background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <div class="shead" style="margin-bottom: 15px;">
+                    <h2 id="page-editor-title" style="font-size: 20px;"><i class="fas fa-edit"></i> Editing: About Us</h2>
+                </div>
+                <div class="fgroup">
+                    <label>HTML Content</label>
+                    <textarea id="page-html-editor" rows="15" style="font-family: monospace; font-size: 14px; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1.5px solid var(--border);"></textarea>
+                </div>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                    <button class="btn-p" id="page-save-btn" onclick="savePage()" style="flex: 1; justify-content: center;"><i class="fas fa-save"></i> Save Changes</button>
+                    <button class="btn-s" onclick="resetPageToDefault()" style="flex: 1; justify-content: center;"><i class="fas fa-undo"></i> Reset</button>
+                    <button class="btn-s" onclick="previewPage()" style="flex: 1; justify-content: center;"><i class="fas fa-eye"></i> Preview</button>
                 </div>
             </div>
+        </div>
+
+        <!-- STORE CONFIG (SETTINGS) -->
+        <div class="section" id="sec-settings">
+            <div class="shead"><h2><i class="fas fa-cog"></i> Store Config</h2><button class="btn-s" onclick="loadSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
             
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 16px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-share-alt"></i> Social Media Links</h3>
-                <div class="fgroup"><label>Facebook Page URL</label><input type="text" id="s-facebook" placeholder="https://facebook.com/yourpage"></div>
-                <div class="fgroup"><label>Instagram URL</label><input type="text" id="s-instagram" placeholder="https://instagram.com/yourprofile"></div>
-                <div class="fgroup"><label>YouTube URL</label><input type="text" id="s-youtube" placeholder="https://youtube.com/@yourchannel"></div>
-                <div class="fgroup"><label>TikTok URL</label><input type="text" id="s-tiktok" placeholder="https://tiktok.com/@yourprofile"></div>
+            <div style="background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--text); font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;"><i class="fas fa-store" style="color:var(--primary);"></i> Basic Information</h3>
+                <div class="fgroup"><label>Store Name *</label><input type="text" id="s-store-name" placeholder="Burqa Bazar and Boutiques"></div>
+                <div class="fgroup"><label>Welcome Text (Homepage)</label><input type="text" id="s-welcome-text" placeholder="WELCOME TO BURQA BAZAR"></div>
+            </div>
+            
+            <div style="background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--text); font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;"><i class="fas fa-phone" style="color:var(--primary);"></i> Contact Details</h3>
+                <div class="fgroup"><label>Phone Number</label><input type="text" id="s-phone" placeholder="+880 1832-140613"></div>
+                <div class="fgroup"><label>WhatsApp Number (No Space/+/)</label><input type="text" id="s-whatsapp" placeholder="8801832140613"></div>
+                <div class="fgroup"><label>Store Address</label><textarea id="s-address" rows="2"></textarea></div>
             </div>
 
-            <div style="position: sticky; bottom: 20px; background: var(--bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="btn-p" id="settings-save-btn" onclick="saveSettings()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Changes</button>
-                <button class="btn-s" onclick="resetSettingsToDefault()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset</button>
+            <div style="background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--text); font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;"><i class="fas fa-money-bill-wave" style="color:var(--primary);"></i> Delivery & Payments</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="fgroup"><label>Inside Feni (৳)</label><input type="number" id="s-delivery-inside" placeholder="60"></div>
+                    <div class="fgroup"><label>Outside Feni (৳)</label><input type="number" id="s-delivery-outside" placeholder="130"></div>
+                </div>
+                <div class="fgroup"><label>bKash Number</label><input type="text" id="s-bkash" placeholder="01832140613"></div>
+                <div class="fgroup"><label>Nagad Number</label><input type="text" id="s-nagad" placeholder="01832140613"></div>
+            </div>
+
+            <div style="position: sticky; bottom: 20px; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap; box-shadow: 0 -4px 15px rgba(0,0,0,0.05);">
+                <button class="btn-p" id="settings-save-btn" onclick="saveSettings()" style="flex: 1; justify-content: center;"><i class="fas fa-save"></i> Save Changes</button>
             </div>
         </div>
+
     </div>
 </div>
 
 <!-- PROMO CODE MODAL -->
-<div class="coupon-form-modal" id="coupon-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99998; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-    <div class="coupon-form-box" style="background: var(--card); border: 1px solid var(--gold); border-radius: 16px; padding: 25px; max-width: 520px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.8);">
-        <h3 id="coupon-modal-title" style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;"><i class="fas fa-ticket-alt"></i> Create Promo Code</h3>
-        <div id="coupon-form-msg" class="msg"></div>
+<div id="coupon-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #fff; border-radius: 20px; padding: 30px; max-width: 500px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+        <h3 id="coupon-modal-title" style="font-family: var(--font-heading); color: var(--text); font-size: 22px; margin-bottom: 20px;"><i class="fas fa-ticket-alt"></i> Create Promo Code</h3>
         <input type="hidden" id="c-edit-id">
-        <div class="fgroup"><label>Coupon Code *</label><input type="text" id="c-code" placeholder="e.g. EID20" required style="text-transform: uppercase;"></div>
-        <div class="fgroup"><label>Discount Type *</label><select id="c-type" required onchange="onCouponTypeChange()"><option value="percentage">Percentage (%)</option><option value="flat">Flat (৳)</option></select></div>
-        <div class="fgroup"><label id="c-value-label">Discount Value *</label><input type="number" id="c-value" placeholder="20" required min="1"></div>
-        <div class="fgroup"><label>Minimum Order (৳) *</label><input type="number" id="c-minorder" placeholder="500" required min="0" value="0"></div>
-        <div class="fgroup"><label>Expiry Date *</label><input type="date" id="c-expiry" required></div>
-        <div class="fgroup"><label>Description (Optional)</label><input type="text" id="c-desc" placeholder="e.g. Eid Special Discount"></div>
-        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
-            <div><div style="font-size: 12px; font-weight: 700; color: var(--gold); text-transform:uppercase;">Active Status</div></div>
-            <label class="toggle-switch" style="position:relative; display:inline-block; width:46px; height:24px;"><input type="checkbox" id="c-active" checked style="opacity:0; width:0; height:0;"><span class="toggle-slider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#555; transition:.3s; border-radius:24px;"><span style="position:absolute; content:''; height:18px; width:18px; left:3px; bottom:3px; background-color:white; transition:.3s; border-radius:50%; transform: translateX(0);"></span></span></label>
+        <div class="fgroup"><label>Coupon Code *</label><input type="text" id="c-code" placeholder="e.g. EID20" style="text-transform: uppercase;"></div>
+        <div class="fgroup"><label>Discount Type *</label><select id="c-type"><option value="percentage">Percentage (%)</option><option value="flat">Flat (৳)</option></select></div>
+        <div class="fgroup"><label>Discount Value *</label><input type="number" id="c-value" placeholder="20"></div>
+        <div class="fgroup"><label>Minimum Order (৳) *</label><input type="number" id="c-minorder" placeholder="500" value="0"></div>
+        <div class="fgroup"><label>Expiry Date *</label><input type="date" id="c-expiry"></div>
+        <div style="display: flex; gap: 15px; margin-top: 25px;">
+            <button class="btn-p" onclick="submitCoupon()" style="flex: 1; justify-content: center;"><i class="fas fa-save"></i> Save</button>
+            <button class="btn-s" onclick="closeCouponModal()" style="flex: 1; justify-content: center;"><i class="fas fa-times"></i> Discard</button>
         </div>
-        <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;"><button type="button" class="btn-p" id="c-submit-btn" onclick="submitCoupon()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Changes</button><button type="button" class="btn-s" onclick="closeCouponModal()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Discard</button></div>
     </div>
 </div>
 
 <!-- BANNER MODAL -->
-<div class="coupon-form-modal" id="banner-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99998; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-    <div class="coupon-form-box" style="background: var(--card); border: 1px solid var(--gold); border-radius: 16px; padding: 25px; max-width: 520px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.8);">
-        <h3 id="banner-modal-title" style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;"><i class="fas fa-image"></i> Upload Banner</h3>
-        <div id="banner-form-msg" class="msg"></div>
+<div id="banner-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 99998; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #fff; border-radius: 20px; padding: 30px; max-width: 500px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+        <h3 id="banner-modal-title" style="font-family: var(--font-heading); color: var(--text); font-size: 22px; margin-bottom: 20px;"><i class="fas fa-image"></i> Upload Banner</h3>
         <input type="hidden" id="b-edit-id">
-        <div class="fgroup"><label>Banner Image URL *</label><input type="text" id="b-image" placeholder="https://i.ibb.co/xxxxx/banner.png" required><div class="img-upload-wrap"><input type="file" id="b-image-file" accept="image/*" style="display:none" onchange="uploadBannerImage(event)"><button type="button" class="upload-btn" onclick="document.getElementById('b-image-file').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Image</button></div><small style="color: var(--muted); font-size: 10px; display: block; margin-top: 5px;">Recommended: 1600×900 px</small></div>
+        <div class="fgroup"><label>Banner Image URL *</label><input type="text" id="b-image" placeholder="https://i.ibb.co/xxxxx/banner.png"></div>
         <div class="fgroup"><label>Banner Title (Optional)</label><input type="text" id="b-title" placeholder="e.g. Eid Special Collection"></div>
-        <div class="fgroup"><label>On Click Action</label><select id="b-link-type" onchange="onBannerLinkTypeChange()"><option value="none">Do Nothing</option><option value="category">Go to Category</option><option value="tab">Go to Section</option><option value="external">External Link</option></select></div>
-        <div class="fgroup" id="b-category-group" style="display: none;"><label>Select Category</label><select id="b-category-value"><option value="Hijab Collection">Hijab Collection</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option></select></div>
-        <div class="fgroup" id="b-tab-group" style="display: none;"><label>Select Section</label><select id="b-tab-value"><option value="shop">Shop</option><option value="faq">FAQ</option><option value="about">About Us</option><option value="contact">Contact Us</option></select></div>
-        <div class="fgroup" id="b-external-group" style="display: none;"><label>External URL</label><input type="text" id="b-external-value" placeholder="https://facebook.com/yourpage"></div>
-        <div class="fgroup"><label>Order *</label><input type="number" id="b-order" placeholder="1" min="1" value="1" required></div>
-        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
-            <div><div style="font-size: 12px; font-weight: 700; color: var(--gold); text-transform:uppercase;">Active Status</div></div>
-            <label class="toggle-switch" style="position:relative; display:inline-block; width:46px; height:24px;"><input type="checkbox" id="b-active" checked style="opacity:0; width:0; height:0;"><span class="toggle-slider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#555; transition:.3s; border-radius:24px;"><span style="position:absolute; content:''; height:18px; width:18px; left:3px; bottom:3px; background-color:white; transition:.3s; border-radius:50%; transform: translateX(0);"></span></span></label>
+        <div class="fgroup"><label>Order *</label><input type="number" id="b-order" placeholder="1" value="1"></div>
+        <div style="display: flex; gap: 15px; margin-top: 25px;">
+            <button class="btn-p" onclick="submitBanner()" style="flex: 1; justify-content: center;"><i class="fas fa-save"></i> Save</button>
+            <button class="btn-s" onclick="closeBannerModal()" style="flex: 1; justify-content: center;"><i class="fas fa-times"></i> Discard</button>
         </div>
-        <div style="margin-top: 15px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;"><div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">Preview:</div><div id="b-preview" style="width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;"><span style="color: var(--muted); font-size: 12px;">No image</span></div></div>
-        <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;"><button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Changes</button><button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Discard</button></div>
     </div>
 </div>
 <script type="module">
@@ -523,14 +450,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// Global variables
+// ==========================================
+// 🌍 GLOBAL VARIABLES
+// ==========================================
 let products = [], orders = [], reviews = [], newsletterList = [], coupons = [], banners = [];
-let editingId = null, editingCouponId = null, editingBannerId = null;
-let selectedSizes = [];
-let orderFilter = 'all', orderSearchQuery = '', orderDateFilter = 'all', orderDateFrom = '', orderDateTo = '';
+let editingId = null;
+let orderFilter = 'all', orderSearchQuery = '', orderDateFilter = 'all';
 let newsSearchQuery = '', couponFilter = 'all';
-let currentSizeChartCategory = 'default';
-let allSizeCharts = {};
 let settingsCache = {};
 let pagesCache = {};
 let currentEditingPage = 'about';
@@ -542,7 +468,6 @@ const _firstLoad = { newsletter: true, reviews: true, orders: true };
 const DEFAULT_SETTINGS = { storeName: 'Burqa Bazar', welcomeText: 'Welcome', pageTitle: 'Admin', phone: '', whatsapp: '', email: '', address: '', bkash: '', nagad: '', upay: '', rocket: '', surecash: '', bankName: '', bankAccountName: '', bankAccountNumber: '', bankBranch: '', deliveryInside: 60, deliveryOutside: 130, facebook: '', instagram: '', youtube: '', tiktok: '' };
 const DEFAULT_PAGES = { 'about': '<h2>About Us</h2>', 'privacy': '<h2>Privacy</h2>', 'terms': '<h2>Terms</h2>', 'return-policy': '<h2>Return</h2>', 'contact': '<h2>Contact</h2>', 'track-order': '<h2>Track Order</h2>' };
 const PAGE_NAMES = { 'about': 'About Us', 'privacy': 'Privacy Policy', 'terms': 'Terms & Conditions', 'return-policy': 'Return Policy', 'contact': 'Contact Us', 'track-order': 'Track Order' };
-const DEFAULT_CONTENT = { logoUrl: 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png', copyrightText: '© 2026 All rights reserved.' };
 
 // ==========================================
 // ⚡ HELPER FUNCTIONS
@@ -553,14 +478,6 @@ window.extractUrl = function(str) {
     if (m && m[1]) return m[1];
     if (str.startsWith('http')) return str.split(/[\s<"']/)[0];
     return '';
-};
-
-window.showMsg = function(id, text, type) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = text;
-    el.className = 'msg show ' + (type || 'ok');
-    if (type === 'ok') setTimeout(() => el.classList.remove('show'), 4000);
 };
 
 window.broadcastToWebsite = function(type, payload) {
@@ -582,19 +499,11 @@ window.doLogin = async (e) => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const btn = document.getElementById('login-btn');
-    const errBox = document.getElementById('err');
-    errBox.classList.remove('show');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entering...';
     try { await signInWithEmailAndPassword(auth, email, password); }
     catch (err) {
-        let msg = 'Login failed.';
-        if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = '❌ Incorrect password.';
-        else if (err.code === 'auth/user-not-found') msg = '❌ Account not found.';
-        else if (err.code === 'auth/invalid-email') msg = '❌ Invalid email.';
-        else if (err.code === 'auth/too-many-requests') msg = '⏳ Too many attempts. Try later.';
-        errBox.textContent = msg;
-        errBox.classList.add('show');
+        bqAlert("Invalid email or password.", "Login Failed");
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Enter Dashboard';
     }
@@ -638,7 +547,6 @@ function instantLoadFromCache() {
     banners = aCacheGet(ADMIN_CACHE.banners) || [];
     
     updateTabBadges();
-    
     const cachedStats = aCacheGet(ADMIN_CACHE.stats);
     if (cachedStats) applyStatsToUI(cachedStats, products, orders);
     
@@ -655,7 +563,7 @@ function updateTabBadges() {
         if (bData[tName] > 0) {
             const badge = document.createElement('span');
             badge.className = 'tab-count-badge';
-            badge.style.cssText = 'background: rgba(255,255,255,0.2); color: #fff; padding: 1px 6px; border-radius: 10px; font-size: 10px; font-weight: 800; margin-left: 6px;';
+            badge.style.cssText = 'background: #e2e8f0; color: #0f172a; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 800; margin-left: 6px;';
             badge.textContent = bData[tName] > 99 ? '99+' : bData[tName];
             tab.appendChild(badge);
         }
@@ -668,7 +576,7 @@ function updateTabBadges() {
 async function preloadEverything() {
     const t0 = performance.now();
     try {
-        const [pS, oS, rS, nS, cS, bS, pgS, fS, szS, hcS, setS] = await Promise.all([
+        const [pS, oS, rS, nS, cS, bS, pgS, setS] = await Promise.all([
             getDocs(collection(db, 'products')).catch(() => null),
             getDocs(collection(db, 'orders')).catch(() => null),
             getDocs(collection(db, 'reviews')).catch(() => null),
@@ -676,9 +584,6 @@ async function preloadEverything() {
             getDocs(collection(db, 'coupons')).catch(() => null),
             getDocs(collection(db, 'banners')).catch(() => null),
             getDocs(collection(db, 'pages')).catch(() => null),
-            getDocs(collection(db, 'faq')).catch(() => null),
-            getDocs(collection(db, 'sizeCharts')).catch(() => null),
-            getDocs(collection(db, 'homeCollections')).catch(() => null),
             getDoc(doc(db, 'settings', 'store')).catch(() => null)
         ]);
         
@@ -689,9 +594,6 @@ async function preloadEverything() {
         if (cS) { coupons = []; cS.forEach(d => coupons.push({ docId: d.id, ...d.data() })); aCacheSet(ADMIN_CACHE.coupons, coupons); }
         if (bS) { banners = []; bS.forEach(d => banners.push({ docId: d.id, ...d.data() })); aCacheSet(ADMIN_CACHE.banners, banners); }
         if (pgS) { pagesCache = {}; pgS.forEach(d => pagesCache[d.id] = d.data().html || ''); aCacheSet(ADMIN_CACHE.pages, pagesCache); }
-        if (fS) { const arr = []; fS.forEach(d => arr.push({ docId: d.id, ...d.data() })); aCacheSet(ADMIN_CACHE.faq, arr); }
-        if (szS) { allSizeCharts = {}; szS.forEach(d => allSizeCharts[d.id] = d.data()); aCacheSet(ADMIN_CACHE.sizeCharts, allSizeCharts); }
-        if (hcS) { const arr = []; hcS.forEach(d => arr.push({ docId: d.id, ...d.data() })); aCacheSet(ADMIN_CACHE.homeCollections, arr); }
         if (setS && setS.exists()) { settingsCache = { ...DEFAULT_SETTINGS, ...setS.data() }; aCacheSet(ADMIN_CACHE.settings, settingsCache); }
         
         recalcStatsFromCache();
@@ -731,28 +633,7 @@ function attachRealtimeListeners() {
             } else { arr.forEach(item => _seenIds.orders.add(item.docId)); _firstLoad.orders = false; }
             recalcStatsFromCache();
             updateTabBadges();
-            const activeTab = document.querySelector('.tab.active');
-            if (activeTab && activeTab.getAttribute('data-tab') === 'orders') renderOrders();
-        });
-    } catch(e) {}
-
-    try {
-        onSnapshot(collection(db, 'newsletter'), (snap) => {
-            const arr = [];
-            snap.forEach(d => arr.push({ docId: d.id, ...d.data() }));
-            newsletterList = arr;
-            if (!_firstLoad.newsletter) {
-                arr.forEach(item => {
-                    if (!_seenIds.newsletter.has(item.docId)) {
-                        _seenIds.newsletter.add(item.docId);
-                        bqAlert(`New subscriber: ${item.email}`, 'Subscriber Alert');
-                    }
-                });
-            } else { arr.forEach(item => _seenIds.newsletter.add(item.docId)); _firstLoad.newsletter = false; }
-            document.getElementById('news-total-count').textContent = arr.length;
-            updateTabBadges();
-            const activeTab = document.querySelector('.tab.active');
-            if (activeTab && activeTab.getAttribute('data-tab') === 'newsletter') renderNewsletter();
+            if (document.querySelector('.tab.active')?.getAttribute('data-tab') === 'orders') renderOrders();
         });
     } catch(e) {}
 }
@@ -778,7 +659,6 @@ window.switchTab = function(name) {
         case 'coupons': renderCoupons(); break;
         case 'banners': renderBanners(); break;
         case 'pages': switchPage(currentEditingPage); break;
-        case 'content': loadContentSettings(); break;
         case 'settings': fillSettingsForm(); break;
         case 'add': if (!editingId) resetForm(); break;
     }
@@ -792,8 +672,6 @@ function recalcStatsFromCache() {
     const todayStr = new Date().toDateString();
     const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0, 0, 0, 0);
     const productSales = {};
-    const weeklyData = {};
-    for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0); weeklyData[d.toDateString()] = { revenue: 0, orders: 0, date: d }; }
     
     orders.forEach(o => {
         const amount = parseInt(o.totalAmount) || 0;
@@ -802,21 +680,18 @@ function recalcStatsFromCache() {
         totalRevenue += amount;
         if (orderDate.toDateString() === todayStr) { todayRevenue += amount; todayOrders++; }
         if (orderDate >= thisMonth) monthRevenue += amount;
-        if (weeklyData[orderDate.toDateString()]) { weeklyData[orderDate.toDateString()].revenue += amount; weeklyData[orderDate.toDateString()].orders++; }
         if (Array.isArray(o.products)) o.products.forEach(p => { if (!productSales[p.id]) productSales[p.id] = { id: p.id, name: p.name || 'Unknown', qty: 0, revenue: 0 }; const qty = parseInt(p.quantity) || 1; productSales[p.id].qty += qty; if (typeof p.price === 'number') productSales[p.id].revenue += p.price * qty; });
     });
     
-    const stats = { pending, completed, todayRevenue, monthRevenue, totalRevenue, todayOrders, topProducts: Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5), weeklyData: Object.values(weeklyData) };
+    const stats = { pending, completed, todayRevenue, monthRevenue, totalRevenue, todayOrders, topProducts: Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5) };
     aCacheSet(ADMIN_CACHE.stats, stats);
     applyStatsToUI(stats, products, orders);
 }
 
 function applyStatsToUI(stats, pList, oList) {
     const safe = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    safe('st-products', pList.length);
-    safe('st-orders', oList.length);
-    safe('st-pending', stats.pending);
-    safe('st-completed', stats.completed);
+    safe('st-products', pList.length); safe('st-orders', oList.length);
+    safe('st-pending', stats.pending); safe('st-completed', stats.completed);
     safe('st-today-revenue', '৳' + (stats.todayRevenue || 0).toLocaleString());
     safe('st-month-revenue', '৳' + (stats.monthRevenue || 0).toLocaleString());
     safe('st-total-revenue', '৳' + (stats.totalRevenue || 0).toLocaleString());
@@ -824,12 +699,17 @@ function applyStatsToUI(stats, pList, oList) {
     
     const topC = document.getElementById('top-products-container');
     if (topC && stats.topProducts) {
-        if (stats.topProducts.length === 0) topC.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--muted);">No sales yet.</div>';
+        if (stats.topProducts.length === 0) topC.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><h3>No sales yet</h3></div>';
         else {
             let h = '';
             stats.topProducts.forEach((p, i) => {
                 const img = extractUrl((pList.find(x => parseInt(x.id) === parseInt(p.id)) || {}).image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
-                h += `<div style="display:flex; align-items:center; gap:12px; padding:12px 8px; border-bottom:1px solid var(--border);"><div style="width:30px;height:30px;border-radius:50%;background:var(--gold);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;">${i+1}</div><img src="${img}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;"><div style="flex:1;"><div style="font-weight:700;font-size:13px;">${p.name}</div><div style="font-size:11px;color:var(--muted);">Revenue: <strong>৳${p.revenue.toLocaleString()}</strong></div></div><div style="text-align:right;"><div style="font-weight:900;color:var(--gold);font-size:16px;">${p.qty}</div><div style="font-size:10px;color:var(--muted);">sold</div></div></div>`;
+                h += `<div style="display:flex; align-items:center; gap:15px; padding:15px; border-bottom:1px solid var(--border);">
+                    <div style="width:32px;height:32px;border-radius:8px;background:#f1f5f9;color:var(--text);display:flex;align-items:center;justify-content:center;font-weight:800;">${i+1}</div>
+                    <img src="${img}" style="width:50px;height:50px;border-radius:10px;object-fit:cover;border:1px solid var(--border);">
+                    <div style="flex:1;"><div style="font-weight:700;font-size:14px;">${p.name}</div><div style="font-size:12px;color:var(--muted);">Revenue: <strong>৳${p.revenue.toLocaleString()}</strong></div></div>
+                    <div style="text-align:right;"><div style="font-weight:800;color:var(--primary);font-size:16px;">${p.qty}</div><div style="font-size:10px;color:var(--muted);">sold</div></div>
+                </div>`;
             });
             topC.innerHTML = h;
         }
@@ -846,7 +726,18 @@ window.renderProducts = () => {
     products.forEach(p => {
         const price = (typeof p.price === 'number') ? '৳ ' + p.price : (p.price || 'Coming Soon');
         const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
-        html += `<div class="pcard"><img src="${img}" class="pimg"><div class="pinfo"><div class="pname">${p.name || 'Unnamed'}</div><div class="pmeta">${p.category || ''} • Stock: ${p.stock || 0}</div><div class="pprice">${price}</div><div class="pacts"><button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Modify</button><button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Remove</button></div></div></div>`;
+        html += `<div class="pcard">
+            <img src="${img}" class="pimg">
+            <div class="pinfo">
+                <div class="pname">${p.name || 'Unnamed'}</div>
+                <div class="pmeta">${p.category || ''} • Stock: ${p.stock || 0}</div>
+                <div class="pprice">${price}</div>
+                <div class="pacts">
+                    <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Modify</button>
+                    <button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Remove</button>
+                </div>
+            </div>
+        </div>`;
     });
     c.innerHTML = html;
 };
@@ -864,12 +755,28 @@ window.deleteProduct = async (docId, name) => {
     } catch (err) { bqError('Error', err.message); }
 };
 
+window.editProduct = (docId) => {
+    const p = products.find(x => x.docId === docId);
+    if (!p) return;
+    editingId = docId;
+    document.getElementById('edit-id').value = docId;
+    document.getElementById('p-name').value = p.name || '';
+    document.getElementById('p-cat').value = p.category || '';
+    document.getElementById('p-price').value = p.price || '';
+    document.getElementById('p-stock').value = p.stock || 1;
+    document.getElementById('p-image').value = p.image || '';
+    document.getElementById('p-desc').value = p.fullDescription || '';
+    document.getElementById('form-title').innerHTML = 'Modify Item';
+    document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Changes';
+    switchTab('add');
+};
+
 window.resetForm = () => {
-    editingId = null; selectedSizes = [];
-    document.getElementById('p-form').reset(); document.getElementById('edit-id').value = '';
-    document.getElementById('colors').innerHTML = ''; document.getElementById('additional-images').innerHTML = '';
-    document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Create New Item';
-    addColor(); addAdditionalImage();
+    editingId = null;
+    document.getElementById('p-form').reset(); 
+    document.getElementById('edit-id').value = '';
+    document.getElementById('form-title').innerHTML = 'Create New Item';
+    document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Changes';
 };
 
 window.submitProduct = async (e) => {
@@ -887,10 +794,7 @@ window.submitProduct = async (e) => {
         const desc = document.getElementById('p-desc').value.trim();
         let price = priceRaw.toLowerCase().includes('coming') ? 'Coming Soon' : (parseInt(priceRaw.replace(/[^0-9]/g, '')) || 0);
         
-        const colors = [];
-        document.querySelectorAll('#colors .crow').forEach(row => { const n = row.querySelector('.cname').value.trim(); const i = row.querySelector('.cimg').value.trim(); if (n && i) colors.push({ name: n, image: extractUrl(i) || i }); });
-        
-        const data = { name, category, price, stock, image, sizes: selectedSizes, colors, fullDescription: desc, updatedAt: new Date().toISOString() };
+        const data = { name, category, price, stock, image, fullDescription: desc, updatedAt: new Date().toISOString() };
         
         if (editId) {
             await updateDoc(doc(db, 'products', editId), data);
@@ -909,7 +813,8 @@ window.submitProduct = async (e) => {
             await bqSuccess('Created!', 'New product created.');
         }
         resetForm(); switchTab('products'); renderProducts(); updateTabBadges();
-    } catch (err) { bqError('Save Failed', err.message); btn.disabled = false; btn.innerHTML = orig; }
+    } catch (err) { bqError('Save Failed', err.message); }
+    btn.disabled = false; btn.innerHTML = orig;
 };
 
 // ==========================================
@@ -930,13 +835,29 @@ window.renderOrders = () => {
         let ph = '';
         if (Array.isArray(o.products)) o.products.forEach(p => { ph += `<li>${p.name} — ${p.quantity} pcs</li>`; });
         
-        html += `<div class="ocard" style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:12px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><div style="font-family:'Playfair Display'; color:var(--gold); font-weight:700;">📦 ${o.orderId}</div><div style="font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px; background:${st==='completed'?'rgba(34,197,94,.15)':'rgba(245,158,11,.15)'}; color:${st==='completed'?'#22c55e':'#f59e0b'};">${stTxt}</div></div>
-            <div style="font-size:13px; line-height:1.8; color:var(--muted);"><div><strong style="color:var(--text);">Name:</strong> ${o.name}</div><div><strong style="color:var(--text);">Phone:</strong> ${o.phone}</div><div><strong style="color:var(--text);">Address:</strong> ${o.address}</div><ul style="padding-left:15px; margin:8px 0;">${ph}</ul><div><strong style="color:var(--text);">Total:</strong> ৳${o.totalAmount}</div></div>
-            <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;"><button class="abtn edit" onclick="updateOrderStatus('${o.docId}', '${st==='completed'?'pending':'completed'}')"><i class="fas fa-check"></i> Mark as ${st==='completed'?'Pending':'Completed'}</button><button class="abtn del" onclick="deleteOrder('${o.docId}')"><i class="fas fa-trash"></i> Remove</button></div>
+        html += `<div class="ocard" style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:15px; box-shadow:0 2px 10px rgba(0,0,0,0.02);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><div style="font-family:var(--font-heading); color:var(--text); font-size:18px; font-weight:700;">📦 ${o.orderId}</div><div style="font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; background:${st==='completed'?'#ecfdf5':'#fffbeb'}; color:${st==='completed'?'#10b981':'#f59e0b'};">${stTxt}</div></div>
+            <div style="font-size:14px; line-height:1.8; color:var(--muted);"><div><strong style="color:var(--text);">Name:</strong> ${o.name}</div><div><strong style="color:var(--text);">Phone:</strong> ${o.phone}</div><div><strong style="color:var(--text);">Address:</strong> ${o.address}</div><ul style="padding-left:20px; margin:10px 0; color:var(--text);">${ph}</ul><div><strong style="color:var(--text);">Total:</strong> ৳${o.totalAmount}</div></div>
+            <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;"><button class="abtn edit" onclick="updateOrderStatus('${o.docId}', '${st==='completed'?'pending':'completed'}')"><i class="fas fa-check"></i> Mark as ${st==='completed'?'Pending':'Completed'}</button><button class="abtn del" onclick="deleteOrder('${o.docId}')"><i class="fas fa-trash"></i> Remove</button></div>
         </div>`;
     });
     c.innerHTML = html;
+};
+
+window.filterOrders = (filter) => { 
+    orderFilter = filter; 
+    document.querySelectorAll('#order-filter button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+        b.style.background = b.classList.contains('active') ? 'var(--primary)' : '#fff';
+        b.style.color = b.classList.contains('active') ? '#fff' : 'var(--text)';
+        b.style.borderColor = b.classList.contains('active') ? 'var(--primary)' : 'var(--border)';
+    });
+    renderOrders(); 
+};
+
+window.applyOrderFilters = () => {
+    orderSearchQuery = document.getElementById('order-search').value.trim();
+    renderOrders();
 };
 
 window.updateOrderStatus = async (docId, newStatus) => {
@@ -952,28 +873,108 @@ window.deleteOrder = async (docId) => {
 };
 
 // ==========================================
-// 🎟️ COUPONS (PROMO CODES)
+// ⭐ REVIEWS
+// ==========================================
+window.renderReviews = () => {
+    const c = document.getElementById('reviews-container');
+    if (reviews.length === 0) { c.innerHTML = '<div class="empty"><i class="fas fa-star"></i><h3>No feedback yet</h3></div>'; return; }
+    let html = '';
+    reviews.forEach(r => {
+        const prod = products.find(x => parseInt(x.id) === parseInt(r.productId));
+        const prodName = prod ? prod.name : 'Unknown Product';
+        html += `<div class="ocard" style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <div style="color:var(--primary); font-weight:700;">🛍️ ${prodName}</div>
+                <div style="color:#f59e0b;">${'⭐'.repeat(parseInt(r.rating) || 0)}</div>
+            </div>
+            <div style="font-weight:700; font-size:15px; margin-bottom:5px; color:var(--text);">${r.name || 'Anonymous'}</div>
+            <div style="font-size:14px; color:var(--muted); margin-bottom:15px; line-height:1.6;">"${r.text || ''}"</div>
+            <button class="abtn del" onclick="deleteReview('${r.docId}')"><i class="fas fa-trash"></i> Remove</button>
+        </div>`;
+    });
+    c.innerHTML = html;
+};
+
+window.deleteReview = async (docId) => {
+    const ok = await bqDelete('Review', '');
+    if (!ok) return;
+    try { await deleteDoc(doc(db, 'reviews', docId)); reviews = reviews.filter(r => r.docId !== docId); aCacheSet(ADMIN_CACHE.reviews, reviews); renderReviews(); updateTabBadges(); bqSuccess('Removed', 'Review deleted.'); } catch (err) { bqError('Error', err.message); }
+};
+
+// ==========================================
+// 📧 NEWSLETTER
+// ==========================================
+window.renderNewsletter = () => {
+    const c = document.getElementById('newsletter-container');
+    if (newsletterList.length === 0) { c.innerHTML = '<div class="empty"><i class="fas fa-envelope"></i><h3>No subscribers yet</h3></div>'; return; }
+    let html = '';
+    newsletterList.forEach(n => {
+        html += `<div class="ocard" style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <div style="font-weight:600; color:var(--text); margin-bottom:3px;">${n.email}</div>
+                <div style="font-size:12px; color:var(--muted);">${new Date(n.date || 0).toLocaleString()}</div>
+            </div>
+            <button class="abtn del" onclick="deleteSubscriber('${n.docId}')"><i class="fas fa-trash"></i></button>
+        </div>`;
+    });
+    c.innerHTML = html;
+};
+
+window.deleteSubscriber = async (docId) => {
+    const ok = await bqDelete('Subscriber', '');
+    if (!ok) return;
+    try { await deleteDoc(doc(db, 'newsletter', docId)); newsletterList = newsletterList.filter(n => n.docId !== docId); aCacheSet(ADMIN_CACHE.newsletter, newsletterList); renderNewsletter(); updateTabBadges(); bqSuccess('Removed', 'Subscriber deleted.'); } catch (err) { bqError('Error', err.message); }
+};
+
+window.exportNewsletterCSV = () => {
+    if (newsletterList.length === 0) return bqWarning('Empty', 'No emails to export.');
+    let csv = 'Email,Date\n';
+    newsletterList.forEach(n => { csv += `"${n.email}","${new Date(n.date||0).toLocaleString()}"\n`; });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'subscribers.csv'; link.click();
+};
+
+window.copyAllEmails = () => {
+    if (newsletterList.length === 0) return bqWarning('Empty', 'No emails.');
+    const emails = newsletterList.map(n => n.email).join(', ');
+    navigator.clipboard.writeText(emails).then(() => bqSuccess('Copied', 'All emails copied.'));
+};
+
+window.filterNewsletter = () => {
+    const q = document.getElementById('news-search').value.toLowerCase();
+    const c = document.getElementById('newsletter-container');
+    const filtered = newsletterList.filter(n => n.email.toLowerCase().includes(q));
+    let html = '';
+    filtered.forEach(n => {
+        html += `<div class="ocard" style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div><div style="font-weight:600; color:var(--text); margin-bottom:3px;">${n.email}</div></div>
+            <button class="abtn del" onclick="deleteSubscriber('${n.docId}')"><i class="fas fa-trash"></i></button>
+        </div>`;
+    });
+    c.innerHTML = html;
+};
+
+// ==========================================
+// 🎟️ COUPONS
 // ==========================================
 window.renderCoupons = () => {
     const c = document.getElementById('coupons-container');
     if (coupons.length === 0) { c.innerHTML = '<div class="empty"><i class="fas fa-ticket-alt"></i><h3>No promo codes</h3></div>'; return; }
     let html = '';
     coupons.forEach(co => {
-        html += `<div class="coupon-card" style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:12px; position:relative;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><div style="font-family:'Playfair Display'; font-size:22px; font-weight:800; color:var(--gold);">${co.code}</div><div style="color:#22c55e; font-weight:700;">${co.type==='percentage'?co.value+'% OFF':'৳'+co.value+' OFF'}</div></div>
-            <div style="font-size:12px; color:var(--muted); margin-bottom:15px;">Min Order: ৳${co.minOrder} | Expiry: ${co.expiry}</div>
-            <div style="display:flex; gap:8px;"><button class="abtn edit" onclick="editCoupon('${co.docId}')"><i class="fas fa-edit"></i> Modify</button><button class="abtn del" onclick="deleteCoupon('${co.docId}')"><i class="fas fa-trash"></i> Remove</button></div>
+        html += `<div class="coupon-card" style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:15px; position:relative; box-shadow:0 4px 15px rgba(0,0,0,0.02);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <div style="font-family:var(--font-heading); font-size:24px; font-weight:800; color:var(--text);">${co.code}</div>
+                <div style="color:#10b981; font-weight:800; font-size:16px;">${co.type==='percentage'?co.value+'% OFF':'৳'+co.value+' OFF'}</div>
+            </div>
+            <div style="font-size:13px; color:var(--muted); margin-bottom:15px;">Min Order: ৳${co.minOrder} | Expiry: ${co.expiry}</div>
+            <div style="display:flex; gap:10px;"><button class="abtn del" onclick="deleteCoupon('${co.docId}')"><i class="fas fa-trash"></i> Remove</button></div>
         </div>`;
     });
     c.innerHTML = html;
 };
 
-window.openCouponModal = () => {
-    document.getElementById('coupon-modal').style.display = 'flex';
-    document.getElementById('c-edit-id').value = '';
-    document.getElementById('c-code').value = '';
-    document.getElementById('c-value').value = '';
-};
+window.openCouponModal = () => { document.getElementById('coupon-modal').style.display = 'flex'; document.getElementById('c-code').value=''; document.getElementById('c-value').value=''; };
 window.closeCouponModal = () => { document.getElementById('coupon-modal').style.display = 'none'; };
 
 window.submitCoupon = async () => {
@@ -982,16 +983,14 @@ window.submitCoupon = async () => {
     const value = parseInt(document.getElementById('c-value').value);
     const minOrder = parseInt(document.getElementById('c-minorder').value) || 0;
     const expiry = document.getElementById('c-expiry').value;
-    
-    if (!code || !value || !expiry) { bqWarning('Missing Data', 'Please fill all required fields.'); return; }
+    if (!code || !value || !expiry) return bqWarning('Missing Data', 'Please fill all required fields.');
     
     const data = { code, type, value, minOrder, expiry, active: true, updatedAt: new Date().toISOString() };
     try {
         const docRef = await addDoc(collection(db, 'coupons'), data);
         coupons.push({ docId: docRef.id, ...data });
         aCacheSet(ADMIN_CACHE.coupons, coupons);
-        closeCouponModal(); renderCoupons(); updateTabBadges();
-        broadcastToWebsite('coupons', coupons);
+        closeCouponModal(); renderCoupons(); updateTabBadges(); broadcastToWebsite('coupons', coupons);
         bqSuccess('Created', 'Promo code created.');
     } catch (err) { bqError('Error', err.message); }
 };
@@ -1010,9 +1009,9 @@ window.renderBanners = () => {
     if (banners.length === 0) { c.innerHTML = '<div class="empty"><i class="fas fa-images"></i><h3>No banners</h3></div>'; return; }
     let html = '';
     banners.forEach(b => {
-        html += `<div class="coupon-card" style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px; margin-bottom:12px; display:flex; gap:15px; align-items:center;">
-            <img src="${extractUrl(b.image)||b.image}" style="width:120px; height:70px; object-fit:cover; border-radius:8px;">
-            <div style="flex:1;"><div style="font-weight:700; color:var(--gold); margin-bottom:5px;">${b.title || 'Untitled'}</div><div style="font-size:11px; color:var(--muted);">Order: ${b.order}</div></div>
+        html += `<div class="coupon-card" style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:15px; margin-bottom:15px; display:flex; gap:15px; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.02);">
+            <img src="${extractUrl(b.image)||b.image}" style="width:140px; height:80px; object-fit:cover; border-radius:10px;">
+            <div style="flex:1;"><div style="font-weight:700; color:var(--text); margin-bottom:5px;">${b.title || 'Untitled'}</div><div style="font-size:12px; color:var(--muted);">Order: ${b.order}</div></div>
             <button class="abtn del" onclick="deleteBanner('${b.docId}')"><i class="fas fa-trash"></i> Remove</button>
         </div>`;
     });
@@ -1026,14 +1025,13 @@ window.submitBanner = async () => {
     const image = document.getElementById('b-image').value.trim();
     const title = document.getElementById('b-title').value.trim();
     const order = parseInt(document.getElementById('b-order').value) || 1;
-    if (!image) { bqWarning('Missing Data', 'Image URL required.'); return; }
+    if (!image) return bqWarning('Missing Data', 'Image URL required.');
     try {
         const data = { image, title, order, active: true, updatedAt: new Date().toISOString() };
         const docRef = await addDoc(collection(db, 'banners'), data);
         banners.push({ docId: docRef.id, ...data });
         aCacheSet(ADMIN_CACHE.banners, banners);
-        closeBannerModal(); renderBanners();
-        broadcastToWebsite('banners', banners);
+        closeBannerModal(); renderBanners(); broadcastToWebsite('banners', banners);
         bqSuccess('Created', 'Banner uploaded.');
     } catch (err) { bqError('Error', err.message); }
 };
@@ -1049,7 +1047,12 @@ window.deleteBanner = async (docId) => {
 // ==========================================
 window.switchPage = function(pageId) {
     currentEditingPage = pageId;
-    document.querySelectorAll('#page-filter button').forEach(b => b.classList.toggle('active', b.getAttribute('data-page') === pageId));
+    document.querySelectorAll('#page-filter button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-page') === pageId);
+        b.style.background = b.classList.contains('active') ? 'var(--primary)' : '#fff';
+        b.style.color = b.classList.contains('active') ? '#fff' : 'var(--text)';
+        b.style.borderColor = b.classList.contains('active') ? 'var(--primary)' : 'var(--border)';
+    });
     document.getElementById('page-editor-title').innerHTML = 'Editing: ' + PAGE_NAMES[pageId];
     document.getElementById('page-html-editor').value = pagesCache[pageId] || DEFAULT_PAGES[pageId] || '';
 };
@@ -1069,17 +1072,28 @@ window.savePage = async function() {
     btn.disabled = false; btn.innerHTML = orig;
 };
 
+window.previewPage = function() {
+    const html = document.getElementById('page-html-editor').value;
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html><head><title>Preview</title><style>body{background:#fff;color:#111827;font-family:'Inter',sans-serif;padding:40px;line-height:1.8;max-width:900px;margin:0 auto;}h2{font-family:'Playfair Display',serif;border-bottom:2px solid #e5e7eb;padding-bottom:12px;text-align:center;}</style></head><body>${html}</body></html>`);
+    w.document.close();
+};
+
+window.resetPageToDefault = () => {
+    document.getElementById('page-html-editor').value = DEFAULT_PAGES[currentEditingPage] || '';
+    bqAlert('Default content restored. Click Save to apply.', 'Reset');
+};
+
 // ==========================================
 // ⚙️ SETTINGS
 // ==========================================
 function fillSettingsForm() {
     const s = settingsCache || DEFAULT_SETTINGS;
     const safe = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    safe('s-store-name', s.storeName); safe('s-welcome-text', s.welcomeText); safe('s-page-title', s.pageTitle);
-    safe('s-phone', s.phone); safe('s-whatsapp', s.whatsapp); safe('s-email', s.email); safe('s-address', s.address);
-    safe('s-bkash', s.bkash); safe('s-nagad', s.nagad); safe('s-upay', s.upay); safe('s-rocket', s.rocket); safe('s-surecash', s.surecash);
+    safe('s-store-name', s.storeName); safe('s-welcome-text', s.welcomeText);
+    safe('s-phone', s.phone); safe('s-whatsapp', s.whatsapp); safe('s-address', s.address);
+    safe('s-bkash', s.bkash); safe('s-nagad', s.nagad);
     safe('s-delivery-inside', s.deliveryInside); safe('s-delivery-outside', s.deliveryOutside);
-    safe('s-facebook', s.facebook); safe('s-instagram', s.instagram); safe('s-youtube', s.youtube); safe('s-tiktok', s.tiktok);
 }
 
 window.saveSettings = async function() {
@@ -1087,7 +1101,7 @@ window.saveSettings = async function() {
     const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     try {
-        const data = { storeName: document.getElementById('s-store-name').value, welcomeText: document.getElementById('s-welcome-text').value, pageTitle: document.getElementById('s-page-title').value, phone: document.getElementById('s-phone').value, whatsapp: document.getElementById('s-whatsapp').value.replace(/[^0-9]/g, ''), email: document.getElementById('s-email').value, address: document.getElementById('s-address').value, bkash: document.getElementById('s-bkash').value, nagad: document.getElementById('s-nagad').value, upay: document.getElementById('s-upay').value, rocket: document.getElementById('s-rocket').value, surecash: document.getElementById('s-surecash').value, deliveryInside: parseInt(document.getElementById('s-delivery-inside').value)||60, deliveryOutside: parseInt(document.getElementById('s-delivery-outside').value)||130, facebook: document.getElementById('s-facebook').value, instagram: document.getElementById('s-instagram').value, youtube: document.getElementById('s-youtube').value, tiktok: document.getElementById('s-tiktok').value, updatedAt: new Date().toISOString() };
+        const data = { storeName: document.getElementById('s-store-name').value, welcomeText: document.getElementById('s-welcome-text').value, phone: document.getElementById('s-phone').value, whatsapp: document.getElementById('s-whatsapp').value.replace(/[^0-9]/g, ''), address: document.getElementById('s-address').value, bkash: document.getElementById('s-bkash').value, nagad: document.getElementById('s-nagad').value, deliveryInside: parseInt(document.getElementById('s-delivery-inside').value)||60, deliveryOutside: parseInt(document.getElementById('s-delivery-outside').value)||130, updatedAt: new Date().toISOString() };
         await setDoc(doc(db, 'settings', 'store'), data, { merge: true });
         settingsCache = { ...settingsCache, ...data };
         aCacheSet(ADMIN_CACHE.settings, settingsCache);
@@ -1097,29 +1111,8 @@ window.saveSettings = async function() {
     btn.disabled = false; btn.innerHTML = orig;
 };
 
-// ==========================================
-// ✨ INITIALIZATION
-// ==========================================
-window.addAdditionalImage = (url) => {
-    const c = document.getElementById('additional-images');
-    const id = 'ai-' + Date.now();
-    const row = document.createElement('div');
-    row.className = 'crow-img'; row.id = id;
-    row.innerHTML = `<input type="text" placeholder="Image URL" value="${url||''}" class="aimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
-    c.appendChild(row);
-};
-
-window.addColor = (name, img) => {
-    const c = document.getElementById('colors');
-    const id = 'c-' + Date.now();
-    const row = document.createElement('div');
-    row.className = 'crow'; row.id = id;
-    row.innerHTML = `<input type="text" placeholder="Color Name" value="${name||''}" class="cname"><input type="text" placeholder="Image URL" value="${img||''}" class="cimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
-    c.appendChild(row);
-};
-
+// Init
 document.addEventListener('DOMContentLoaded', () => {
-    // Ensure UI starts correctly
     const cm = document.getElementById('coupon-modal'); if(cm) cm.style.display = 'none';
     const bm = document.getElementById('banner-modal'); if(bm) bm.style.display = 'none';
 });
