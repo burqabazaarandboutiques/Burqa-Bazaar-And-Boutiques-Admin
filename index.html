@@ -21,14 +21,14 @@
 
 <script>
 window.ADMIN_CACHE = {
-    products: 'bq_admin_products_v8', orders: 'bq_admin_orders_v8',
-    reviews: 'bq_admin_reviews_v8', newsletter: 'bq_admin_newsletter_v8',
-    coupons: 'bq_admin_coupons_v8', banners: 'bq_admin_banners_v8',
-    pages: 'bq_admin_pages_v8', faq: 'bq_admin_faq_v8',
-    sizeCharts: 'bq_admin_sizeCharts_v8', homeCollections: 'bq_admin_homeCollections_v8',
-    settings: 'bq_admin_settings_v8', contentSettings: 'bq_admin_content_v8',
-    stats: 'bq_admin_stats_v8', categories: 'bq_admin_categories_v8',
-    customSizes: 'bq_admin_customSizes_v8', customPages: 'bq_admin_customPages_v8'
+    products: 'bq_admin_products_v9', orders: 'bq_admin_orders_v9',
+    reviews: 'bq_admin_reviews_v9', newsletter: 'bq_admin_newsletter_v9',
+    coupons: 'bq_admin_coupons_v9', banners: 'bq_admin_banners_v9',
+    pages: 'bq_admin_pages_v9', faq: 'bq_admin_faq_v9',
+    sizeCharts: 'bq_admin_sizeCharts_v9', homeCollections: 'bq_admin_homeCollections_v9',
+    settings: 'bq_admin_settings_v9', contentSettings: 'bq_admin_content_v9',
+    stats: 'bq_admin_stats_v9', categories: 'bq_admin_categories_v9',
+    customSizes: 'bq_admin_customSizes_v9', customPages: 'bq_admin_customPages_v9'
 };
 window.aCacheGet = function(key) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw).data : null; } catch(e) { return null; } };
 window.aCacheSet = function(key, data) { try { localStorage.setItem(key, JSON.stringify({ data, t: Date.now() })); } catch(e) {} };
@@ -75,7 +75,7 @@ window.playNotificationSound = function() {
     } catch(e) {}
 };
 
-window.showAdminNotification = function(type, title, message, duration = 1000) {
+window.showAdminNotification = function(type, title, message, duration = 1500) {
     const container = document.getElementById('admin-notification-container');
     if (!container) return;
     const icons = { newsletter: '<i class="fas fa-envelope"></i>', review: '<i class="fas fa-star"></i>', order: '<i class="fas fa-shopping-bag"></i>', update: '<i class="fas fa-bell"></i>' };
@@ -91,7 +91,7 @@ window.showAdminNotification = function(type, title, message, duration = 1000) {
 <script>
 window.IMGBB_API_KEY = 'eb9005b90193cd312248ce197c18b25e';
 
-window.compressImage = function(file, maxWidth = 1400, quality = 0.75) {
+window.compressImage = function(file, maxWidth = 1200, quality = 0.75) {
     return new Promise((resolve, reject) => {
         if (!file || !file.type.startsWith('image/')) return reject(new Error('শুধু image file'));
         const reader = new FileReader();
@@ -232,8 +232,9 @@ button,input,select,textarea{font-family:inherit}
 .msg.ok{background:rgba(34,197,94,.15);border:1px solid var(--ok);color:#86efac}
 .msg.bad{background:rgba(239,68,68,.15);border:1px solid var(--bad);color:#fca5a5}
 
-.pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:12px;display:flex;gap:15px;align-items:flex-start;transition:all .2s}
-.pcard:hover{border-color:var(--gold)}
+/* PREMIUM PRODUCT CARDS */
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:12px;display:flex;gap:15px;align-items:flex-start;transition:all .2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+.pcard:hover{border-color:var(--gold); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(223,177,91,0.15);}
 .pimg{width:80px;height:80px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#000;border:1px solid var(--border)}
 .pinfo{flex:1;min-width:0}
 .pname{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;word-break:break-word}
@@ -267,14 +268,15 @@ button,input,select,textarea{font-family:inherit}
 .img-preview-box .img-remove-btn{position:absolute;top:6px;right:6px;background:rgba(239,68,68,.9);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5);transition:all .2s}
 .img-preview-box .img-remove-btn:hover{background:var(--bad);transform:scale(1.1)}
 
-.preview-main{width:100%;max-width:240px;aspect-ratio:1;margin:0 auto}
-.preview-add{width:140px;aspect-ratio:1;flex-shrink:0}
-.preview-color{width:100px;aspect-ratio:1;flex-shrink:0}
-.preview-logo{width:180px;aspect-ratio:1;margin:0 auto}
-.preview-icon{width:90px;aspect-ratio:1;flex-shrink:0}
-.preview-courier{width:140px;aspect-ratio:1;flex-shrink:0}
-.preview-collection{width:100%;max-width:280px;aspect-ratio:16/9;margin:0 auto}
-.preview-banner{width:100%;max-width:400px;aspect-ratio:16/9;margin:0 auto}
+/* Smaller, optimized image sizes */
+.preview-main{width:100%;max-width:140px;aspect-ratio:1;margin:0 auto}
+.preview-add{width:100px;aspect-ratio:1;flex-shrink:0}
+.preview-color{width:80px;aspect-ratio:1;flex-shrink:0}
+.preview-logo{width:120px;aspect-ratio:1;margin:0 auto}
+.preview-icon{width:70px;aspect-ratio:1;flex-shrink:0}
+.preview-courier{width:110px;aspect-ratio:1;flex-shrink:0}
+.preview-collection{width:100%;max-width:200px;aspect-ratio:16/9;margin:0 auto}
+.preview-banner{width:100%;max-width:300px;aspect-ratio:16/9;margin:0 auto}
 
 .crow-color{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;padding:10px;background:var(--card);border-radius:10px;border:1px solid var(--border)}
 .crow-color .color-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
@@ -317,39 +319,41 @@ button,input,select,textarea{font-family:inherit}
 .ofilter button{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid var(--border);background:var(--card);color:var(--text);transition:all .2s}
 .ofilter button.active{background:var(--gold);color:#0b0b0d;border-color:var(--gold)}
 
-.news-hero{background:linear-gradient(135deg,rgba(223,177,91,.15) 0%,rgba(223,177,91,.03) 100%);border:1px solid var(--gold);border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+/* PREMIUM NEWSLETTER */
+.news-hero{background:linear-gradient(135deg,rgba(59,130,246,.12) 0%,rgba(59,130,246,.03) 100%);border:1px solid #3b82f6;border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap; box-shadow: 0 8px 25px rgba(59,130,246,0.1);}
 .news-hero-left{display:flex;align-items:center;gap:15px;min-width:0}
-.news-hero-icon{width:55px;height:55px;border-radius:50%;background:var(--gold);color:#0b0b0d;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(223,177,91,.4)}
-.news-hero-text h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:16px;margin-bottom:4px}
+.news-hero-icon{width:55px;height:55px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(59,130,246,.4)}
+.news-hero-text h3{font-family:'Playfair Display',serif;color:#60a5fa;font-size:16px;margin-bottom:4px}
 .news-hero-text p{color:var(--muted);font-size:12px}
-.news-count-big{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;color:var(--gold);line-height:1}
-.news-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;transition:all .2s}
-.news-card:hover{border-color:var(--gold)}
+.news-count-big{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;color:#60a5fa;line-height:1; text-shadow: 0 0 15px rgba(59,130,246,0.5);}
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;transition:all .2s; box-shadow: 0 4px 12px rgba(0,0,0,0.1);}
+.news-card:hover{border-color:#3b82f6; transform: translateY(-2px);}
 .news-card-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
-.news-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#dfb15b,#9c7526);color:#0b0b0d;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0}
+.news-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0; box-shadow: 0 2px 8px rgba(59,130,246,0.4);}
 .news-info{flex:1;min-width:0}
 .news-email{font-size:14px;font-weight:600;color:var(--text);word-break:break-all;margin-bottom:3px}
 .news-meta{font-size:11px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
 .news-meta .badge-new{background:rgba(34,197,94,.15);color:var(--ok);border:1px solid var(--ok);padding:1px 8px;border-radius:10px;font-weight:700}
 .news-actions{display:flex;gap:6px;flex-wrap:wrap}
-.news-btn-copy{background:rgba(59,130,246,.15);color:var(--info);border:1px solid var(--info);padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:all .2s}
-.news-btn-copy:hover{background:var(--info);color:#fff}
+.news-btn-copy{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid #3b82f6;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:all .2s}
+.news-btn-copy:hover{background:#3b82f6;color:#fff}
 .news-export-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
 .news-export-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:all .2s}
-.news-export-btn:hover{opacity:0.9}
+.news-export-btn:hover{opacity:0.9; box-shadow: 0 4px 15px rgba(34,197,94,0.4);}
 .search-news-box{position:relative;margin-bottom:15px}
 .search-news-box input{width:100%;padding:11px 15px 11px 42px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none;font-family:inherit}
-.search-news-box input:focus{border-color:var(--gold)}
-.search-news-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--gold)}
+.search-news-box input:focus{border-color:#3b82f6}
+.search-news-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#3b82f6}
 
-.coupon-hero{background:linear-gradient(135deg,rgba(255,0,127,.12) 0%,rgba(121,40,202,.08) 100%);border:1px solid rgba(255,0,127,.4);border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+/* PREMIUM COUPONS */
+.coupon-hero{background:linear-gradient(135deg,rgba(255,0,127,.12) 0%,rgba(121,40,202,.08) 100%);border:1px solid rgba(255,0,127,.4);border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap; box-shadow: 0 8px 25px rgba(255,0,127,0.15);}
 .coupon-hero-left{display:flex;align-items:center;gap:15px;min-width:0}
 .coupon-hero-icon{width:55px;height:55px;border-radius:50%;background:linear-gradient(135deg,#ff007f,#7928ca);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(255,0,127,.4)}
 .coupon-hero-text h3{font-family:'Playfair Display',serif;color:#ff6bb5;font-size:16px;margin-bottom:4px}
 .coupon-hero-text p{color:var(--muted);font-size:12px}
-.coupon-count-big{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;background:linear-gradient(135deg,#ff007f,#7928ca);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.coupon-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;transition:all .2s}
-.coupon-card:hover{border-color:var(--gold)}
+.coupon-count-big{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;background:linear-gradient(135deg,#ff007f,#7928ca);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1; text-shadow: 0 0 20px rgba(255,0,127,0.3);}
+.coupon-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;transition:all .2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+.coupon-card:hover{border-color:#ff007f; transform: translateY(-2px);}
 .coupon-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#ff007f,#7928ca)}
 .coupon-card.inactive{opacity:0.55}.coupon-card.inactive::before{background:#666}.coupon-card.expired::before{background:#ef4444}
 .coupon-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap}
@@ -365,11 +369,13 @@ button,input,select,textarea{font-family:inherit}
 .coupon-detail-item i{color:var(--gold);width:14px;flex-shrink:0}
 .coupon-actions{display:flex;gap:8px;flex-wrap:wrap}
 
+/* MODALS */
 .coupon-form-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .coupon-form-modal.active{display:flex}
 .coupon-form-box{background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:25px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.8);margin:auto}
 .coupon-form-box h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:18px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
 
+/* TOGGLE */
 .toggle-switch{position:relative;display:inline-block;width:50px;height:26px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0}
 .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.3s;border-radius:26px}
@@ -377,13 +383,7 @@ button,input,select,textarea{font-family:inherit}
 .toggle-switch input:checked + .toggle-slider{background:linear-gradient(135deg,#22c55e,#16a34a)}
 .toggle-switch input:checked + .toggle-slider::before{transform:translateX(24px)}
 
-.content-item-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px;position:relative}
-.content-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.content-item-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#0b0b0d;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0}
-.content-item-remove{background:transparent;border:1px solid var(--bad);color:var(--bad);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.content-item-remove:hover{background:var(--bad);color:#fff}
-.faq-item-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px}
-
+/* DYNAMIC LIST */
 .dyn-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:10px}
 .dyn-item .dyn-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
 .dyn-item .dyn-fields input{padding:10px 12px;background:var(--card);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit;width:100%}
@@ -391,69 +391,28 @@ button,input,select,textarea{font-family:inherit}
 .dyn-item .dyn-remove{background:transparent;border:1px solid var(--bad);color:var(--bad);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:center}
 .dyn-item .dyn-remove:hover{background:var(--bad);color:#fff}
 
-.size-row-item{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:6px;align-items:center}
-.size-row-item input{padding:8px 10px;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;outline:none;font-family:inherit;width:100%;min-width:0}
-.size-row-item input:focus{border-color:var(--gold)}
-.size-row-item .rm{background:transparent;border:1px solid var(--bad);color:var(--bad);width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
-.size-row-item .rm:hover{background:var(--bad);color:#fff}
-.size-chart-header-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:8px;padding:0 2px}
-.size-chart-header-row span{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;text-align:center}
+/* PREMIUM REVIEWS */
+.rating-summary { display: flex; align-items: center; gap: 15px; padding: 20px; background: linear-gradient(135deg, rgba(245,158,11,.1), rgba(245,158,11,.02)); border: 1px solid rgba(245,158,11,.3); border-radius: 16px; margin: 15px 0; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+.rating-average-box { text-align: center; min-width: 90px; padding-right: 20px; border-right: 1px solid rgba(245,158,11,.3); }
+.rating-average { font-size: 42px; font-weight: 800; color: #f59e0b; line-height: 1; font-family: 'Playfair Display', serif; text-shadow: 0 0 15px rgba(245,158,11,0.4); }
+.rating-average-stars { color: #ffb800; font-size: 16px; margin-top: 5px; }
+.rating-total { font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 600; }
+.rating-bars { flex: 1; }
+.rating-bar-row { display: flex; align-items: center; gap: 10px; font-size: 12px; margin-bottom: 5px; }
+.rating-bar-row .star-label { min-width: 30px; color: var(--muted); font-weight: 700; }
+.rating-bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.rating-bar-fill { height: 100%; background: linear-gradient(90deg,#f59e0b,#ffd700); border-radius: 4px; }
+.rating-bar-count { min-width: 25px; color: var(--muted); font-size: 11px; text-align: right; font-weight: 600; }
+.review-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: all .2s; }
+.review-card:hover { border-color: #f59e0b; transform: translateY(-2px); }
+.review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.review-name { font-weight: 700; font-size: 14px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+.review-name .verified-badge { font-size: 10px; color: var(--ok); background: rgba(34,197,94,.15); border: 1px solid var(--ok); padding: 2px 8px; border-radius: 10px; text-transform: uppercase; font-weight: 800; }
+.review-stars { color: #ffb800; font-size: 14px; }
+.review-text { font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--bg); padding: 12px; border-radius: 8px; }
+.review-date { font-size: 11px; color: var(--muted); opacity: .7; margin-top: 8px; display: block; text-align: right; }
 
-.contact-icon-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px}
-.contact-icon-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
-
-.review-stars-row{color:#ffb800;font-size:14px}
-
-.top-product-row{display:flex;align-items:center;gap:12px;padding:12px 8px;border-bottom:1px solid var(--border)}
-.top-product-row:last-child{border-bottom:none}
-.top-product-rank{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;font-family:'Playfair Display',serif}
-.top-product-rank.rank-1{background:linear-gradient(135deg,#ffd700,#b8860b);color:#000}
-.top-product-rank.rank-2{background:linear-gradient(135deg,#c0c0c0,#808080);color:#000}
-.top-product-rank.rank-3{background:linear-gradient(135deg,#cd7f32,#8b4513);color:#fff}
-.top-product-rank.rank-other{background:rgba(223,177,91,.15);color:var(--gold);border:1px solid var(--gold)}
-.top-product-img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:#000;border:1px solid var(--border);flex-shrink:0}
-.top-product-info{flex:1;min-width:0}
-.top-product-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.top-product-meta{font-size:11px;color:var(--muted)}
-.top-product-meta strong{color:var(--gold)}
-.top-product-sales{text-align:right;flex-shrink:0}
-.top-product-sales .count{font-size:16px;font-weight:800;color:var(--gold);line-height:1;font-family:'Playfair Display',serif}
-.top-product-sales .unit{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-
-.weekly-chart{display:flex;align-items:flex-end;justify-content:space-around;gap:8px;height:180px;padding:10px 0;border-bottom:1px solid var(--border)}
-.weekly-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;min-width:0}
-.weekly-bar{width:100%;max-width:42px;background:linear-gradient(180deg,var(--gold),#9c7526);border-radius:6px 6px 0 0;min-height:4px;position:relative}
-.weekly-bar:hover{background:linear-gradient(180deg,#ffd700,var(--gold));box-shadow:0 0 15px rgba(223,177,91,.5)}
-.weekly-bar-value{font-size:10px;font-weight:800;color:var(--gold);margin-bottom:3px;white-space:nowrap}
-.weekly-bar-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
-.weekly-bar-label.today{color:var(--gold);font-weight:800}
-.weekly-summary{display:flex;justify-content:space-between;padding-top:15px;margin-top:15px;border-top:1px dashed var(--border);font-size:13px;color:var(--muted);flex-wrap:wrap;gap:10px}
-.weekly-summary strong{color:var(--gold);font-weight:800}
-
-@media (min-width:1400px){
-  .wrap{max-width:1360px;padding:28px 32px}
-  .stats{grid-template-columns:repeat(4,1fr)}
-  #products-container{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  #products-container .pcard{margin-bottom:0;flex-direction:column;align-items:stretch}
-  #products-container .pimg{width:100%;height:180px}
-  .tab{padding:11px 20px}
-}
-@media (min-width:992px) and (max-width:1399px){
-  .wrap{max-width:1200px;padding:24px}
-  .stats{grid-template-columns:repeat(4,1fr)}
-  #products-container{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-  #products-container .pcard{margin-bottom:0;flex-direction:column;align-items:stretch}
-  #products-container .pimg{width:100%;height:170px}
-}
-@media (min-width:768px) and (max-width:991px){
-  .wrap{max-width:900px;padding:20px 16px}
-  .stats{grid-template-columns:repeat(4,1fr);gap:10px}
-  .stat{padding:16px 12px}.stat .val{font-size:22px}.stat i{font-size:20px}
-  #products-container{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  #products-container .pcard{margin-bottom:0;flex-direction:column;align-items:stretch;padding:12px}
-  #products-container .pimg{width:100%;height:150px}
-  .head h1{font-size:15px}
-}
+/* Responsive */
 @media (max-width:767px){
   .wrap{padding:18px 14px}
   .head{padding:12px 16px}.head h1{font-size:15px}.head-logo{width:34px;height:34px}
@@ -464,20 +423,15 @@ button,input,select,textarea{font-family:inherit}
   .btn-p,.btn-s{padding:10px 16px;font-size:12px}
   .stat{padding:14px 12px}.stat .val{font-size:20px}.stat i{font-size:18px}
   .stat .lbl{font-size:10px}
-  .weekly-chart{height:150px}.weekly-bar-value,.weekly-bar-label{font-size:9px}
   .news-count-big,.coupon-count-big{font-size:34px}
   .coupon-code-big{font-size:18px;letter-spacing:1.5px}
   .coupon-details-grid{grid-template-columns:1fr}
-  .size-row-item{grid-template-columns:1fr 1fr;gap:6px;padding:10px;background:var(--bg);border-radius:8px;border:1px solid var(--border);margin-bottom:10px}
-  .size-row-item .rm{grid-column:1 / -1;width:100%;height:32px;margin-top:4px}
-  .size-chart-header-row{display:none}
-  #sec-settings [style*="grid-template-columns: 1fr 1fr"]{grid-template-columns:1fr !important}
-  .preview-main{max-width:200px}
-  .preview-add{width:100px}
-  .preview-color{width:80px}
-  .preview-logo{width:140px}
-  .preview-icon{width:70px}
-  .preview-courier{width:100px}
+  .preview-main{max-width:120px}
+  .preview-add{width:80px}
+  .preview-color{width:60px}
+  .preview-logo{width:100px}
+  .preview-icon{width:60px}
+  .preview-courier{width:80px}
 }
 @media (max-width:599px){
   .head{padding:11px 12px;gap:8px}
@@ -540,22 +494,7 @@ button,input,select,textarea{font-family:inherit}
   .toggle-switch{width:44px;height:24px}
   .toggle-slider::before{height:18px;width:18px;left:3px;bottom:3px}
   .toggle-switch input:checked + .toggle-slider::before{transform:translateX(20px)}
-  .size-row-item{padding:8px;gap:5px}.size-row-item input{padding:7px 8px;font-size:11px}
-  .size-row-item .rm{height:30px}
-  #sec-settings > div[style*="position: sticky"],
-  #sec-content > div[style*="position: sticky"]{padding:12px !important;bottom:10px !important;gap:8px !important}
-  #sec-settings > div[style*="position: sticky"] button,
-  #sec-content > div[style*="position: sticky"] button{min-width:0 !important;flex:1 1 100%;padding:12px !important;font-size:12px !important}
   #page-html-editor{min-height:280px !important;font-size:12px !important}
-  .top-product-row{gap:8px;padding:10px 4px}
-  .top-product-rank{width:26px;height:26px;font-size:12px}
-  .top-product-img{width:38px;height:38px}
-  .top-product-name{font-size:12px}.top-product-meta{font-size:10px}
-  .top-product-sales .count{font-size:14px}.top-product-sales .unit{font-size:9px}
-  .weekly-chart{height:130px;gap:4px}.weekly-bar{max-width:none}
-  .weekly-bar-value,.weekly-bar-label{font-size:8px;letter-spacing:0}
-  .weekly-summary{font-size:12px;gap:6px;flex-direction:column;align-items:flex-start}
-  .review-stars-row{font-size:12px}
   .preview-main{max-width:100%}
   .preview-add{width:100%}
   .preview-color{width:100%}
@@ -566,18 +505,6 @@ button,input,select,textarea{font-family:inherit}
   .crow-img .img-preview-box,.crow-color .img-preview-box{width:100% !important;max-width:200px !important;margin:0 auto}
   #admin-notification-container{top:10px !important;right:10px !important;left:10px !important;max-width:none !important}
   .admin-notification{max-width:100% !important;padding:12px 14px !important}
-}
-@media (max-width:380px){
-  .wrap{padding:14px 10px}
-  .head{padding:10px}.head h1{font-size:12px}.head-logo{width:28px;height:28px}
-  .tab{padding:7px 10px;font-size:10px;gap:4px}.tab i{font-size:10px}
-  .stat{padding:12px 8px}.stat .val{font-size:16px}.stat .lbl{font-size:9px}.stat i{font-size:15px}
-  .pimg{height:150px}
-  .login-box{padding:24px 16px}.login-logo{width:60px;height:60px}.login-box h1{font-size:20px}
-  .size-btn{padding:8px 12px;font-size:13px}
-  .coupon-code-big{font-size:15px;letter-spacing:1px}
-  .coupon-hero,.news-hero{padding:14px}
-  .coupon-hero-icon,.news-hero-icon{width:40px;height:40px;font-size:18px}
 }
 </style>
 </head>
@@ -639,8 +566,6 @@ button,input,select,textarea{font-family:inherit}
                 <div class="stat" style="background: linear-gradient(135deg, rgba(223,177,91,.15), rgba(223,177,91,.03)); border-color: rgba(223,177,91,.4);"><i class="fas fa-coins"></i><div class="val" id="st-total-revenue">৳0</div><div class="lbl">Total Revenue</div></div>
                 <div class="stat" style="background: linear-gradient(135deg, rgba(255,0,127,.15), rgba(121,40,202,.05)); border-color: rgba(255,0,127,.4);"><i class="fas fa-shopping-cart" style="color: #ff007f;"></i><div class="val" id="st-today-orders" style="color: #ff007f;">0</div><div class="lbl">Today's Orders</div></div>
             </div>
-            <div class="shead"><h2><i class="fas fa-trophy"></i> Top 5 Best-Selling Products</h2></div>
-            <div id="top-products-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 25px;"><div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             <div class="shead"><h2><i class="fas fa-chart-bar"></i> Last 7 Days Sales</h2></div>
             <div id="weekly-chart-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 25px;"><div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading chart...</p></div></div>
         </div>
@@ -691,7 +616,7 @@ button,input,select,textarea{font-family:inherit}
                 </div>
 
                 <div class="fgroup"><label>🎥 Video URL (ঐচ্ছিক)</label><input type="text" id="p-video" placeholder="YouTube / Facebook / Vimeo Video Link"></div>
-                <div class="fgroup"><label>🏷️ Badge (ঐচ্ছিক)</label><select id="p-badge"><option value="">None</option><option value="new">NEW</option><option value="hot">HOT</option><option value="sale">SALE</option><option value="soldout">SOLD OUT</option></select></div>
+                <!-- 🚫 Badge Dropdown Removed (Auto NEW feature added) -->
 
                 <div class="fgroup" id="size-section" style="display: none;">
                     <label>📏 Sizes</label>
@@ -758,12 +683,17 @@ button,input,select,textarea{font-family:inherit}
 
         <!-- PAGES -->
         <div class="section" id="sec-pages">
-            <div class="shead"><h2><i class="fas fa-file-alt"></i> Website Pages Editor</h2><div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn-p" onclick="promptAddPage()"><i class="fas fa-plus"></i> Add New Page</button><button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button></div></div>
+            <div class="shead"><h2><i class="fas fa-file-alt"></i> Website Pages Editor</h2><div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn-p" onclick="openAddPageModal()"><i class="fas fa-plus"></i> Add New Page</button><button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button></div></div>
             <div class="ofilter" id="page-filter"></div>
             <div id="page-editor-wrapper" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
                 <div class="shead" style="margin-bottom: 12px;"><h2 id="page-editor-title" style="font-size: 16px;"><i class="fas fa-edit"></i> Editing: About Us</h2><span id="page-editor-status" style="font-size: 11px; color: var(--muted);"></span></div>
                 <div class="fgroup"><label>📝 HTML Content</label><textarea id="page-html-editor" rows="20" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 400px;"></textarea></div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;"><button class="btn-p" id="page-save-btn" onclick="savePage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Page</button><button class="btn-s" onclick="resetPageToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button><button class="btn-s" onclick="previewPage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-eye"></i> Preview</button></div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                    <button class="btn-p" id="page-save-btn" onclick="savePage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Page</button>
+                    <button class="btn-s" onclick="resetPageToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button>
+                    <button class="btn-s" onclick="previewPage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-eye"></i> Preview</button>
+                    <button class="btn-s" onclick="deleteCurrentPage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px; border-color: var(--bad); color: var(--bad);"><i class="fas fa-trash"></i> Delete Page</button>
+                </div>
                 <div id="page-form-msg" class="msg" style="margin-top: 12px;"></div>
             </div>
         </div>
@@ -807,12 +737,7 @@ button,input,select,textarea{font-family:inherit}
                 <div id="faq-container"></div>
                 <button type="button" class="btn-s" onclick="addFAQ()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add FAQ</button>
             </div>
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-ruler"></i> Size Chart Manager</h3>
-                <div class="fgroup"><label>📁 Select Category</label><select id="size-chart-category" onchange="loadSizeChartForCategory()"><option value="default">Default / সাধারণ</option></select></div>
-                <div class="fgroup"><label>📝 Chart Title</label><input type="text" id="size-chart-title-input" placeholder="বোরকা সাইজ চার্ট"></div>
-                <div class="fgroup"><label>📏 Size Rows</label><div class="size-chart-header-row"><span>Size</span><span>Chest</span><span>Waist</span><span>Length</span><span>Shoulder</span><span>Sleeve</span><span></span></div><div id="size-chart-rows-container"></div><button type="button" class="btn-s" onclick="addSizeChartRow()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Size Row</button></div>
-            </div>
+            <!-- 🚫 Size Chart Manager Removed -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-th-large"></i> Home Collections</h3>
                 <div id="home-collections-container"></div>
@@ -828,12 +753,20 @@ button,input,select,textarea{font-family:inherit}
         <div class="section" id="sec-settings">
             <div class="shead"><h2><i class="fas fa-cog"></i> Store Settings</h2><button class="btn-s" onclick="loadSettings()"><i class="fas fa-sync-alt"></i> Reload</button></div>
             <div id="settings-msg" class="msg"></div>
+            
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
+                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-list"></i> Category Manager (Edit/Delete)</h3>
+                <div id="category-manager-container"></div>
+                <button type="button" class="btn-s" onclick="promptAddCategory()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Category</button>
+            </div>
+
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-store"></i> Store Information</h3>
                 <div class="fgroup"><label>🏪 Store Name *</label><input type="text" id="s-store-name" placeholder="Burqa Bazar and Boutiques"></div>
                 <div class="fgroup"><label>📝 Welcome Text (Homepage)</label><input type="text" id="s-welcome-text" placeholder="WELCOME TO BURQA BAZAR AND BOUTIQUES ✨"></div>
                 <div class="fgroup"><label>📄 Website Title (Browser Tab)</label><input type="text" id="s-page-title" placeholder="Burqa Bazar & Boutiques | Premium Hijab, Burqa & Abaya Collection"></div>
             </div>
+
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-phone"></i> Contact Information</h3>
                 <div class="fgroup"><label>📞 Phone Number</label><input type="text" id="s-phone" placeholder="+880 1832-140613"></div>
@@ -841,16 +774,19 @@ button,input,select,textarea{font-family:inherit}
                 <div class="fgroup"><label>📧 Email</label><input type="email" id="s-email" placeholder="burqabazaarandboutiques@gmail.com"></div>
                 <div class="fgroup"><label>📍 Store Address</label><textarea id="s-address" rows="2" placeholder="ফেনী সওদাগর পট্টি..."></textarea></div>
             </div>
+
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-money-bill-wave"></i> Payment Numbers <span style="font-size:11px;color:var(--muted);font-weight:400;">(Add যত খুশি)</span></h3>
+                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-money-bill-wave"></i> Payment Numbers (Premium)</h3>
                 <div id="payment-numbers-container"></div>
                 <button type="button" class="btn-s" onclick="addPaymentNumber()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Payment Number</button>
             </div>
+
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-university"></i> Bank Information <span style="font-size:11px;color:var(--muted);font-weight:400;">(Multiple Banks)</span></h3>
+                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-university"></i> Bank Information (Premium)</h3>
                 <div id="banks-container"></div>
                 <button type="button" class="btn-s" onclick="addBank()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Bank</button>
             </div>
+
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Delivery Charges</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -858,11 +794,13 @@ button,input,select,textarea{font-family:inherit}
                     <div class="fgroup"><label>🚚 Outside Feni (৳) *</label><input type="number" id="s-delivery-outside" placeholder="130" min="0"></div>
                 </div>
             </div>
+
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-share-alt"></i> Social Media Links <span style="font-size:11px;color:var(--muted);font-weight:400;">(Add যত খুশি)</span></h3>
+                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-share-alt"></i> Social Media Links</h3>
                 <div id="social-links-container"></div>
                 <button type="button" class="btn-s" onclick="addSocialLink()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Social Link</button>
             </div>
+
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-tools"></i> Backup & Sync Tools</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
@@ -926,6 +864,19 @@ button,input,select,textarea{font-family:inherit}
         <div class="fgroup"><label>🔢 Order *</label><input type="number" id="b-order" placeholder="1" min="1" value="1" required></div>
         <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;"><div><div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div></div><label class="toggle-switch"><input type="checkbox" id="b-active" checked><span class="toggle-slider"></span></label></div>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;"><button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Banner</button><button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button></div>
+    </div>
+</div>
+
+<!-- PAGE MODAL -->
+<div class="coupon-form-modal" id="page-modal">
+    <div class="coupon-form-box">
+        <h3><i class="fas fa-file-alt"></i> Add New Page</h3>
+        <div id="page-modal-msg" class="msg"></div>
+        <div class="fgroup"><label>📄 Page Name *</label><input type="text" id="new-page-name" placeholder="যেমন: Size Guide"></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button type="button" class="btn-p" onclick="submitNewPage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Create Page</button>
+            <button type="button" class="btn-s" onclick="closeAddPageModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -1149,7 +1100,7 @@ function attachRealtimeListeners() {
             arr.forEach(item => {
                 if (!_seenIds.newsletter.has(item.docId)) {
                     _seenIds.newsletter.add(item.docId);
-                    if (!_firstLoad.newsletter) showAdminNotification('newsletter', '📬 নতুন Newsletter', `${item.email || 'Unknown'}`, 1000);
+                    if (!_firstLoad.newsletter) showAdminNotification('newsletter', '📬 নতুন Newsletter', `${item.email || 'Unknown'}`, 1500);
                 }
             });
             _firstLoad.newsletter = false;
@@ -1172,7 +1123,7 @@ function attachRealtimeListeners() {
                     _seenIds.reviews.add(item.docId);
                     if (!_firstLoad.reviews) {
                         const stars = '⭐'.repeat(parseInt(item.rating) || 0);
-                        showAdminNotification('review', '⭐ নতুন Review', `${item.name || 'Anonymous'} — ${stars}`, 1000);
+                        showAdminNotification('review', '⭐ নতুন Review', `${item.name || 'Anonymous'} — ${stars}`, 1500);
                     }
                 }
             });
@@ -1192,7 +1143,7 @@ function attachRealtimeListeners() {
             arr.forEach(item => {
                 if (!_seenIds.orders.has(item.docId)) {
                     _seenIds.orders.add(item.docId);
-                    if (!_firstLoad.orders) showAdminNotification('order', '📦 নতুন Order!', `${item.name || 'Customer'} — ৳${item.totalAmount || 0}`, 1000);
+                    if (!_firstLoad.orders) showAdminNotification('order', '📦 নতুন Order!', `${item.name || 'Customer'} — ৳${item.totalAmount || 0}`, 1500);
                 }
             });
             _firstLoad.orders = false;
@@ -1249,12 +1200,71 @@ window.switchTab = function(name, userClick = false) {
         case 'settings':
             fillSettingsForm();
             renderSettingsDynamic();
+            renderCategoryManager();
             break;
         case 'add':
             if (userClick) resetForm();
             populateCategoryDropdown();
             break;
     }
+};
+
+// ============================================================
+// CATEGORY MANAGER (ADD, EDIT, DELETE)
+// ============================================================
+window.renderCategoryManager = function() {
+    const c = document.getElementById('category-manager-container');
+    if(!c) return;
+    c.innerHTML = '';
+    allCategories.forEach((cat, idx) => {
+        const item = document.createElement('div');
+        item.className = 'dyn-item';
+        item.innerHTML = `<div class="content-item-num" style="align-self:center;">${idx+1}</div>
+            <div class="dyn-fields"><input type="text" id="cat-name-${idx}" value="${cat}"></div>
+            <button type="button" class="dyn-remove" style="background:rgba(34,197,94,.15);border-color:var(--ok);color:var(--ok);" onclick="saveEditedCategory(${idx})" title="Save"><i class="fas fa-check"></i></button>
+            <button type="button" class="dyn-remove" onclick="deleteCategory(${idx})" title="Delete"><i class="fas fa-trash"></i></button>`;
+        c.appendChild(item);
+    });
+    if(allCategories.length === 0) c.innerHTML = '<div style="text-align:center;padding:15px;color:var(--muted);font-size:12px;">কোনো ক্যাটাগরি নেই।</div>';
+};
+
+window.saveEditedCategory = async function(idx) {
+    const newName = document.getElementById(`cat-name-${idx}`).value.trim();
+    if(!newName) { alert('ক্যাটাগরি নাম খালি রাখা যাবে না।'); return; }
+    const oldName = allCategories[idx];
+    allCategories[idx] = newName;
+    aCacheSet(ADMIN_CACHE.categories, allCategories);
+    try { await setDoc(doc(db, 'settings', 'categories'), { list: allCategories }, { merge: true }); } catch(e) {}
+    
+    // Update existing products with the new category name
+    if (oldName !== newName) {
+        try {
+            const snap = await getDocs(collection(db, 'products'));
+            const batchPromises = [];
+            snap.forEach(d => {
+                if(d.data().category === oldName) {
+                    batchPromises.push(updateDoc(doc(db, 'products', d.id), { category: newName }));
+                }
+            });
+            await Promise.all(batchPromises);
+            // Reload products to reflect changes
+            loadProducts(true);
+        } catch(e) { console.warn('Could not update products with new category', e); }
+    }
+    
+    renderCategoryManager();
+    populateCategoryDropdown();
+    window.showToast('✅ Category updated!');
+};
+
+window.deleteCategory = async function(idx) {
+    if(!confirm(`"${allCategories[idx]}" ডিলিট করতে চান? (এই ক্যাটাগরির প্রোডাক্টগুলো আনক্যাটাগরি হয়ে যাবে)`)) return;
+    allCategories.splice(idx, 1);
+    aCacheSet(ADMIN_CACHE.categories, allCategories);
+    try { await setDoc(doc(db, 'settings', 'categories'), { list: allCategories }, { merge: true }); } catch(e) {}
+    renderCategoryManager();
+    populateCategoryDropdown();
+    window.showToast('🗑️ Category deleted');
 };
 
 window.populateCategoryDropdown = function() {
@@ -1276,18 +1286,6 @@ window.populateCategoryDropdown = function() {
             sel.appendChild(opt);
         }
         sel.value = current;
-    }
-    const scSel = document.getElementById('size-chart-category');
-    if (scSel) {
-        const scCurrent = scSel.value || 'default';
-        scSel.innerHTML = '<option value="default">Default / সাধারণ</option>';
-        allCategories.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = c;
-            scSel.appendChild(opt);
-        });
-        if (scCurrent) scSel.value = scCurrent;
     }
     const bSel = document.getElementById('b-category-value');
     if (bSel) {
@@ -1312,8 +1310,9 @@ window.promptAddCategory = async function() {
     aCacheSet(ADMIN_CACHE.categories, allCategories);
     try { await setDoc(doc(db, 'settings', 'categories'), { list: allCategories }, { merge: true }); } catch(e) {}
     populateCategoryDropdown();
+    renderCategoryManager();
     document.getElementById('p-cat').value = trimmed;
-    notifySite('category', '📁 নতুন ক্যাটাগরি', `"${trimmed}"`, { category: trimmed });
+    notifySite('category', '📁 নতুন ক্যাটাগরি', `প্রিয় কাস্টমার, আমাদের নতুন কালেকশন "${trimmed}" যোগ করা হয়েছে!`, { category: trimmed });
     showAdminNotification('update', '📁 ক্যাটাগরি যোগ', trimmed, 1000);
 };
 
@@ -1328,17 +1327,54 @@ window.promptAddSize = async function() {
     renderSizeButtons();
 };
 
-window.promptAddPage = async function() {
-    const name = prompt('নতুন page নাম:');
-    if (!name || !name.trim()) return;
-    const trimmed = name.trim();
-    const pageId = trimmed.toLowerCase().replace(/\s+/g, '-');
-    if (DEFAULT_PAGES[pageId] || customPages[pageId]) { alert('❌ আগেই আছে'); return; }
-    customPages[pageId] = trimmed;
+// ============================================================
+// PAGES MANAGER (MODAL, DELETE)
+// ============================================================
+window.openAddPageModal = function() {
+    document.getElementById('new-page-name').value = '';
+    document.getElementById('page-modal-msg').classList.remove('show');
+    document.getElementById('page-modal').classList.add('active');
+};
+window.closeAddPageModal = function() {
+    document.getElementById('page-modal').classList.remove('active');
+};
+window.submitNewPage = async function() {
+    const nameInput = document.getElementById('new-page-name');
+    const name = nameInput.value.trim();
+    if(!name) { showMsg('page-modal-msg', '⚠️ নাম দিন', 'bad'); return; }
+    const pageId = name.toLowerCase().replace(/\s+/g, '-');
+    if (DEFAULT_PAGES[pageId] || customPages[pageId]) { showMsg('page-modal-msg', '❌ এই নামে পেজ আগেই আছে', 'bad'); return; }
+    
+    customPages[pageId] = name;
     aCacheSet(ADMIN_CACHE.customPages, customPages);
     try { await setDoc(doc(db, 'settings', 'customPages'), { pages: customPages }, { merge: true }); } catch(e) {}
+    
+    closeAddPageModal();
     renderPageTabs();
     switchPage(pageId);
+    window.showToast('✅ Page created!');
+};
+
+window.deleteCurrentPage = async function() {
+    const pageId = currentEditingPage;
+    if(DEFAULT_PAGES[pageId]) {
+        alert('❌ ডিফল্ট পেজ ডিলিট করা যাবে না।');
+        return;
+    }
+    if(!confirm(`"${customPages[pageId]}" পেজটি ডিলিট করতে চান?`)) return;
+    
+    // Delete from Firebase
+    try { await deleteDoc(doc(db, 'pages', pageId)); } catch(e) {}
+    
+    // Remove from customPages
+    delete customPages[pageId];
+    aCacheSet(ADMIN_CACHE.customPages, customPages);
+    try { await setDoc(doc(db, 'settings', 'customPages'), { pages: customPages }, { merge: true }); } catch(e) {}
+    
+    // Update UI
+    renderPageTabs();
+    switchPage('about');
+    window.showToast('🗑️ Page deleted');
 };
 
 function renderPageTabs() {
@@ -1364,7 +1400,6 @@ function recalcStatsFromCache() {
         let pending = 0, completed = 0, todayRevenue = 0, monthRevenue = 0, totalRevenue = 0, todayOrders = 0;
         const todayStr = new Date().toDateString();
         const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0, 0, 0, 0);
-        const productSales = {};
         const weeklyData = {};
         for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0); weeklyData[d.toDateString()] = { revenue: 0, orders: 0, date: d }; }
         ordersList.forEach(o => {
@@ -1375,9 +1410,8 @@ function recalcStatsFromCache() {
             if (orderDate.toDateString() === todayStr) { todayRevenue += amount; todayOrders++; }
             if (orderDate >= thisMonth) monthRevenue += amount;
             if (weeklyData[orderDate.toDateString()]) { weeklyData[orderDate.toDateString()].revenue += amount; weeklyData[orderDate.toDateString()].orders++; }
-            if (Array.isArray(o.products)) o.products.forEach(p => { if (!productSales[p.id]) productSales[p.id] = { id: p.id, name: p.name || 'Unknown', qty: 0, revenue: 0 }; const qty = parseInt(p.quantity) || 1; productSales[p.id].qty += qty; if (typeof p.price === 'number') productSales[p.id].revenue += p.price * qty; });
         });
-        const statsData = { pending, completed, todayRevenue, monthRevenue, totalRevenue, todayOrders, topProducts: Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5), weeklyData: Object.values(weeklyData) };
+        const statsData = { pending, completed, todayRevenue, monthRevenue, totalRevenue, todayOrders, weeklyData: Object.values(weeklyData) };
         aCacheSet(ADMIN_CACHE.stats, statsData);
         applyStatsToUI(statsData, productsList, ordersList);
     } catch(e) { console.warn(e); }
@@ -1394,28 +1428,10 @@ function applyStatsToUI(stats, productsList, ordersList) {
         setV('st-month-revenue', '৳' + (stats.monthRevenue || 0).toLocaleString());
         setV('st-total-revenue', '৳' + (stats.totalRevenue || 0).toLocaleString());
         setV('st-today-orders', stats.todayOrders || 0);
-        if (stats.topProducts && stats.topProducts.length > 0) renderTopProductsFromCache(stats.topProducts);
         if (stats.weeklyData && stats.weeklyData.length > 0) renderWeeklyChartFromCache(stats.weeklyData);
     } catch(e) { console.warn(e); }
 }
 
-function renderTopProductsFromCache(topProducts) {
-    const c = document.getElementById('top-products-container');
-    if (!c) return;
-    if (topProducts.length === 0) { c.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--muted);"><i class="fas fa-box-open" style="font-size: 40px; color: var(--gold); opacity: .4; display: block; margin-bottom: 15px;"></i><p>এখনো কোনো sales হয়নি।</p></div>'; return; }
-    const productsList = aCacheGet(ADMIN_CACHE.products) || [];
-    const productImages = {};
-    productsList.forEach(p => { productImages[parseInt(p.id)] = p.image || ''; });
-    let html = '';
-    topProducts.forEach((p, idx) => {
-        const rankClass = idx < 3 ? `rank-${idx + 1}` : 'rank-other';
-        const img = extractUrl(productImages[parseInt(p.id)]) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
-        html += `<div class="top-product-row"><div class="top-product-rank ${rankClass}">${idx + 1}</div><img src="${img}" class="top-product-img" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'"><div class="top-product-info"><div class="top-product-name">${p.name}</div><div class="top-product-meta">Revenue: <strong>৳${p.revenue.toLocaleString()}</strong></div></div><div class="top-product-sales"><div class="count">${p.qty}</div><div class="unit">sold</div></div></div>`;
-    });
-    c.innerHTML = html;
-}
-
-// 🔥 Fixed: Handled string date format from LocalStorage cache
 function renderWeeklyChartFromCache(weeklyData) {
     const c = document.getElementById('weekly-chart-container');
     if (!c) return;
@@ -1425,7 +1441,7 @@ function renderWeeklyChartFromCache(weeklyData) {
     weeklyData.forEach(d => {
         const heightPercent = (d.revenue / maxRevenue) * 100;
         const barHeight = Math.max(heightPercent, 3);
-        const dDate = new Date(d.date); // Recreate Date object
+        const dDate = new Date(d.date);
         const dayName = dDate.toLocaleDateString('en-GB', { weekday: 'short' });
         const isToday = dDate.toDateString() === todayStr;
         const displayRevenue = d.revenue > 0 ? '৳' + (d.revenue >= 1000 ? (d.revenue / 1000).toFixed(1) + 'k' : d.revenue) : '';
@@ -1434,13 +1450,7 @@ function renderWeeklyChartFromCache(weeklyData) {
     html += '</div>';
     const totalWeek = weeklyData.reduce((sum, d) => sum + d.revenue, 0);
     const totalWeekOrders = weeklyData.reduce((sum, d) => sum + d.orders, 0);
-    const bestDay = weeklyData.reduce((best, d) => d.revenue > best.revenue ? d : best, weeklyData[0]);
-    let bestDayHtml = '';
-    if (bestDay && bestDay.revenue > 0) {
-        const bestDate = new Date(bestDay.date); // Recreate Date object
-        bestDayHtml = `<div>🏆 সেরা দিন: <strong>${bestDate.toLocaleDateString('en-GB', { weekday: 'long' })}</strong></div>`;
-    }
-    html += `<div class="weekly-summary"><div>📅 ৭ দিনে: <strong>৳${totalWeek.toLocaleString()}</strong></div><div>🛒 অর্ডার: <strong>${totalWeekOrders}</strong></div>${bestDayHtml}</div>`;
+    html += `<div class="weekly-summary"><div>📅 ৭ দিনে: <strong>৳${totalWeek.toLocaleString()}</strong></div><div>🛒 অর্ডার: <strong>${totalWeekOrders}</strong></div></div>`;
     c.innerHTML = html;
 }
 
@@ -1550,6 +1560,10 @@ window.renderProducts = () => {
         c.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><h3>এখনো কোনো প্রোডাক্ট নেই</h3><button class="btn-p" onclick="switchTab(\'add\', true)" style="margin-top:15px;"><i class="fas fa-plus"></i> Add Product</button></div>';
         return;
     }
+    
+    // Auto NEW Badge logic: Find the maximum ID (latest product)
+    const maxId = products.reduce((max, p) => Math.max(max, parseInt(p.id) || 0), 0);
+
     let html = '';
     products.forEach(p => {
         const price = (typeof p.price === 'number') ? '৳ ' + p.price : (p.price || 'Coming Soon');
@@ -1557,6 +1571,7 @@ window.renderProducts = () => {
         const cc = Array.isArray(p.colors) ? p.colors.length : 0;
         const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
         const imgCount = Array.isArray(p.images) ? p.images.length : 1;
+        
         let stockBadge = '';
         if (p.stock !== undefined && p.stock !== null) {
             const stockNum = parseInt(p.stock) || 0;
@@ -1564,7 +1579,14 @@ window.renderProducts = () => {
             else if (stockNum <= 5) stockBadge = '<span class="stock-badge lowstock"><i class="fas fa-exclamation-triangle"></i> Low: ' + stockNum + '</span>';
             else stockBadge = '<span class="stock-badge instock"><i class="fas fa-check-circle"></i> Stock: ' + stockNum + '</span>';
         }
-        html += `<div class="pcard"><img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'"><div class="pinfo"><div class="pname">${p.name || 'Unnamed'}</div><div class="pmeta">${p.category || ''} • ${sc} sizes • ${cc} colors • 📸 ${imgCount}</div>${stockBadge}<div class="pprice">${price}</div><div class="pacts"><button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button><button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button></div></div></div>`;
+
+        // Apply auto NEW badge
+        let autoBadge = '';
+        if (parseInt(p.id) === maxId && maxId > 0) {
+            autoBadge = '<span class="product-badge new" style="margin-left:10px;background:linear-gradient(135deg,#00dfd8,#00a99d);color:#fff;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:800;">NEW</span>';
+        }
+
+        html += `<div class="pcard"><img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'"><div class="pinfo"><div class="pname">${p.name || 'Unnamed'} ${autoBadge}</div><div class="pmeta">${p.category || ''} • ${sc} sizes • ${cc} colors • 📸 ${imgCount}</div>${stockBadge}<div class="pprice">${price}</div><div class="pacts"><button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button><button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button></div></div></div>`;
     });
     c.innerHTML = html;
 };
@@ -1621,7 +1643,6 @@ window.editProduct = (docId) => {
         document.getElementById('p-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 1;
         document.getElementById('p-image').value = p.image || '';
         document.getElementById('p-video').value = p.video || '';
-        document.getElementById('p-badge').value = p.badge || '';
         document.getElementById('p-desc').value = p.fullDescription || '';
         
         const mainImg = extractUrl(p.image);
@@ -1677,7 +1698,6 @@ window.submitProduct = async (e) => {
         const stockRaw = document.getElementById('p-stock').value.trim();
         const image = document.getElementById('p-image').value.trim();
         const videoUrl = document.getElementById('p-video').value.trim();
-        const badge = document.getElementById('p-badge').value;
         const desc = document.getElementById('p-desc').value.trim();
         const editId = document.getElementById('edit-id').value;
         if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') { showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
@@ -1697,7 +1717,9 @@ window.submitProduct = async (e) => {
         document.querySelectorAll('#additional-images .crow-img').forEach(row => { const urlInput = row.querySelector('.aimg'); if (urlInput && urlInput.value.trim()) additionalImages.push(extractUrl(urlInput.value.trim()) || urlInput.value.trim()); });
         const cleanImg = extractUrl(image) || image;
         const uniqueImages = [...new Set([cleanImg, ...additionalImages])];
-        const data = { name, category, price, stock, image: cleanImg, video: videoUrl || null, badge: badge || null, badgeText: badge ? badge.toUpperCase() : null, sizes, colors, images: uniqueImages, fullDescription: desc, updatedAt: new Date().toISOString() };
+        
+        // Note: badge is no longer manually set here, it's auto-assigned based on ID.
+        const data = { name, category, price, stock, image: cleanImg, video: videoUrl || null, sizes, colors, images: uniqueImages, fullDescription: desc, updatedAt: new Date().toISOString() };
         
         if (editId) {
             const backup = products.map(p => ({ ...p }));
@@ -1709,8 +1731,19 @@ window.submitProduct = async (e) => {
             showMsg('form-msg', '✅ আপডেট!', 'ok');
             window.showToast('✅ Updated');
             setTimeout(() => { resetForm(); switchTab('products'); }, 300);
+            
             updateDoc(doc(db, 'products', editId), data).then(() => {
-                notifySite('product_updated', '✏️ প্রোডাক্ট আপডেট', `"${name}"`, { name, category, price });
+                const oldP = products.find(p => p.docId === editId);
+                let priceMsg = 'আপডেট করা হয়েছে।';
+                if (oldP && oldP.price !== price) {
+                    if (typeof oldP.price === 'number' && typeof price === 'number') {
+                        if (price > oldP.price) priceMsg = `এর দাম বেড়ে এখন ৳${price} হয়েছে!`;
+                        else if (price < oldP.price) priceMsg = `এর দাম কমে এখন ৳${price} হয়েছে!`;
+                    } else {
+                        priceMsg = `এর দাম আপডেট হয়ে এখন ৳${price} হয়েছে!`;
+                    }
+                }
+                notifySite('product_updated', '✏️ প্রোডাক্ট আপডেট', `প্রিয় কাস্টমার, ${category} কালেকশনের "${name}" প্রোডাক্টটি ${priceMsg}`, { name, category, price });
                 showAdminNotification('update', '✏️ প্রোডাক্ট আপডেট', `${name} — ${category}`, 1000);
             }).catch(err => {
                 products = backup;
@@ -1729,11 +1762,12 @@ window.submitProduct = async (e) => {
             showMsg('form-msg', '✅ যোগ হয়েছে!', 'ok');
             window.showToast('✅ Added');
             setTimeout(() => { resetForm(); switchTab('products'); }, 300);
+            
             addDoc(collection(db, 'products'), data).then(docRef => {
                 const idx = products.findIndex(p => p.docId === tempId);
                 if (idx > -1) products[idx].docId = docRef.id;
                 aCacheSet(ADMIN_CACHE.products, products);
-                notifySite('product_added', '🆕 নতুন প্রোডাক্ট', `"${name}" — ${category} — ৳${price}`, { name, category, price, colors: colors.map(c => c.name), sizes });
+                notifySite('product_added', '🆕 নতুন প্রোডাক্ট', `প্রিয় কাস্টমার, ${category} কালেকশনে নতুন প্রোডাক্ট "${name}" যোগ করা হয়েছে! দাম ৳${price}।`, { name, category, price, colors: colors.map(c => c.name), sizes });
                 showAdminNotification('update', '🆕 প্রোডাক্ট যোগ', `${name} — ৳${price}`, 1000);
             }).catch(err => {
                 products = products.filter(p => p.docId !== tempId);
@@ -1912,13 +1946,22 @@ window.renderReviews = () => {
     let totalRating = 0;
     reviews.forEach(r => totalRating += (parseInt(r.rating) || 0));
     const avg = (totalRating / reviews.length).toFixed(1);
-    let html = `<div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 18px;"><div style="text-align: center;"><div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1;">${avg}</div><div class="review-stars-row">${renderStarsRow(Math.round(parseFloat(avg)))}</div><div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${reviews.length} reviews</div></div></div><div style="display: flex; flex-direction: column; gap: 12px;">`;
+    
+    // Premium Review Layout
+    let html = `<div class="rating-summary"><div class="rating-average-box"><div class="rating-average">${avg}</div><div class="rating-average-stars">${renderStarsRow(Math.round(parseFloat(avg)))}</div><div class="rating-total">${reviews.length} reviews</div></div><div class="rating-bars">`;
+    for(let star=5; star>=1; star--) {
+        const count = reviews.filter(r => parseInt(r.rating) === star).length;
+        const pct = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+        html += `<div class="rating-bar-row"><span class="star-label">${star}★</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:${pct}%"></div></div><span class="rating-bar-count">${count}</span></div>`;
+    }
+    html += `</div></div><div style="display: flex; flex-direction: column; gap: 12px;">`;
+    
     reviews.forEach(r => {
         const prodName = getProductNameById(r.productId);
         const rt = parseInt(r.rating) || 0;
         const dStr = r.date || r.createdAt || '';
         const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
-        html += `<div class="ocard"><div class="ohead"><div style="flex: 1; font-family: 'Playfair Display', serif; color: var(--gold); font-size: 13px; font-weight: 700;">🛍️ ${prodName}</div><div class="review-stars-row">${renderStarsRow(rt)}</div></div><div style="background: var(--bg); border-radius: 8px; padding: 12px;"><div style="display: flex; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap;"><div style="font-weight: 700; font-size: 14px;">👤 ${r.name || 'Anonymous'}</div><div style="font-size: 11px; color: var(--muted);">${niceDate}</div></div><div style="font-size: 13px; color: var(--muted); line-height: 1.7;">${r.text || '(no comment)'}</div></div><div class="oactions"><button class="btn-od" onclick="deleteReview('${r.docId}', '${(r.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button></div></div>`;
+        html += `<div class="review-card"><div class="review-header"><div class="review-name">👤 ${r.name || 'Anonymous'} <span class="verified-badge">Verified</span></div><div class="review-stars">${renderStarsRow(rt)}</div></div><div style="font-size:12px; color:var(--gold); margin-bottom:8px; font-weight:700;">🛍️ ${prodName}</div><div class="review-text">"${r.text || '(no comment)'}"</div><div class="review-date">${niceDate}</div><div class="oactions" style="margin-top:10px;"><button class="btn-od" onclick="deleteReview('${r.docId}', '${(r.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button></div></div>`;
     });
     html += '</div>';
     c.innerHTML = html;
@@ -1950,7 +1993,7 @@ window.renderNewsletter = () => {
         const dStr = n.date || n.createdAt || '';
         const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
         const isToday = dStr ? (new Date(dStr).toDateString() === new Date().toDateString()) : false;
-        html += `<div class="news-card"><div class="news-card-left"><div class="news-avatar">${initial}</div><div class="news-info"><div class="news-email">${email}</div><div class="news-meta"><span><i class="fas fa-clock"></i> ${niceDate}</span>${isToday ? '<span class="badge-new">🆕</span>' : ''}</div></div></div><div class="news-actions"><button class="news-btn-copy" onclick="copyNewsEmail('${email.replace(/'/g, "\\'")}')"><i class="fas fa-copy"></i> Copy</button><button class="abtn del" onclick="deleteNewsletter('${n.docId}', '${email.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i></button></div></div>`;
+        html += `<div class="news-card"><div class="news-card-left"><div class="news-avatar">${initial}</div><div class="news-info"><div class="news-email">${email}</div><div class="news-meta"><span><i class="fas fa-clock"></i> ${niceDate}</span>${isToday ? '<span class="badge-new">🆕 NEW</span>' : ''}</div></div></div><div class="news-actions"><button class="news-btn-copy" onclick="copyNewsEmail('${email.replace(/'/g, "\\'")}')"><i class="fas fa-copy"></i> Copy</button><button class="abtn del" onclick="deleteNewsletter('${n.docId}', '${email.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i></button></div></div>`;
     });
     c.innerHTML = html;
 };
@@ -2085,7 +2128,7 @@ window.submitCoupon = async () => {
             const idx = coupons.findIndex(co => co.docId === editId);
             if (idx > -1) coupons[idx] = { ...coupons[idx], ...data };
             aCacheSet(ADMIN_CACHE.coupons, coupons);
-            notifySite('coupon_updated', '✏️ কুপন আপডেট', code, { code });
+            notifySite('coupon_updated', '✏️ কুপন আপডেট', `প্রিয় কাস্টমার, কুপন "${code}" আপডেট করা হয়েছে!`, { code });
             showMsg('coupon-form-msg', '✅ আপডেট!', 'ok'); 
             setTimeout(() => { closeCouponModal(); renderCoupons(); }, 300); 
         }
@@ -2095,7 +2138,7 @@ window.submitCoupon = async () => {
             const docRef = await addDoc(collection(db, 'coupons'), data);
             coupons.unshift({ docId: docRef.id, ...data });
             aCacheSet(ADMIN_CACHE.coupons, coupons);
-            notifySite('coupon_added', '🎟️ নতুন কুপন', code, { code });
+            notifySite('coupon_added', '🎟️ নতুন কুপন', `প্রিয় কাস্টমার, নতুন কুপন "${code}" যোগ করা হয়েছে! এখনই ব্যবহার করুন।`, { code });
             showMsg('coupon-form-msg', '✅ তৈরি!', 'ok'); 
             setTimeout(() => { closeCouponModal(); renderCoupons(); }, 300); 
         }
@@ -2219,7 +2262,7 @@ window.submitBanner = async () => {
             const idx = banners.findIndex(b => b.docId === editId);
             if (idx > -1) banners[idx] = { ...banners[idx], ...data };
             aCacheSet(ADMIN_CACHE.banners, banners);
-            notifySite('banner_updated', '✏️ ব্যানার আপডেট', title || 'Banner', { title });
+            notifySite('banner_updated', '✏️ ব্যানার আপডেট', `প্রিয় কাস্টমার, ব্যানারটি আপডেট করা হয়েছে!`, {});
             showMsg('banner-form-msg', '✅ আপডেট!', 'ok'); 
             setTimeout(() => { closeBannerModal(); renderBanners(); }, 300); 
         }
@@ -2228,7 +2271,7 @@ window.submitBanner = async () => {
             const docRef = await addDoc(collection(db, 'banners'), data);
             banners.push({ docId: docRef.id, ...data });
             aCacheSet(ADMIN_CACHE.banners, banners);
-            notifySite('banner_added', '🖼️ নতুন ব্যানার', title || 'Banner', { title });
+            notifySite('banner_added', '🖼️ নতুন ব্যানার', `প্রিয় কাস্টমার, ওয়েবসাইটে নতুন ব্যানার যোগ করা হয়েছে!`, {});
             showMsg('banner-form-msg', '✅ তৈরি!', 'ok'); 
             setTimeout(() => { closeBannerModal(); renderBanners(); }, 300); 
         }
@@ -2323,10 +2366,6 @@ function renderContentTab() {
     renderCouriers(cached.couriers || []);
     const cachedFaq = aCacheGet(ADMIN_CACHE.faq) || [];
     renderFAQList(cachedFaq);
-    const cachedSC = aCacheGet(ADMIN_CACHE.sizeCharts) || {};
-    allSizeCharts = cachedSC;
-    populateCategoryDropdown();
-    loadSizeChartForCategory();
     const cachedHC = aCacheGet(ADMIN_CACHE.homeCollections) || [];
     renderHomeCollections(cachedHC);
 }
@@ -2444,25 +2483,6 @@ window.addFAQ = function() {
     c.appendChild(box);
 };
 
-window.loadSizeChartForCategory = function() {
-    const cat = document.getElementById('size-chart-category').value;
-    const data = allSizeCharts[cat] || { title: '', rows: [] };
-    document.getElementById('size-chart-title-input').value = data.title || '';
-    const rowsContainer = document.getElementById('size-chart-rows-container');
-    rowsContainer.innerHTML = '';
-    if (data.rows && data.rows.length > 0) data.rows.forEach(row => addSizeChartRow(row));
-    else addSizeChartRow();
-};
-
-window.addSizeChartRow = function(row) {
-    const c = document.getElementById('size-chart-rows-container');
-    const item = document.createElement('div');
-    item.className = 'size-row-item';
-    const r = row || { size: '', chest: '', waist: '', length: '', shoulder: '', sleeve: '' };
-    item.innerHTML = `<input type="text" class="sz-size" placeholder="Size" value="${r.size || ''}"><input type="number" class="sz-chest" placeholder="Chest" value="${r.chest || ''}"><input type="number" class="sz-waist" placeholder="Waist" value="${r.waist || ''}"><input type="number" class="sz-length" placeholder="Length" value="${r.length || ''}"><input type="number" class="sz-shoulder" placeholder="Shoulder" value="${r.shoulder || ''}"><input type="number" class="sz-sleeve" placeholder="Sleeve" value="${r.sleeve || ''}"><button type="button" class="rm" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-    c.appendChild(item);
-};
-
 window.renderHomeCollections = function(list) {
     const c = document.getElementById('home-collections-container');
     if (!c) return;
@@ -2537,13 +2557,6 @@ window.saveContentSettings = async function() {
             const a = box.querySelector('.faq-a').value.trim();
             if (q && a) faqList.push({ category: cat, q, a, order: idx + 1 });
         });
-        const currentCat = document.getElementById('size-chart-category').value;
-        const chartTitle = document.getElementById('size-chart-title-input').value.trim();
-        const sizeRows = [];
-        document.querySelectorAll('#size-chart-rows-container .size-row-item').forEach(item => {
-            const size = item.querySelector('.sz-size').value.trim();
-            if (size) sizeRows.push({ size, chest: parseFloat(item.querySelector('.sz-chest').value) || 0, waist: parseFloat(item.querySelector('.sz-waist').value) || 0, length: parseFloat(item.querySelector('.sz-length').value) || 0, shoulder: parseFloat(item.querySelector('.sz-shoulder').value) || 0, sleeve: parseFloat(item.querySelector('.sz-sleeve').value) || 0 });
-        });
         const hcList = [];
         document.querySelectorAll('#home-collections-container .content-item-box').forEach(box => {
             const name = box.querySelector('.hc-name').value.trim();
@@ -2562,12 +2575,12 @@ window.saveContentSettings = async function() {
         await Promise.all([...faqDeletes, ...hcDeletes]);
         const faqAdds = faqList.map(f => addDoc(collection(db, 'faq'), f));
         const hcAdds = hcList.map(hc => addDoc(collection(db, 'homeCollections'), hc));
-        await Promise.all([...faqAdds, ...hcAdds, setDoc(doc(db, 'sizeCharts', currentCat), { title: chartTitle, rows: sizeRows, updatedAt: new Date().toISOString() }, { merge: true })]);
+        await Promise.all([...faqAdds, ...hcAdds]);
+        
         aCacheSet(ADMIN_CACHE.contentSettings, contentData);
         aCacheSet(ADMIN_CACHE.faq, faqList);
         aCacheSet(ADMIN_CACHE.homeCollections, hcList);
-        allSizeCharts[currentCat] = { title: chartTitle, rows: sizeRows };
-        aCacheSet(ADMIN_CACHE.sizeCharts, allSizeCharts);
+        
         notifySite('content_updated', '🎨 Content আপডেট', 'সব content সেভ হয়েছে', {});
         showMsg('content-msg', '✅ সব Content সেভ!', 'ok');
         window.showToast('✅ Saved!');
@@ -2599,6 +2612,7 @@ window.fillSettingsForm = function() {
 
 window.renderSettingsDynamic = function() {
     const s = settingsCache;
+    
     const pnC = document.getElementById('payment-numbers-container');
     if (pnC) {
         pnC.innerHTML = '';
@@ -2607,10 +2621,31 @@ window.renderSettingsDynamic = function() {
         else list.forEach((p, idx) => {
             const item = document.createElement('div');
             item.className = 'dyn-item';
-            item.innerHTML = `<div class="content-item-num" style="align-self:center;">${idx + 1}</div><div class="dyn-fields"><input type="text" class="pn-name" placeholder="Payment Name *" value="${(p.name || '').replace(/"/g, '&quot;')}"><input type="text" class="pn-number" placeholder="Number *" value="${(p.number || '').replace(/"/g, '&quot;')}"></div><button type="button" class="dyn-remove" onclick="removePaymentNumber(${idx})"><i class="fas fa-trash"></i></button>`;
+            const imgUrl = p.imageUrl || '';
+            item.innerHTML = `<div class="content-item-num" style="align-self:center;">${idx + 1}</div>
+            <div class="dyn-fields">
+                <div style="display:grid;grid-template-columns:60px 1fr;gap:10px;align-items:start;">
+                    <div class="img-preview-box preview-icon" id="pn-prev-${idx}" style="width:60px;height:60px;">
+                        ${imgUrl ? `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;"><button type="button" class="img-remove-btn" onclick="document.getElementById('pn-url-${idx}').value=''; this.parentElement.innerHTML='<div class=\\'img-placeholder\\'><i class=\\'fas fa-image\\'></i></div>'; this.parentElement.classList.remove('has-image');"><i class="fas fa-times"></i></button>` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <input type="text" class="pn-name" placeholder="Payment Name *" value="${(p.name || '').replace(/"/g, '&quot;')}">
+                        <input type="text" class="pn-number" placeholder="Number *" value="${(p.number || '').replace(/"/g, '&quot;')}">
+                    </div>
+                </div>
+                <input type="hidden" class="pn-image" id="pn-url-${idx}" value="${imgUrl}">
+                <div class="img-upload-wrap" style="margin-top:4px;">
+                    <input type="file" id="pn-file-${idx}" accept="image/*" style="display:none" onchange="handleImageUpload(this, 'pn-url-${idx}', 'pn-prev-${idx}', null)">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('pn-file-${idx}').click()" style="padding:6px 12px;font-size:11px;"><i class="fas fa-cloud-upload-alt"></i> Image</button>
+                </div>
+                <textarea class="pn-instruction" rows="2" placeholder="Instruction (Optional)" style="padding:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;resize:vertical;">${p.instruction || ''}</textarea>
+            </div>
+            <button type="button" class="dyn-remove" onclick="removePaymentNumber(${idx})"><i class="fas fa-trash"></i></button>`;
+            if (imgUrl) item.querySelector('.img-preview-box').classList.add('has-image');
             pnC.appendChild(item);
         });
     }
+    
     const bkC = document.getElementById('banks-container');
     if (bkC) {
         bkC.innerHTML = '';
@@ -2619,10 +2654,32 @@ window.renderSettingsDynamic = function() {
         else list.forEach((b, idx) => {
             const item = document.createElement('div');
             item.className = 'dyn-item';
-            item.innerHTML = `<div class="content-item-num" style="align-self:flex-start;margin-top:8px;">${idx + 1}</div><div class="dyn-fields"><input type="text" class="bk-name" placeholder="Bank Name *" value="${(b.bankName || '').replace(/"/g, '&quot;')}"><input type="text" class="bk-account" placeholder="Account Name *" value="${(b.accountName || '').replace(/"/g, '&quot;')}"><input type="text" class="bk-number" placeholder="Account Number *" value="${(b.accountNumber || '').replace(/"/g, '&quot;')}"><input type="text" class="bk-branch" placeholder="Branch" value="${(b.branch || '').replace(/"/g, '&quot;')}"></div><button type="button" class="dyn-remove" onclick="removeBank(${idx})"><i class="fas fa-trash"></i></button>`;
+            const imgUrl = b.imageUrl || '';
+            item.innerHTML = `<div class="content-item-num" style="align-self:flex-start;margin-top:8px;">${idx + 1}</div>
+            <div class="dyn-fields">
+                <div style="display:grid;grid-template-columns:60px 1fr;gap:10px;align-items:start;">
+                    <div class="img-preview-box preview-icon" id="bk-prev-${idx}" style="width:60px;height:60px;">
+                        ${imgUrl ? `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;"><button type="button" class="img-remove-btn" onclick="document.getElementById('bk-url-${idx}').value=''; this.parentElement.innerHTML='<div class=\\'img-placeholder\\'><i class=\\'fas fa-image\\'></i></div>'; this.parentElement.classList.remove('has-image');"><i class="fas fa-times"></i></button>` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <input type="text" class="bk-name" placeholder="Bank Name *" value="${(b.bankName || '').replace(/"/g, '&quot;')}">
+                        <input type="text" class="bk-account" placeholder="Account Name *" value="${(b.accountName || '').replace(/"/g, '&quot;')}">
+                        <input type="text" class="bk-number" placeholder="Account Number *" value="${(b.accountNumber || '').replace(/"/g, '&quot;')}">
+                        <input type="text" class="bk-branch" placeholder="Branch" value="${(b.branch || '').replace(/"/g, '&quot;')}">
+                    </div>
+                </div>
+                <input type="hidden" class="bk-image" id="bk-url-${idx}" value="${imgUrl}">
+                <div class="img-upload-wrap" style="margin-top:4px;">
+                    <input type="file" id="bk-file-${idx}" accept="image/*" style="display:none" onchange="handleImageUpload(this, 'bk-url-${idx}', 'bk-prev-${idx}', null)">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('bk-file-${idx}').click()" style="padding:6px 12px;font-size:11px;"><i class="fas fa-cloud-upload-alt"></i> Image</button>
+                </div>
+            </div>
+            <button type="button" class="dyn-remove" onclick="removeBank(${idx})"><i class="fas fa-trash"></i></button>`;
+            if (imgUrl) item.querySelector('.img-preview-box').classList.add('has-image');
             bkC.appendChild(item);
         });
     }
+    
     const slC = document.getElementById('social-links-container');
     if (slC) {
         slC.innerHTML = '';
@@ -2639,7 +2696,7 @@ window.renderSettingsDynamic = function() {
 
 window.addPaymentNumber = function() {
     if (!Array.isArray(settingsCache.paymentNumbers)) settingsCache.paymentNumbers = [];
-    settingsCache.paymentNumbers.push({ name: '', number: '' });
+    settingsCache.paymentNumbers.push({ name: '', number: '', imageUrl: '', instruction: '' });
     renderSettingsDynamic();
 };
 window.removePaymentNumber = function(idx) {
@@ -2648,7 +2705,7 @@ window.removePaymentNumber = function(idx) {
 };
 window.addBank = function() {
     if (!Array.isArray(settingsCache.banks)) settingsCache.banks = [];
-    settingsCache.banks.push({ bankName: '', accountName: '', accountNumber: '', branch: '' });
+    settingsCache.banks.push({ bankName: '', accountName: '', accountNumber: '', branch: '', imageUrl: '' });
     renderSettingsDynamic();
 };
 window.removeBank = function(idx) {
@@ -2686,7 +2743,9 @@ window.saveSettings = async function() {
         document.querySelectorAll('#payment-numbers-container .dyn-item').forEach(item => {
             const name = item.querySelector('.pn-name').value.trim();
             const number = item.querySelector('.pn-number').value.trim();
-            if (name && number) collectedPayments.push({ name, number });
+            const imageUrl = item.querySelector('.pn-image').value.trim();
+            const instruction = item.querySelector('.pn-instruction').value.trim();
+            if (name && number) collectedPayments.push({ name, number, imageUrl, instruction });
         });
         const collectedBanks = [];
         document.querySelectorAll('#banks-container .dyn-item').forEach(item => {
@@ -2694,7 +2753,8 @@ window.saveSettings = async function() {
             const accountName = item.querySelector('.bk-account').value.trim();
             const accountNumber = item.querySelector('.bk-number').value.trim();
             const branch = item.querySelector('.bk-branch').value.trim();
-            if (bankName && accountNumber) collectedBanks.push({ bankName, accountName, accountNumber, branch });
+            const imageUrl = item.querySelector('.bk-image').value.trim();
+            if (bankName && accountNumber) collectedBanks.push({ bankName, accountName, accountNumber, branch, imageUrl });
         });
         const collectedSocial = [];
         document.querySelectorAll('#social-links-container .dyn-item').forEach(item => {
@@ -2740,8 +2800,8 @@ window.resetSettingsToDefault = function() {
 window.backupAllData = async function() {
     if (!confirm('Backup নিবেন?')) return;
     try {
-        const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'sizeCharts', 'homeCollections'];
-        const backup = { version: '8.0', timestamp: new Date().toISOString(), data: {} };
+        const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'homeCollections'];
+        const backup = { version: '9.0', timestamp: new Date().toISOString(), data: {} };
         for (const col of collections) {
             try { const snap = await getDocs(collection(db, col)); backup.data[col] = []; snap.forEach(d => backup.data[col].push({ _docId: d.id, ...d.data() })); }
             catch (e) { backup.data[col] = []; }
@@ -2767,7 +2827,7 @@ window.handleRestoreFile = async function(event) {
         const backup = JSON.parse(text);
         if (!backup.data || !backup.version) { alert('❌ Invalid file.'); event.target.value = ''; return; }
         let total = 0;
-        const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'sizeCharts', 'homeCollections'];
+        const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'homeCollections'];
         for (const col of collections) {
             if (!backup.data[col] || !Array.isArray(backup.data[col])) continue;
             for (const item of backup.data[col]) {
@@ -2802,10 +2862,12 @@ document.addEventListener('keydown', (e) => {
         if (cm && cm.classList.contains('active')) closeCouponModal();
         const bm = document.getElementById('banner-modal');
         if (bm && bm.classList.contains('active')) closeBannerModal();
+        const pm = document.getElementById('page-modal');
+        if (pm && pm.classList.contains('active')) closeAddPageModal();
     }
 });
 
-console.log('✅ Admin Panel v8 — Date Render Fix applied');
+console.log('✅ Admin Panel v9 — All new features applied');
 </script>
 </body>
 </html>
