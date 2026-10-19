@@ -434,6 +434,29 @@ button,input,select,textarea{font-family:inherit}
   .preview-courier{width:80px}
 }
 @media (max-width:599px){
+    .preview-main{max-width:140px !important; margin:0 auto 10px !important;}
+.crow-img, .crow-color {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 10px !important;
+    gap: 10px !important;
+}
+.crow-img .img-preview-box, .crow-color .img-preview-box {
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    margin: 0 !important;
+}
+.crow-img .img-info, .crow-color .color-info {
+    flex: 1 !important;
+    min-width: 140px !important;
+}
+.crow-img .rm, .crow-color .rm {
+    width: 36px !important;
+    height: 36px !important;
+}
   .head{padding:11px 12px;gap:8px}
   .head h1{font-size:13px}.head-logo{width:30px;height:30px}.head-left{gap:8px}
   .badge{display:none}
