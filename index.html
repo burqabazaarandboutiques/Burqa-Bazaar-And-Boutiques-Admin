@@ -21,14 +21,14 @@
 
 <script>
 window.ADMIN_CACHE = {
-    products: 'bq_admin_products_v9', orders: 'bq_admin_orders_v9',
-    reviews: 'bq_admin_reviews_v9', newsletter: 'bq_admin_newsletter_v9',
-    coupons: 'bq_admin_coupons_v9', banners: 'bq_admin_banners_v9',
-    pages: 'bq_admin_pages_v9', faq: 'bq_admin_faq_v9',
-    sizeCharts: 'bq_admin_sizeCharts_v9', homeCollections: 'bq_admin_homeCollections_v9',
-    settings: 'bq_admin_settings_v9', contentSettings: 'bq_admin_content_v9',
-    stats: 'bq_admin_stats_v9', categories: 'bq_admin_categories_v9',
-    customSizes: 'bq_admin_customSizes_v9', customPages: 'bq_admin_customPages_v9'
+    products: 'bq_admin_products_v10', orders: 'bq_admin_orders_v10',
+    reviews: 'bq_admin_reviews_v10', newsletter: 'bq_admin_newsletter_v10',
+    coupons: 'bq_admin_coupons_v10', banners: 'bq_admin_banners_v10',
+    pages: 'bq_admin_pages_v10', faq: 'bq_admin_faq_v10',
+    sizeCharts: 'bq_admin_sizeCharts_v10', homeCollections: 'bq_admin_homeCollections_v10',
+    settings: 'bq_admin_settings_v10', contentSettings: 'bq_admin_content_v10',
+    stats: 'bq_admin_stats_v10', categories: 'bq_admin_categories_v10',
+    customSizes: 'bq_admin_customSizes_v10', customPages: 'bq_admin_customPages_v10'
 };
 window.aCacheGet = function(key) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw).data : null; } catch(e) { return null; } };
 window.aCacheSet = function(key, data) { try { localStorage.setItem(key, JSON.stringify({ data, t: Date.now() })); } catch(e) {} };
@@ -232,7 +232,6 @@ button,input,select,textarea{font-family:inherit}
 .msg.ok{background:rgba(34,197,94,.15);border:1px solid var(--ok);color:#86efac}
 .msg.bad{background:rgba(239,68,68,.15);border:1px solid var(--bad);color:#fca5a5}
 
-/* PREMIUM PRODUCT CARDS */
 .pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:12px;display:flex;gap:15px;align-items:flex-start;transition:all .2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
 .pcard:hover{border-color:var(--gold); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(223,177,91,0.15);}
 .pimg{width:80px;height:80px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#000;border:1px solid var(--border)}
@@ -268,7 +267,6 @@ button,input,select,textarea{font-family:inherit}
 .img-preview-box .img-remove-btn{position:absolute;top:6px;right:6px;background:rgba(239,68,68,.9);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5);transition:all .2s}
 .img-preview-box .img-remove-btn:hover{background:var(--bad);transform:scale(1.1)}
 
-/* Smaller, optimized image sizes */
 .preview-main{width:100%;max-width:140px;aspect-ratio:1;margin:0 auto}
 .preview-add{width:100px;aspect-ratio:1;flex-shrink:0}
 .preview-color{width:80px;aspect-ratio:1;flex-shrink:0}
@@ -319,7 +317,6 @@ button,input,select,textarea{font-family:inherit}
 .ofilter button{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid var(--border);background:var(--card);color:var(--text);transition:all .2s}
 .ofilter button.active{background:var(--gold);color:#0b0b0d;border-color:var(--gold)}
 
-/* PREMIUM NEWSLETTER */
 .news-hero{background:linear-gradient(135deg,rgba(59,130,246,.12) 0%,rgba(59,130,246,.03) 100%);border:1px solid #3b82f6;border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap; box-shadow: 0 8px 25px rgba(59,130,246,0.1);}
 .news-hero-left{display:flex;align-items:center;gap:15px;min-width:0}
 .news-hero-icon{width:55px;height:55px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(59,130,246,.4)}
@@ -345,7 +342,6 @@ button,input,select,textarea{font-family:inherit}
 .search-news-box input:focus{border-color:#3b82f6}
 .search-news-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#3b82f6}
 
-/* PREMIUM COUPONS */
 .coupon-hero{background:linear-gradient(135deg,rgba(255,0,127,.12) 0%,rgba(121,40,202,.08) 100%);border:1px solid rgba(255,0,127,.4);border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap; box-shadow: 0 8px 25px rgba(255,0,127,0.15);}
 .coupon-hero-left{display:flex;align-items:center;gap:15px;min-width:0}
 .coupon-hero-icon{width:55px;height:55px;border-radius:50%;background:linear-gradient(135deg,#ff007f,#7928ca);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(255,0,127,.4)}
@@ -369,13 +365,11 @@ button,input,select,textarea{font-family:inherit}
 .coupon-detail-item i{color:var(--gold);width:14px;flex-shrink:0}
 .coupon-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-/* MODALS */
 .coupon-form-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .coupon-form-modal.active{display:flex}
 .coupon-form-box{background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:25px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.8);margin:auto}
 .coupon-form-box h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:18px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
 
-/* TOGGLE */
 .toggle-switch{position:relative;display:inline-block;width:50px;height:26px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0}
 .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.3s;border-radius:26px}
@@ -383,7 +377,6 @@ button,input,select,textarea{font-family:inherit}
 .toggle-switch input:checked + .toggle-slider{background:linear-gradient(135deg,#22c55e,#16a34a)}
 .toggle-switch input:checked + .toggle-slider::before{transform:translateX(24px)}
 
-/* DYNAMIC LIST */
 .dyn-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:10px}
 .dyn-item .dyn-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
 .dyn-item .dyn-fields input{padding:10px 12px;background:var(--card);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit;width:100%}
@@ -391,7 +384,6 @@ button,input,select,textarea{font-family:inherit}
 .dyn-item .dyn-remove{background:transparent;border:1px solid var(--bad);color:var(--bad);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:center}
 .dyn-item .dyn-remove:hover{background:var(--bad);color:#fff}
 
-/* PREMIUM REVIEWS */
 .rating-summary { display: flex; align-items: center; gap: 15px; padding: 20px; background: linear-gradient(135deg, rgba(245,158,11,.1), rgba(245,158,11,.02)); border: 1px solid rgba(245,158,11,.3); border-radius: 16px; margin: 15px 0; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
 .rating-average-box { text-align: center; min-width: 90px; padding-right: 20px; border-right: 1px solid rgba(245,158,11,.3); }
 .rating-average { font-size: 42px; font-weight: 800; color: #f59e0b; line-height: 1; font-family: 'Playfair Display', serif; text-shadow: 0 0 15px rgba(245,158,11,0.4); }
@@ -412,7 +404,6 @@ button,input,select,textarea{font-family:inherit}
 .review-text { font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--bg); padding: 12px; border-radius: 8px; }
 .review-date { font-size: 11px; color: var(--muted); opacity: .7; margin-top: 8px; display: block; text-align: right; }
 
-/* Responsive */
 @media (max-width:767px){
   .wrap{padding:18px 14px}
   .head{padding:12px 16px}.head h1{font-size:15px}.head-logo{width:34px;height:34px}
@@ -434,29 +425,6 @@ button,input,select,textarea{font-family:inherit}
   .preview-courier{width:80px}
 }
 @media (max-width:599px){
-    .preview-main{max-width:140px !important; margin:0 auto 10px !important;}
-.crow-img, .crow-color {
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    padding: 10px !important;
-    gap: 10px !important;
-}
-.crow-img .img-preview-box, .crow-color .img-preview-box {
-    width: 80px !important;
-    height: 80px !important;
-    min-width: 80px !important;
-    margin: 0 !important;
-}
-.crow-img .img-info, .crow-color .color-info {
-    flex: 1 !important;
-    min-width: 140px !important;
-}
-.crow-img .rm, .crow-color .rm {
-    width: 36px !important;
-    height: 36px !important;
-}
   .head{padding:11px 12px;gap:8px}
   .head h1{font-size:13px}.head-logo{width:30px;height:30px}.head-left{gap:8px}
   .badge{display:none}
@@ -472,8 +440,8 @@ button,input,select,textarea{font-family:inherit}
   .stat .val{font-size:18px}.stat .lbl{font-size:10px}.stat i{font-size:17px;margin-bottom:6px}
   .login-box{padding:28px 20px}.login-logo{width:70px;height:70px}
   .login-box h1{font-size:22px}.login-box .sub{font-size:12px;margin-bottom:24px}
-  .pcard{flex-direction:column;align-items:stretch;padding:12px;gap:10px}
-  .pimg{width:100%;height:180px;border-radius:10px;border:none}
+  .pcard{flex-direction:row;align-items:flex-start;padding:12px;gap:12px}
+  .pimg{width:75px;height:75px;border-radius:8px;border:1px solid var(--border)}
   .pname{font-size:14px}.pprice{font-size:14px;margin-bottom:8px}
   .pacts{gap:6px}.pacts .abtn{flex:1;justify-content:center}
   .ocard{padding:14px;border-radius:12px}.oid{font-size:14px;flex:1;min-width:0}
@@ -528,14 +496,6 @@ button,input,select,textarea{font-family:inherit}
   .crow-img .img-preview-box,.crow-color .img-preview-box{width:100% !important;max-width:200px !important;margin:0 auto}
   #admin-notification-container{top:10px !important;right:10px !important;left:10px !important;max-width:none !important}
   .admin-notification{max-width:100% !important;padding:12px 14px !important}
-}
-    @media (max-width: 599px) {
-    .pcard { flex-direction: row !important; align-items: flex-start !important; padding: 12px !important; gap: 12px !important; }
-    .pimg { width: 75px !important; height: 75px !important; border-radius: 8px !important; border: 1px solid var(--border) !important; flex-shrink: 0 !important; }
-    .pinfo { flex: 1 !important; min-width: 0 !important; }
-    .pname { font-size: 14px !important; }
-    .pprice { font-size: 14px !important; margin-bottom: 8px !important; }
-    .pacts .abtn { flex: 1 !important; justify-content: center !important; padding: 6px 4px !important; font-size: 11px !important; }
 }
 </style>
 </head>
@@ -753,11 +713,7 @@ button,input,select,textarea{font-family:inherit}
                 <div id="contact-icons-container"></div>
                 <button type="button" class="btn-s" onclick="addContactIcon()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add New Contact Icon</button>
             </div>
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-credit-card"></i> Payment Methods</h3>
-                <div id="payment-methods-container"></div>
-                <button type="button" class="btn-s" onclick="addPaymentMethod()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Payment Method</button>
-            </div>
+            <!-- 🚫 Payment Methods Removed from Content -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Track Order Couriers</h3>
                 <div id="couriers-container"></div>
@@ -768,7 +724,6 @@ button,input,select,textarea{font-family:inherit}
                 <div id="faq-container"></div>
                 <button type="button" class="btn-s" onclick="addFAQ()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add FAQ</button>
             </div>
-            <!-- 🚫 Size Chart Manager Removed -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-th-large"></i> Home Collections</h3>
                 <div id="home-collections-container"></div>
@@ -1240,9 +1195,6 @@ window.switchTab = function(name, userClick = false) {
     }
 };
 
-// ============================================================
-// CATEGORY MANAGER (ADD, EDIT, DELETE)
-// ============================================================
 window.renderCategoryManager = function() {
     const c = document.getElementById('category-manager-container');
     if(!c) return;
@@ -1267,7 +1219,6 @@ window.saveEditedCategory = async function(idx) {
     aCacheSet(ADMIN_CACHE.categories, allCategories);
     try { await setDoc(doc(db, 'settings', 'categories'), { list: allCategories }, { merge: true }); } catch(e) {}
     
-    // Update existing products with the new category name
     if (oldName !== newName) {
         try {
             const snap = await getDocs(collection(db, 'products'));
@@ -1278,7 +1229,6 @@ window.saveEditedCategory = async function(idx) {
                 }
             });
             await Promise.all(batchPromises);
-            // Reload products to reflect changes
             loadProducts(true);
         } catch(e) { console.warn('Could not update products with new category', e); }
     }
@@ -1289,7 +1239,7 @@ window.saveEditedCategory = async function(idx) {
 };
 
 window.deleteCategory = async function(idx) {
-    if(!confirm(`"${allCategories[idx]}" ডিলিট করতে চান? (এই ক্যাটাগরির প্রোডাক্টগুলো আনক্যাটাগরি হয়ে যাবে)`)) return;
+    if(!confirm(`"${allCategories[idx]}" ডিলিট করতে চান?`)) return;
     allCategories.splice(idx, 1);
     aCacheSet(ADMIN_CACHE.categories, allCategories);
     try { await setDoc(doc(db, 'settings', 'categories'), { list: allCategories }, { merge: true }); } catch(e) {}
@@ -1358,9 +1308,6 @@ window.promptAddSize = async function() {
     renderSizeButtons();
 };
 
-// ============================================================
-// PAGES MANAGER (MODAL, DELETE)
-// ============================================================
 window.openAddPageModal = function() {
     document.getElementById('new-page-name').value = '';
     document.getElementById('page-modal-msg').classList.remove('show');
@@ -1388,21 +1335,14 @@ window.submitNewPage = async function() {
 
 window.deleteCurrentPage = async function() {
     const pageId = currentEditingPage;
-    if(DEFAULT_PAGES[pageId]) {
-        alert('❌ ডিফল্ট পেজ ডিলিট করা যাবে না।');
-        return;
-    }
+    if(DEFAULT_PAGES[pageId]) { alert('❌ ডিফল্ট পেজ ডিলিট করা যাবে না।'); return; }
     if(!confirm(`"${customPages[pageId]}" পেজটি ডিলিট করতে চান?`)) return;
     
-    // Delete from Firebase
     try { await deleteDoc(doc(db, 'pages', pageId)); } catch(e) {}
-    
-    // Remove from customPages
     delete customPages[pageId];
     aCacheSet(ADMIN_CACHE.customPages, customPages);
     try { await setDoc(doc(db, 'settings', 'customPages'), { pages: customPages }, { merge: true }); } catch(e) {}
     
-    // Update UI
     renderPageTabs();
     switchPage('about');
     window.showToast('🗑️ Page deleted');
@@ -1592,7 +1532,6 @@ window.renderProducts = () => {
         return;
     }
     
-    // Auto NEW Badge logic: Find the maximum ID (latest product)
     const maxId = products.reduce((max, p) => Math.max(max, parseInt(p.id) || 0), 0);
 
     let html = '';
@@ -1611,7 +1550,6 @@ window.renderProducts = () => {
             else stockBadge = '<span class="stock-badge instock"><i class="fas fa-check-circle"></i> Stock: ' + stockNum + '</span>';
         }
 
-        // Apply auto NEW badge
         let autoBadge = '';
         if (parseInt(p.id) === maxId && maxId > 0) {
             autoBadge = '<span class="product-badge new" style="margin-left:10px;background:linear-gradient(135deg,#00dfd8,#00a99d);color:#fff;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:800;">NEW</span>';
@@ -1749,7 +1687,6 @@ window.submitProduct = async (e) => {
         const cleanImg = extractUrl(image) || image;
         const uniqueImages = [...new Set([cleanImg, ...additionalImages])];
         
-        // Note: badge is no longer manually set here, it's auto-assigned based on ID.
         const data = { name, category, price, stock, image: cleanImg, video: videoUrl || null, sizes, colors, images: uniqueImages, fullDescription: desc, updatedAt: new Date().toISOString() };
         
         if (editId) {
@@ -1978,7 +1915,6 @@ window.renderReviews = () => {
     reviews.forEach(r => totalRating += (parseInt(r.rating) || 0));
     const avg = (totalRating / reviews.length).toFixed(1);
     
-    // Premium Review Layout
     let html = `<div class="rating-summary"><div class="rating-average-box"><div class="rating-average">${avg}</div><div class="rating-average-stars">${renderStarsRow(Math.round(parseFloat(avg)))}</div><div class="rating-total">${reviews.length} reviews</div></div><div class="rating-bars">`;
     for(let star=5; star>=1; star--) {
         const count = reviews.filter(r => parseInt(r.rating) === star).length;
@@ -2393,7 +2329,6 @@ function renderContentTab() {
     else { logoPrev.innerHTML = '<div class="img-placeholder"><i class="fas fa-image"></i><span>No logo</span></div>'; logoPrev.classList.remove('has-image'); }
     document.getElementById('c-copyright-text').value = cached.copyrightText || DEFAULT_CONTENT.copyrightText;
     renderContactIcons(cached.contactIcons || []);
-    renderPaymentMethods(cached.paymentMethods || []);
     renderCouriers(cached.couriers || []);
     const cachedFaq = aCacheGet(ADMIN_CACHE.faq) || [];
     renderFAQList(cachedFaq);
@@ -2431,41 +2366,6 @@ window.renumberContactIcons = function() {
     const c = document.getElementById('contact-icons-container');
     if (!c) return;
     Array.from(c.children).forEach((child, idx) => { const num = child.querySelector('.content-item-num'); if (num) num.textContent = idx + 1; });
-};
-
-window.renderPaymentMethods = function(list) {
-    const c = document.getElementById('payment-methods-container');
-    if (!c) return;
-    c.innerHTML = '';
-    if (!Array.isArray(list)) list = [];
-    list.forEach((pm, idx) => {
-        const box = document.createElement('div');
-        box.className = 'content-item-box';
-        const imgUrl = pm.iconUrl || '';
-        const hasCustomInstr = pm.instructionType === 'custom';
-        box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx + 1}</div><button type="button" class="content-item-remove" onclick="this.parentElement.parentElement.remove(); renumberContentItems('payment-methods-container');"><i class="fas fa-trash"></i></button></div><div style="display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:start;"><div class="img-preview-box preview-icon" id="pm-prev-${idx}">${imgUrl ? `<img src="${imgUrl}">` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}</div><div style="display:flex;flex-direction:column;gap:8px;"><div class="fgroup" style="margin:0;"><label>Method Name</label><input type="text" class="pm-name" value="${(pm.name || '').replace(/"/g, '&quot;')}"></div><div class="fgroup" style="margin:0;"><label>Value</label><input type="text" class="pm-value" value="${(pm.value || '').replace(/"/g, '&quot;')}"></div></div></div><div class="fgroup"><label>Icon</label><input type="hidden" class="pm-icon" id="pm-url-${idx}" value="${imgUrl}"><div class="img-upload-wrap" style="margin-top:4px;"><input type="file" id="pm-file-${idx}" accept="image/*" style="display:none" onchange="handleImageUpload(this, 'pm-url-${idx}', 'pm-prev-${idx}', null)"><button type="button" class="upload-btn" onclick="document.getElementById('pm-file-${idx}').click()"><i class="fas fa-cloud-upload-alt"></i> ${imgUrl ? 'Change' : 'Upload'}</button></div></div><div class="fgroup"><label>🎯 Instruction Type</label><select class="pm-instruction-type" onchange="onPaymentInstructionChange(this)"><option value="none" ${pm.instructionType === 'none' || !pm.instructionType ? 'selected' : ''}>❌ কিছুই না</option><option value="cod" ${pm.instructionType === 'cod' ? 'selected' : ''}>💰 COD</option><option value="bkash" ${pm.instructionType === 'bkash' ? 'selected' : ''}>💳 bKash</option><option value="nagad" ${pm.instructionType === 'nagad' ? 'selected' : ''}>💰 Nagad</option><option value="upay" ${pm.instructionType === 'upay' ? 'selected' : ''}>💳 Upay</option><option value="rocket" ${pm.instructionType === 'rocket' ? 'selected' : ''}>💰 Rocket</option><option value="surecash" ${pm.instructionType === 'surecash' ? 'selected' : ''}>💰 SureCash</option><option value="bank" ${pm.instructionType === 'bank' ? 'selected' : ''}>🏦 Bank</option><option value="custom" ${pm.instructionType === 'custom' ? 'selected' : ''}>📝 Custom</option></select></div><div class="fgroup pm-number-field" style="${hasCustomInstr ? 'display:none;' : 'display:block;'}"><label>📞 Instruction Number</label><input type="text" class="pm-instruction-number" value="${(pm.instructionNumber || '').replace(/"/g, '&quot;')}"></div><div class="fgroup pm-custom-field" style="${hasCustomInstr ? 'display:block;' : 'display:none;'}"><label>📝 Custom Instruction</label><textarea class="pm-custom-instruction" rows="3">${pm.customInstruction || ''}</textarea></div><div class="fgroup" style="display: flex; align-items: center; gap: 10px;"><label style="flex: 1;">Enabled</label><label class="toggle-switch"><input type="checkbox" class="pm-enabled" ${pm.enabled !== false ? 'checked' : ''}><span class="toggle-slider"></span></label></div>`;
-        if (imgUrl) box.querySelector('.img-preview-box').classList.add('has-image');
-        c.appendChild(box);
-    });
-};
-
-window.onPaymentInstructionChange = function(selectEl) {
-    const box = selectEl.closest('.content-item-box');
-    const numberField = box.querySelector('.pm-number-field');
-    const customField = box.querySelector('.pm-custom-field');
-    const type = selectEl.value;
-    if (type === 'custom') { numberField.style.display = 'none'; customField.style.display = 'block'; }
-    else if (type === 'none') { numberField.style.display = 'none'; customField.style.display = 'none'; }
-    else { numberField.style.display = 'block'; customField.style.display = 'none'; }
-};
-
-window.addPaymentMethod = function() {
-    const c = document.getElementById('payment-methods-container');
-    const idx = c.children.length;
-    const box = document.createElement('div');
-    box.className = 'content-item-box';
-    box.innerHTML = `<div class="content-item-header"><div class="content-item-num">${idx + 1}</div><button type="button" class="content-item-remove" onclick="this.parentElement.parentElement.remove(); renumberContentItems('payment-methods-container');"><i class="fas fa-trash"></i></button></div><div style="display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:start;"><div class="img-preview-box preview-icon" id="pm-prev-new-${idx}"><div class="img-placeholder"><i class="fas fa-image"></i></div></div><div style="display:flex;flex-direction:column;gap:8px;"><div class="fgroup" style="margin:0;"><label>Method Name</label><input type="text" class="pm-name"></div><div class="fgroup" style="margin:0;"><label>Value</label><input type="text" class="pm-value"></div></div></div><div class="fgroup"><label>Icon</label><input type="hidden" class="pm-icon" id="pm-url-new-${idx}"><div class="img-upload-wrap" style="margin-top:4px;"><input type="file" id="pm-file-new-${idx}" accept="image/*" style="display:none" onchange="handleImageUpload(this, 'pm-url-new-${idx}', 'pm-prev-new-${idx}', null)"><button type="button" class="upload-btn" onclick="document.getElementById('pm-file-new-${idx}').click()"><i class="fas fa-cloud-upload-alt"></i> Upload</button></div></div><div class="fgroup"><label>🎯 Instruction Type</label><select class="pm-instruction-type" onchange="onPaymentInstructionChange(this)"><option value="none" selected>❌ কিছুই না</option><option value="cod">💰 COD</option><option value="bkash">💳 bKash</option><option value="nagad">💰 Nagad</option><option value="upay">💳 Upay</option><option value="rocket">💰 Rocket</option><option value="surecash">💰 SureCash</option><option value="bank">🏦 Bank</option><option value="custom">📝 Custom</option></select></div><div class="fgroup pm-number-field" style="display:none;"><label>📞 Instruction Number</label><input type="text" class="pm-instruction-number"></div><div class="fgroup pm-custom-field" style="display:none;"><label>📝 Custom Instruction</label><textarea class="pm-custom-instruction" rows="3"></textarea></div><div class="fgroup" style="display: flex; align-items: center; gap: 10px;"><label style="flex: 1;">Enabled</label><label class="toggle-switch"><input type="checkbox" class="pm-enabled" checked><span class="toggle-slider"></span></label></div>`;
-    c.appendChild(box);
 };
 
 window.renderCouriers = function(list) {
@@ -2559,18 +2459,7 @@ window.saveContentSettings = async function() {
             if (label && iconUrl) contactIcons.push({ label, iconUrl, linkUrl, enabled });
         });
         contentData.contactIcons = contactIcons;
-        const paymentMethods = [];
-        document.querySelectorAll('#payment-methods-container .content-item-box').forEach(box => {
-            const name = box.querySelector('.pm-name').value.trim();
-            const value = box.querySelector('.pm-value').value.trim();
-            const iconUrl = box.querySelector('.pm-icon').value.trim();
-            const instructionType = box.querySelector('.pm-instruction-type').value;
-            const instructionNumber = box.querySelector('.pm-instruction-number').value.trim();
-            const customInstruction = box.querySelector('.pm-custom-instruction').value.trim();
-            const enabled = box.querySelector('.pm-enabled').checked;
-            if (name && value) paymentMethods.push({ name, label: name, value, iconUrl, instructionType, instructionNumber, customInstruction, enabled });
-        });
-        contentData.paymentMethods = paymentMethods;
+        
         const couriersList = [];
         document.querySelectorAll('#couriers-container .content-item-box').forEach(box => {
             const name = box.querySelector('.co-name').value.trim();
@@ -2581,6 +2470,7 @@ window.saveContentSettings = async function() {
             if (name && url) couriersList.push({ name, description, url, logoUrl, enabled });
         });
         contentData.couriers = couriersList;
+        
         const faqList = [];
         document.querySelectorAll('#faq-container .faq-item-box').forEach((box, idx) => {
             const cat = box.querySelector('.faq-cat').value;
@@ -2588,6 +2478,7 @@ window.saveContentSettings = async function() {
             const a = box.querySelector('.faq-a').value.trim();
             if (q && a) faqList.push({ category: cat, q, a, order: idx + 1 });
         });
+        
         const hcList = [];
         document.querySelectorAll('#home-collections-container .content-item-box').forEach(box => {
             const name = box.querySelector('.hc-name').value.trim();
@@ -2596,6 +2487,7 @@ window.saveContentSettings = async function() {
             const enabled = box.querySelector('.hc-enabled').checked;
             if (name && image) hcList.push({ name, image, order, enabled });
         });
+        
         const [_, faqOld, hcOld] = await Promise.all([
             setDoc(doc(db, 'settings', 'store'), contentData, { merge: true }),
             getDocs(collection(db, 'faq')),
@@ -2624,7 +2516,7 @@ window.resetContentToDefault = function() {
     if (!confirm('সব Default এ ফিরবে?')) return;
     document.getElementById('c-logo-url').value = DEFAULT_CONTENT.logoUrl;
     document.getElementById('c-copyright-text').value = DEFAULT_CONTENT.copyrightText;
-    renderContactIcons([]); renderPaymentMethods([]); renderCouriers([]); renderFAQList([]); renderHomeCollections([]);
+    renderContactIcons([]); renderCouriers([]); renderFAQList([]); renderHomeCollections([]);
     showMsg('content-msg', 'ℹ️ Reset।', 'ok');
 };
 
@@ -2654,22 +2546,31 @@ window.renderSettingsDynamic = function() {
             item.className = 'dyn-item';
             const imgUrl = p.imageUrl || '';
             item.innerHTML = `<div class="content-item-num" style="align-self:center;">${idx + 1}</div>
-            <div class="dyn-fields">
-                <div style="display:grid;grid-template-columns:60px 1fr;gap:10px;align-items:start;">
-                    <div class="img-preview-box preview-icon" id="pn-prev-${idx}" style="width:60px;height:60px;">
+            <div class="dyn-fields" style="gap:12px;">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                    <div class="img-preview-box preview-icon" id="pn-prev-${idx}" style="width:60px; height:60px; flex-shrink:0;">
                         ${imgUrl ? `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;"><button type="button" class="img-remove-btn" onclick="document.getElementById('pn-url-${idx}').value=''; this.parentElement.innerHTML='<div class=\\'img-placeholder\\'><i class=\\'fas fa-image\\'></i></div>'; this.parentElement.classList.remove('has-image');"><i class="fas fa-times"></i></button>` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
                     </div>
-                    <div style="display:flex;flex-direction:column;gap:8px;">
-                        <input type="text" class="pn-name" placeholder="Payment Name *" value="${(p.name || '').replace(/"/g, '&quot;')}">
-                        <input type="text" class="pn-number" placeholder="Number *" value="${(p.number || '').replace(/"/g, '&quot;')}">
+                    <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
+                        <div class="fgroup" style="margin:0;">
+                            <label style="font-size:11px; margin-bottom:2px; color:var(--gold);">Method Name (যেমন: bKash)</label>
+                            <input type="text" class="pn-name" placeholder="Payment Name *" value="${(p.name || '').replace(/"/g, '&quot;')}">
+                        </div>
+                        <div class="fgroup" style="margin:0;">
+                            <label style="font-size:11px; margin-bottom:2px; color:var(--gold);">Payment Number</label>
+                            <input type="text" class="pn-number" placeholder="Number *" value="${(p.number || '').replace(/"/g, '&quot;')}">
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" class="pn-image" id="pn-url-${idx}" value="${imgUrl}">
-                <div class="img-upload-wrap" style="margin-top:4px;">
+                <div class="img-upload-wrap" style="margin-top:0; margin-bottom:5px;">
                     <input type="file" id="pn-file-${idx}" accept="image/*" style="display:none" onchange="handleImageUpload(this, 'pn-url-${idx}', 'pn-prev-${idx}', null)">
-                    <button type="button" class="upload-btn" onclick="document.getElementById('pn-file-${idx}').click()" style="padding:6px 12px;font-size:11px;"><i class="fas fa-cloud-upload-alt"></i> Image</button>
+                    <button type="button" class="upload-btn" onclick="document.getElementById('pn-file-${idx}').click()" style="padding:6px 12px;font-size:11px; flex:1;"><i class="fas fa-cloud-upload-alt"></i> Upload Icon</button>
                 </div>
-                <textarea class="pn-instruction" rows="2" placeholder="Instruction (Optional)" style="padding:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;resize:vertical;">${p.instruction || ''}</textarea>
+                <div class="fgroup" style="margin:0;">
+                    <label style="font-size:11px; margin-bottom:2px; color:var(--gold);">Instruction Text (ঐচ্ছিক)</label>
+                    <textarea class="pn-instruction" rows="2" placeholder="যেমন: দয়া করে Send Money করবেন" style="padding:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;resize:vertical;">${p.instruction || ''}</textarea>
+                </div>
             </div>
             <button type="button" class="dyn-remove" onclick="removePaymentNumber(${idx})"><i class="fas fa-trash"></i></button>`;
             if (imgUrl) item.querySelector('.img-preview-box').classList.add('has-image');
@@ -2832,7 +2733,7 @@ window.backupAllData = async function() {
     if (!confirm('Backup নিবেন?')) return;
     try {
         const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'homeCollections'];
-        const backup = { version: '9.0', timestamp: new Date().toISOString(), data: {} };
+        const backup = { version: '10.0', timestamp: new Date().toISOString(), data: {} };
         for (const col of collections) {
             try { const snap = await getDocs(collection(db, col)); backup.data[col] = []; snap.forEach(d => backup.data[col].push({ _docId: d.id, ...d.data() })); }
             catch (e) { backup.data[col] = []; }
@@ -2898,7 +2799,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-console.log('✅ Admin Panel v9 — All new features applied');
+console.log('✅ Admin Panel v10 — Payment System Updated');
 </script>
 </body>
 </html>
