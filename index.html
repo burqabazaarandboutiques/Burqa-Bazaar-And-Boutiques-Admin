@@ -607,7 +607,6 @@ button,input,select,textarea{font-family:inherit}
                 </div>
 
                 <div class="fgroup"><label>🎥 Video URL (ঐচ্ছিক)</label><input type="text" id="p-video" placeholder="YouTube / Facebook / Vimeo Video Link"></div>
-                <!-- 🚫 Badge Dropdown Removed (Auto NEW feature added) -->
 
                 <div class="fgroup" id="size-section" style="display: none;">
                     <label>📏 Sizes</label>
@@ -713,7 +712,6 @@ button,input,select,textarea{font-family:inherit}
                 <div id="contact-icons-container"></div>
                 <button type="button" class="btn-s" onclick="addContactIcon()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add New Contact Icon</button>
             </div>
-            <!-- 🚫 Payment Methods Removed from Content -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Track Order Couriers</h3>
                 <div id="couriers-container"></div>
@@ -794,9 +792,13 @@ button,input,select,textarea{font-family:inherit}
                     <button type="button" class="btn-s" onclick="restoreAllData()" style="justify-content: center; padding: 12px;"><i class="fas fa-upload"></i> Restore Data</button>
                 </div>
                 <input type="file" id="restore-file-input" accept=".json" style="display: none;" onchange="handleRestoreFile(event)">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
                     <button type="button" class="btn-p" onclick="forceSyncWebsite()" style="justify-content: center; padding: 12px;"><i class="fas fa-bolt"></i> Force Sync</button>
                     <button type="button" class="btn-s" onclick="clearAdminCacheNow()" style="justify-content: center; padding: 12px;"><i class="fas fa-broom"></i> Clear Cache</button>
+                </div>
+                <!-- NEW: Recalculate Review Stats Button -->
+                <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                    <button type="button" class="btn-p" onclick="recalcAllReviewStats()" style="justify-content: center; padding: 12px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);"><i class="fas fa-calculator"></i> Recalculate Review Stats (One-time)</button>
                 </div>
             </div>
             <div style="position: sticky; bottom: 20px; background: var(--bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap;">
@@ -868,7 +870,7 @@ button,input,select,textarea{font-family:inherit}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { initializeFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { initializeFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc, onSnapshot, increment, query, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -1936,12 +1938,33 @@ window.renderReviews = () => {
 
 window.deleteReview = async (docId, name) => {
     if (!confirm('রিভিউ মুছবেন? "' + name + '"')) return;
+    const review = reviews.find(r => r.docId === docId);
     const backup = [...reviews];
     reviews = reviews.filter(r => r.docId !== docId);
     aCacheSet(ADMIN_CACHE.reviews, reviews);
     renderReviews();
     window.showToast('🗑️');
-    try { await deleteDoc(doc(db, 'reviews', docId)); }
+    try { 
+        await deleteDoc(doc(db, 'reviews', docId)); 
+        // Update product stats to reflect deletion
+        if (review && review.productId) {
+            const prod = products.find(p => parseInt(p.id) === parseInt(review.productId));
+            if (prod && prod.docId) {
+                const rating = parseInt(review.rating) || 0;
+                try {
+                    await updateDoc(doc(db, 'products', prod.docId), {
+                        reviewCount: increment(-1),
+                        ratingSum: increment(-rating),
+                        [`ratingDist.${rating}`]: increment(-1)
+                    });
+                    // Update local cache
+                    prod.reviewCount = Math.max(0, (prod.reviewCount || 0) - 1);
+                    prod.ratingSum = Math.max(0, (prod.ratingSum || 0) - rating);
+                    if (prod.ratingDist && prod.ratingDist[rating] > 0) prod.ratingDist[rating]--;
+                } catch (e) { console.warn('Product stats decrement failed:', e.message); }
+            }
+        }
+    }
     catch(err) { reviews = backup; aCacheSet(ADMIN_CACHE.reviews, reviews); renderReviews(); alert('❌ ' + err.message); }
 };
 
@@ -2786,6 +2809,55 @@ window.clearAdminCacheNow = function() {
     aCacheClear();
     alert('✅ Cache Clear! Reload হবে...');
     setTimeout(() => location.reload(), 1000);
+};
+
+window.recalcAllReviewStats = async function() {
+    if (!confirm('সব প্রোডাক্টের রিভিউ স্ট্যাটস নতুন করে হিসাব করবেন?\n\n১-২ মিনিট লাগতে পারে। চলবে?')) return;
+    try {
+        const btn = event.target.closest('button');
+        const origText = btn ? btn.innerHTML : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'; }
+        
+        const reviewsSnap = await getDocs(collection(db, 'reviews'));
+        const grouped = {};
+        reviewsSnap.forEach(d => {
+            const data = d.data();
+            const pid = data.productId;
+            if (pid === undefined || pid === null) return;
+            const key = String(pid);
+            if (!grouped[key]) grouped[key] = { count: 0, sum: 0, dist: {1:0,2:0,3:0,4:0,5:0} };
+            const r = parseInt(data.rating) || 0;
+            grouped[key].count++;
+            grouped[key].sum += r;
+            if (grouped[key].dist[r] !== undefined) grouped[key].dist[r]++;
+        });
+        
+        const productsSnap = await getDocs(collection(db, 'products'));
+        let updated = 0, failed = 0;
+        for (const docSnap of productsSnap.docs) {
+            const data = docSnap.data();
+            const pid = String(parseInt(data.id) || 0);
+            const stats = grouped[pid] || { count: 0, sum: 0, dist: {1:0,2:0,3:0,4:0,5:0} };
+            try {
+                await updateDoc(doc(db, 'products', docSnap.id), {
+                    reviewCount: stats.count,
+                    ratingSum: stats.sum,
+                    ratingDist: stats.dist
+                });
+                updated++;
+            } catch (e) {
+                failed++;
+                console.warn('Failed for product', data.name, e.message);
+            }
+        }
+        
+        alert(`✅ সফল!\n\n${updated}টি প্রোডাক্ট আপডেট হয়েছে${failed > 0 ? `\n${failed}টি ব্যর্থ` : ''}\n\nওয়েবসাইট রিফ্রেশ করলে নতুন স্ট্যাটস দেখাবে।`);
+        if (btn) { btn.disabled = false; btn.innerHTML = origText; }
+    } catch (err) {
+        alert('❌ ' + (err.message || 'Failed'));
+        const btn = event.target.closest('button');
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-calculator"></i> Recalculate Review Stats (One-time)'; }
+    }
 };
 
 document.addEventListener('keydown', (e) => {
