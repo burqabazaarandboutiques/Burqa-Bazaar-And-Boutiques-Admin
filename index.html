@@ -1589,9 +1589,11 @@
             const preview = row.querySelector('.aimg-prev');
             try {
                 const url = await window.uploadToImgBB(file);
-                input.value = url;
-                preview.innerHTML = `<img src="${url}"><button type="button" class="img-remove-btn" onclick="clearImgRow('${rowId}')"><i class="fas fa-times"></i></button>`;
-                preview.classList.add('has-image');
+                if (input) input.value = url;
+                if (preview) {
+                    preview.innerHTML = `<img src="${url}"><button type="button" class="img-remove-btn" onclick="clearImgRow('${rowId}')"><i class="fas fa-times"></i></button>`;
+                    preview.classList.add('has-image');
+                }
                 window.showToast('✅ Uploaded!');
             } catch(err) { alert('❌ ' + err.message); }
             event.target.value = '';
@@ -1600,10 +1602,13 @@
         window.clearImgRow = function(rowId) {
             const row = document.getElementById(rowId);
             if (!row) return;
-            row.querySelector('.aimg').value = '';
+            const input = row.querySelector('.aimg');
+            if (input) input.value = '';
             const preview = row.querySelector('.aimg-prev');
-            preview.innerHTML = '<div class="img-placeholder"><i class="fas fa-image"></i></div>';
-            preview.classList.remove('has-image');
+            if (preview) {
+                preview.innerHTML = '<div class="img-placeholder"><i class="fas fa-image"></i></div>';
+                preview.classList.remove('has-image');
+            }
         };
 
         window.uploadColorRow = async function(event, rowId) {
@@ -1615,9 +1620,11 @@
             const preview = row.querySelector('.cimg-prev');
             try {
                 const url = await window.uploadToImgBB(file);
-                input.value = url;
-                preview.innerHTML = `<img src="${url}"><button type="button" class="img-remove-btn" onclick="clearColorRow('${rowId}')"><i class="fas fa-times"></i></button>`;
-                preview.classList.add('has-image');
+                if (input) input.value = url;
+                if (preview) {
+                    preview.innerHTML = `<img src="${url}"><button type="button" class="img-remove-btn" onclick="clearColorRow('${rowId}')"><i class="fas fa-times"></i></button>`;
+                    preview.classList.add('has-image');
+                }
                 window.showToast('✅ Color uploaded!');
             } catch(err) { alert('❌ ' + err.message); }
             event.target.value = '';
@@ -1626,20 +1633,24 @@
         window.clearColorRow = function(rowId) {
             const row = document.getElementById(rowId);
             if (!row) return;
-            row.querySelector('.cimg').value = '';
+            const input = row.querySelector('.cimg');
+            if (input) input.value = '';
             const preview = row.querySelector('.cimg-prev');
-            preview.innerHTML = '<div class="img-placeholder"><i class="fas fa-image"></i></div>';
-            preview.classList.remove('has-image');
+            if (preview) {
+                preview.innerHTML = '<div class="img-placeholder"><i class="fas fa-image"></i></div>';
+                preview.classList.remove('has-image');
+            }
         };
 
         window.uploadContactIcon = async function(event, inputEl) {
             const file = event.target.files[0];
             if (!file) return;
             const box = inputEl.closest('.contact-icon-box');
+            if (!box) return;
             const urlInput = box.querySelector('.ci-icon');
             try {
                 const url = await window.uploadToImgBB(file);
-                urlInput.value = url;
+                if (urlInput) urlInput.value = url;
                 const preview = box.querySelector('.contact-icon-preview');
                 if (preview) preview.innerHTML = `<img src="${url}">`;
                 window.showToast('✅ Icon uploaded!');
@@ -1651,10 +1662,11 @@
             const file = event.target.files[0];
             if (!file) return;
             const box = inputEl.closest('.content-item-box');
+            if (!box) return;
             const urlInput = box.querySelector('.pm-icon');
             try {
                 const url = await window.uploadToImgBB(file);
-                urlInput.value = url;
+                if (urlInput) urlInput.value = url;
                 window.showToast('✅ Icon uploaded!');
             } catch(err) { alert('❌ ' + err.message); }
             event.target.value = '';
@@ -1664,10 +1676,11 @@
             const file = event.target.files[0];
             if (!file) return;
             const box = inputEl.closest('.content-item-box');
+            if (!box) return;
             const urlInput = box.querySelector('.co-logo');
             try {
                 const url = await window.uploadToImgBB(file);
-                urlInput.value = url;
+                if (urlInput) urlInput.value = url;
                 window.showToast('✅ Logo uploaded!');
             } catch(err) { alert('❌ ' + err.message); }
             event.target.value = '';
@@ -1677,10 +1690,11 @@
             const file = event.target.files[0];
             if (!file) return;
             const box = inputEl.closest('.content-item-box');
+            if (!box) return;
             const urlInput = box.querySelector('.hc-image');
             try {
                 const url = await window.uploadToImgBB(file);
-                urlInput.value = url;
+                if (urlInput) urlInput.value = url;
                 window.showToast('✅ Image uploaded!');
             } catch(err) { alert('❌ ' + err.message); }
             event.target.value = '';
@@ -1694,7 +1708,7 @@
             row.className = 'crow-img';
             row.id = id;
             row.innerHTML = `
-                <div class="img-preview-box preview-add" id="${id}-prev">
+                <div class="img-preview-box preview-add aimg-prev" id="${id}-prev">
                     ${url ? `<img src="${url}"><button type="button" class="img-remove-btn" onclick="clearImgRow('${id}')"><i class="fas fa-times"></i></button>` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
                 </div>
                 <div class="img-info">
@@ -1716,7 +1730,7 @@
             row.className = 'crow-color';
             row.id = id;
             row.innerHTML = `
-                <div class="img-preview-box preview-color" id="${id}-prev">
+                <div class="img-preview-box preview-color cimg-prev" id="${id}-prev">
                     ${img ? `<img src="${img}"><button type="button" class="img-remove-btn" onclick="clearColorRow('${id}')"><i class="fas fa-times"></i></button>` : '<div class="img-placeholder"><i class="fas fa-image"></i></div>'}
                 </div>
                 <div class="color-info">
