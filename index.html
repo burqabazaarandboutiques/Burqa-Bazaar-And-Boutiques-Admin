@@ -22,7 +22,7 @@
             reviews: 'bq_fast_reviews_v1', newsletter: 'bq_fast_newsletter_v1',
             coupons: 'bq_fast_coupons_v1', banners: 'bq_fast_banners_v1',
             pages: 'bq_fast_pages_v1', faq: 'bq_fast_faq_v1',
-            sizeCharts: 'bq_fast_sizeCharts_v1', homeCollections: 'bq_fast_homeCollections_v1',
+            homeCollections: 'bq_fast_homeCollections_v1',
             settings: 'bq_fast_settings_v1', stats: 'bq_fast_stats_v1',
             contentSettings: 'bq_fast_content_v1'
         };
@@ -471,13 +471,6 @@
         .content-item-remove { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; }
         .content-item-remove:hover { background: var(--bad); color: #fff; }
         .faq-item-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 12px; }
-        .size-row-item { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr auto; gap: 6px; margin-bottom: 6px; align-items: center; }
-        .size-row-item input { padding: 8px 10px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px; color: var(--text); font-size: 12px; outline: none; font-family: inherit; width: 100%; }
-        .size-row-item input:focus { border-color: var(--gold); }
-        .size-row-item .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 30px; height: 30px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        .size-row-item .rm:hover { background: var(--bad); color: #fff; }
-        .size-chart-header-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr auto; gap: 6px; margin-bottom: 8px; padding: 0 2px; }
-        .size-chart-header-row span { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; text-align: center; }
 
         .contact-icon-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 12px; }
         .contact-icon-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
@@ -491,7 +484,6 @@
             .head h1 { font-size: 14px; }
             .badge { display: none; }
             .login-box { padding: 30px 20px; }
-            .crow { grid-template-columns: 1fr 1fr auto; }
             .select-all-btn { margin-left: 0; width: 100%; justify-content: center; }
             .news-count-big { font-size: 32px; }
             .coupon-code-big { font-size: 18px; }
@@ -499,8 +491,6 @@
             .weekly-chart { height: 140px; }
             .weekly-bar-value { font-size: 9px; }
             .weekly-bar-label { font-size: 9px; }
-            .size-row-item { grid-template-columns: 1fr 1fr; }
-            .size-chart-header-row { display: none; }
             .preview-main { max-width: 120px; }
             .preview-add { width: 100%; max-width: 120px; }
             .preview-color { width: 100%; max-width: 80px; }
@@ -908,32 +898,6 @@
                 </div>
 
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
-                    <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-ruler"></i> Size Chart Manager</h3>
-                    <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">Product details পেজে Size Guide এ এই chart গুলো দেখানো হবে</small>
-                    <div class="fgroup">
-                        <label>📁 Select Category</label>
-                        <select id="size-chart-category" onchange="loadSizeChartForCategory()">
-                            <option value="default">Default / সাধারণ</option>
-                            <option value="Burqa Collection">Burqa Collection</option>
-                            <option value="Abaya Collection">Abaya Collection</option>
-                            <option value="Hijab Collection">Hijab Collection</option>
-                        </select>
-                    </div>
-                    <div class="fgroup">
-                        <label>📝 Chart Title</label>
-                        <input type="text" id="size-chart-title-input" placeholder="হিজাব সাইজ চার্ট">
-                    </div>
-                    <div class="fgroup">
-                        <label>📏 Size Rows</label>
-                        <div class="size-chart-header-row">
-                            <span>Size</span><span>Chest</span><span>Waist</span><span>Length</span><span>Shoulder</span><span>Sleeve</span><span></span>
-                        </div>
-                        <div id="size-chart-rows-container"></div>
-                        <button type="button" class="btn-s" onclick="addSizeChartRow()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Size Row</button>
-                    </div>
-                </div>
-
-                <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-th-large"></i> Home Collections</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">Home page এ Hijab/Burqa/Abaya collection cards</small>
                     <div id="home-collections-container"></div>
@@ -1175,8 +1139,6 @@
         let selectedSizes = [];
         let orderFilter = 'all', orderSearchQuery = '', orderDateFilter = 'all', orderDateFrom = '', orderDateTo = '';
         let newsSearchQuery = '', couponFilter = 'all';
-        let currentSizeChartCategory = 'default';
-        let allSizeCharts = {};
         let settingsCache = {};
         let pagesCache = {};
         let currentEditingPage = 'about';
@@ -1312,11 +1274,10 @@
                     getDocs(collection(db, 'banners')).catch(() => null),
                     getDocs(collection(db, 'pages')).catch(() => null),
                     getDocs(collection(db, 'faq')).catch(() => null),
-                    getDocs(collection(db, 'sizeCharts')).catch(() => null),
                     getDocs(collection(db, 'homeCollections')).catch(() => null),
                     getDoc(doc(db, 'settings', 'store')).catch(() => null)
                 ]);
-                const [pS, oS, rS, nS, cS, bS, pgS, fS, szS, hcS, setS] = results;
+                const [pS, oS, rS, nS, cS, bS, pgS, fS, hcS, setS] = results;
                 if (pS) { const arr = []; pS.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a,b) => (parseInt(a.id)||0)-(parseInt(b.id)||0)); products = arr; fastSet(FAST_CACHE.products, arr); }
                 if (oS) { const arr = []; oS.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a,b) => new Date(b.date||b.createdAt||0)-new Date(a.date||a.createdAt||0)); orders = arr; fastSet(FAST_CACHE.orders, arr); }
                 if (rS) { const arr = []; rS.forEach(d => arr.push({ docId: d.id, ...d.data() })); reviews = arr; fastSet(FAST_CACHE.reviews, arr); }
@@ -1325,7 +1286,6 @@
                 if (bS) { const arr = []; bS.forEach(d => arr.push({ docId: d.id, ...d.data() })); banners = arr; fastSet(FAST_CACHE.banners, arr); }
                 if (pgS) { const obj = {}; pgS.forEach(d => { obj[d.id] = d.data().html || ''; }); pagesCache = obj; fastSet(FAST_CACHE.pages, obj); }
                 if (fS) { const arr = []; fS.forEach(d => arr.push({ docId: d.id, ...d.data() })); fastSet(FAST_CACHE.faq, arr); }
-                if (szS) { const obj = {}; szS.forEach(d => { obj[d.id] = d.data(); }); allSizeCharts = obj; fastSet(FAST_CACHE.sizeCharts, obj); }
                 if (hcS) { const arr = []; hcS.forEach(d => arr.push({ docId: d.id, ...d.data() })); fastSet(FAST_CACHE.homeCollections, arr); }
                 if (setS && setS.exists()) { const data = setS.data(); settingsCache = { ...DEFAULT_SETTINGS, ...data }; fastSet(FAST_CACHE.settings, settingsCache); }
                 recalcStatsFromCache();
@@ -1457,9 +1417,6 @@
                     renderCouriers(cachedContent.couriers || []);
                     const cachedFaq = fastGet(FAST_CACHE.faq);
                     renderFAQList(cachedFaq || []);
-                    const cachedSC = fastGet(FAST_CACHE.sizeCharts);
-                    if (cachedSC && Object.keys(cachedSC).length > 0) { allSizeCharts = cachedSC; loadSizeChartForCategory(); }
-                    else { document.getElementById('size-chart-rows-container').innerHTML = ''; addSizeChartRow(); }
                     const cachedHC = fastGet(FAST_CACHE.homeCollections);
                     renderHomeCollections(cachedHC || []);
                     setTimeout(() => loadContentSettings(), 50);
@@ -2616,7 +2573,6 @@
                 renderCouriers(cached.couriers || []);
             }
             await loadFAQFromFirebase();
-            await loadSizeChartsFromFirebase();
             await loadHomeCollectionsFromFirebase();
             try {
                 const sSnap = await getDoc(doc(db, 'settings', 'store'));
@@ -2756,39 +2712,6 @@
             c.appendChild(box);
         };
 
-        window.loadSizeChartsFromFirebase = async function() {
-            const cached = fastGet(FAST_CACHE.sizeCharts);
-            if (cached && Object.keys(cached).length > 0) { allSizeCharts = cached; document.getElementById('size-chart-category').value = 'default'; loadSizeChartForCategory(); }
-            try {
-                const snap = await getDocs(collection(db, 'sizeCharts'));
-                allSizeCharts = {};
-                snap.forEach(d => { allSizeCharts[d.id] = d.data(); });
-                fastSet(FAST_CACHE.sizeCharts, allSizeCharts);
-                document.getElementById('size-chart-category').value = 'default';
-                loadSizeChartForCategory();
-            } catch (err) {}
-        };
-
-        window.loadSizeChartForCategory = function() {
-            const cat = document.getElementById('size-chart-category').value;
-            currentSizeChartCategory = cat;
-            const data = allSizeCharts[cat] || { title: '', rows: [] };
-            document.getElementById('size-chart-title-input').value = data.title || '';
-            const rowsContainer = document.getElementById('size-chart-rows-container');
-            rowsContainer.innerHTML = '';
-            if (data.rows && data.rows.length > 0) data.rows.forEach(row => addSizeChartRow(row));
-            else addSizeChartRow();
-        };
-
-        window.addSizeChartRow = function(row) {
-            const c = document.getElementById('size-chart-rows-container');
-            const item = document.createElement('div');
-            item.className = 'size-row-item';
-            const r = row || { size: '', chest: '', waist: '', length: '', shoulder: '', sleeve: '' };
-            item.innerHTML = `<input type="text" class="sz-size" placeholder="Size" value="${r.size || ''}"><input type="number" class="sz-chest" placeholder="Chest" value="${r.chest || ''}"><input type="number" class="sz-waist" placeholder="Waist" value="${r.waist || ''}"><input type="number" class="sz-length" placeholder="Length" value="${r.length || ''}"><input type="number" class="sz-shoulder" placeholder="Shoulder" value="${r.shoulder || ''}"><input type="number" class="sz-sleeve" placeholder="Sleeve" value="${r.sleeve || ''}"><button type="button" class="rm" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-            c.appendChild(item);
-        };
-
         window.loadHomeCollectionsFromFirebase = async function() {
             const cached = fastGet(FAST_CACHE.homeCollections);
             if (cached) renderHomeCollections(cached);
@@ -2876,14 +2799,6 @@
                     if (q && a) faqList.push({ category: cat, q, a, order: idx + 1 });
                 });
 
-                const currentCat = currentSizeChartCategory;
-                const chartTitle = document.getElementById('size-chart-title-input').value.trim();
-                const sizeRows = [];
-                document.querySelectorAll('#size-chart-rows-container .size-row-item').forEach(item => {
-                    const size = item.querySelector('.sz-size').value.trim();
-                    if (size) sizeRows.push({ size, chest: parseFloat(item.querySelector('.sz-chest').value) || 0, waist: parseFloat(item.querySelector('.sz-waist').value) || 0, length: parseFloat(item.querySelector('.sz-length').value) || 0, shoulder: parseFloat(item.querySelector('.sz-shoulder').value) || 0, sleeve: parseFloat(item.querySelector('.sz-sleeve').value) || 0 });
-                });
-
                 const hcList = [];
                 document.querySelectorAll('#home-collections-container .content-item-box').forEach(box => {
                     const name = box.querySelector('.hc-name').value.trim();
@@ -2907,16 +2822,13 @@
                 const hcAdds = hcList.map(hc => addDoc(collection(db, 'homeCollections'), hc));
                 await Promise.all([
                     ...faqAdds,
-                    ...hcAdds,
-                    setDoc(doc(db, 'sizeCharts', currentCat), { title: chartTitle, rows: sizeRows, updatedAt: new Date().toISOString() }, { merge: true })
+                    ...hcAdds
                 ]);
 
                 const existingContent = fastGet(FAST_CACHE.contentSettings) || {};
                 fastSet(FAST_CACHE.contentSettings, { ...existingContent, ...contentData });
                 fastSet(FAST_CACHE.faq, faqList);
                 fastSet(FAST_CACHE.homeCollections, hcList);
-                allSizeCharts[currentCat] = { title: chartTitle, rows: sizeRows };
-                fastSet(FAST_CACHE.sizeCharts, allSizeCharts);
 
                 showMsg('content-msg', '✅ সব Content সেভ!', 'ok');
                 showToast('✅ Saved!');
@@ -3027,7 +2939,7 @@
         window.backupAllData = async function() {
             if (!confirm('সব Data Backup নিতে চান?')) return;
             try {
-                const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'sizeCharts', 'homeCollections'];
+                const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'homeCollections'];
                 const backup = { version: '1.0', timestamp: new Date().toISOString(), storeName: (settingsCache && settingsCache.storeName) || 'Burqa Bazar', data: {} };
                 for (const col of collections) {
                     try { const snap = await getDocs(collection(db, col)); backup.data[col] = []; snap.forEach(d => backup.data[col].push({ _docId: d.id, ...d.data() })); }
@@ -3059,7 +2971,7 @@
                 const backup = JSON.parse(text);
                 if (!backup.data || !backup.version) { alert('❌ Invalid file.'); event.target.value = ''; return; }
                 let total = 0;
-                const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'sizeCharts', 'homeCollections'];
+                const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'homeCollections'];
                 for (const col of collections) {
                     if (!backup.data[col] || !Array.isArray(backup.data[col])) continue;
                     for (const item of backup.data[col]) {
